@@ -1,54 +1,29 @@
-/**
- * Index - this is where everything
- *  starts - but offloads to app.js
- *
- * React Native Starter App
- * https://github.com/mcnamee/react-native-starter-app
- */
-/* global __DEV__ */
-import React from 'react';
-import { applyMiddleware, compose, createStore } from 'redux';
-import { connect, Provider } from 'react-redux';
-import logger from 'redux-logger';
-import thunk from 'redux-thunk';
-import { Router } from 'react-native-router-flux';
 
-// Consts and Libs
-import { AppStyles } from '@theme/';
-import AppRoutes from '@navigation/';
-import Analytics from '@lib/analytics';
+import React, { Component } from 'react';
+import { Navigator } from 'react-native';
 
-// All redux reducers (rolled into one mega-reducer)
-import rootReducer from '@redux/index';
+// init Home
+import HomePage from './pages/home';
 
-// Connect RNRF with Redux
-const RouterWithRedux = connect()(Router);
+/*
+initialRoute：初始化路由
 
-// Load middleware
-let middleware = [
-  Analytics,
-  thunk, // Allows action creators to return functions (not just plain objects)
-];
+configureScene: 配置场景动画
+- FloatFromBottom
+- PushFromRight
 
-if (__DEV__) {
-  // Dev-only middleware
-  middleware = [
-    ...middleware,
-    logger(), // Logs state changes to the dev console
-  ];
-}
+renderScene: 渲染场景
+使用动态加载组件的方式. 设置加载页面的navigator参数, 其余使用route.passProps属性传递其他参数.
+*/
 
-// Init redux store (using the given reducer & middleware)
-const store = compose(
-  applyMiddleware(...middleware),
-)(createStore)(rootReducer);
+const AppContainer = () =>
+    <Navigator
+      initialRoute={{ component: HomePage }}
+      configureScene={ () => Navigator.SceneConfigs.PushFromRight }
+      renderScene={ (route, navigator) => {
+        let Component = route.component;
+        return React.createElement(Component, { ...route.passProps, navigator })
+      } } 
+    />
 
-/* Component ==================================================================== */
-// Wrap App in Redux provider (makes Redux available to all sub-components)
-export default function AppContainer() {
-  return (
-    <Provider store={store}>
-      <RouterWithRedux scenes={AppRoutes} style={AppStyles.appContainer} />
-    </Provider>
-  );
-}
+export default AppContainer;

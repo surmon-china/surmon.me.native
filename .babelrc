@@ -1,3 +1,16 @@
 {
-	"presets": ["react-native"]
+  "presets": [
+    "react-native"
+  ],
+  "plugins": [[
+    "babel-plugin-module-alias", [
+      { "src": "./src", "expose": "@app" },
+      { "src": "./src/utils", "expose": "@utils" },
+      { "src": "./src/pages", "expose": "@pages" },
+      { "src": "./src/styles", "expose": "@styles" },
+      { "src": "./src/config", "expose": "@config" },
+      { "src": "./src/images", "expose": "@images" },
+      { "src": "./src/components", "expose": "@components" }
+    ]]
+  ]
 }
