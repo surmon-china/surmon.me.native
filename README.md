@@ -33,9 +33,9 @@ $ npm run test
 ```
 surmon.me.native/
    |
-   ├──ios/                       * IOS配置
+   ├──ios/                       * IOS
    |
-   ├──android/                   * 安卓配置
+   ├──android/                   * Android
    |
    ├──src/                       * 主程序
    │   │
@@ -51,7 +51,7 @@ surmon.me.native/
    │   │
    │   └──config                 * 全局配置
    │   │
-   │   └──index.js               * Appp根组件
+   │   └──index.js               * App入口
    │
    │──package.json               * 包信息
    │
