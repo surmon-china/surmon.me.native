@@ -4,6 +4,7 @@
   "private": false,
   "scripts": {
     "dev": "npm start --reset-cache",
+    "dev:all": "npm run dev:ios && npm run dev:android",
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
