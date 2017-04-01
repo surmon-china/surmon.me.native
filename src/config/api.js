@@ -40,4 +40,10 @@ export default class Api {
   static getArticleDetail(article_id) {
     return restful(`${baseApi}/article/${article_id}`)
   }
+
+  // 获取用户信息
+  static getUserInfo() {
+    return restful(`${baseApi}/auth`)
+  }
+
 }

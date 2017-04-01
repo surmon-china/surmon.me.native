@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
-import { ActivityIndicator, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, WebView, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // Icons
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Markdown from 'react-native-markdown';
+
+// third libs
+import HTMLView from 'react-native-htmlview';
 
 // Components
 import NavBar from '@components/navbar';
@@ -13,11 +15,40 @@ import NavBar from '@components/navbar';
 import Api from '@config/api';
 
 // utils
+import marked from '@utils/marked';
 import filters from '@utils/filters';
 const { toYMD, descLimit, buildThumb } = filters;
 
 // 用户计算缩略图高度
 const { width, height } = Dimensions.get('window');
+
+// 处理html解析
+const renderNode = (node, index, siblings, parent) => {
+  if (node.name == 'iframe') {
+    const a = node.attribs;
+    return (
+      <View key={index} style={{width: Number(a.width), height: Number(a.height)}}>
+        <WebView source={{html: `<iframe src="${a.src}"></iframe>`}} />
+      </View>
+    );
+  } else if (node.name == 'img') {
+    return (
+      <View key={index} style={{width: 100, height: '100%'}}>
+        <Image source={{uri: node.attribs.src}} style={htmlStyles.img} />
+      </View>
+    )
+  } else if (node.type == 'text') {
+    // console.log(node)
+    if (node.parent && Object.is(node.parent.name, 'p')) {
+      node.data = `         ${node.data}`
+    } else {
+      node.data = `    ${node.data}`
+    }
+  } else if (['pre', 'br', 'p'].includes(node.name) || node.name.includes('h')) {
+    // console.log(node)
+    // return null
+  }
+}
 
 // component
 class Detail extends Component {
@@ -25,18 +56,26 @@ class Detail extends Component {
     super(props);
     this.state = {
       loading: false,
-      article: this.props.article
+      article: this.props.article,
+      articleContent: '<p>loading...</p>'
     };
   }
 
+  // 组件加载完成
   componentDidMount() {
     BackAndroid.addEventListener('hardwareBackPress', this._handleBackBtnPress);
     this.setState({loading: true});
     Api.getArticleDetail(this.props.article.id).then(data => {
-      this.setState({ article: data.result, loading: false });
+      this.setState({
+        article: data.result,
+        articleContent: String(marked(data.result.content || ' ')),
+        loading: false
+      });
+      // console.log(this.state.articleContent);
     });
   }
 
+  // 组件即将释放
   componentWillUnmount() {
     // 移除安卓物理按键监听
     BackAndroid.removeEventListener('hardwareBackPress', this._handleBackBtnPress);
@@ -57,7 +96,7 @@ class Detail extends Component {
   }
 
   render() {
-    const { detail, article, loading } = this.state;
+    const { detail, article, loading, articleContent } = this.state;
     const _navigator = this.props.navigator;
     return (
       <View style={{flex: 1, backgroundColor: '#fff'}}>
@@ -88,10 +127,14 @@ class Detail extends Component {
               ? <ActivityIndicator size={'large'} 
                                    style={styles.indicator}
                                    color={Platform.OS === 'ios' ? "#262626" : null}/>
-              : <Markdown style={styles.content}>{ article.content }</Markdown>
+              : <View style={styles.content}><HTMLView value={articleContent} stylesheet={htmlStyles} renderNode={renderNode}/></View>
           }
           <NavBar
-            leftText={Platform.OS === 'ios' ? <Ionicon name='ios-arrow-back' size={32} color={'#eee'} /> : <Ionicon name='md-arrow-back' size={24} color={'#eee'} />}
+            leftText={
+              Platform.OS === 'ios' 
+              ? <Ionicon name='ios-arrow-back' size={32} color={'#eee'} /> 
+              : <Ionicon name='md-arrow-back' size={24} color={'#eee'} />
+            }
             onLeftPress={() => { _navigator.pop() }}
             containerStyle={{backgroundColor: 'transparent'}}
             colorText='#eee' />
@@ -100,6 +143,39 @@ class Detail extends Component {
     )
   }
 }
+
+const htmlStyles = StyleSheet.create({
+  a: {
+    fontWeight: 'bold',
+    color: '#555',
+    textDecorationLine: 'underline'
+  },
+  p: {
+    width: 100,
+    marginTop: 0,
+    marginBottom: 0,
+    paddingTop: 0,
+    paddingBottom: 0,
+    lineHeight: 26
+  },
+  img: {
+    flex: 1,
+    width: width - 40,
+    resizeMode: 'cover',
+    overflow: 'visible'
+  },
+  h3: {
+    lineHeight: 30
+  },
+  h4: {
+    lineHeight: 30
+  },
+  li: {
+    paddingLeft: 20,
+    lineHeight: 28,
+    marginBottom: 0
+  }
+});
 
 const styles = StyleSheet.create({
   image: {
@@ -120,8 +196,8 @@ const styles = StyleSheet.create({
   },
   title: {
     margin: 15,
-    fontSize: 28,
-    lineHeight: 30,
+    fontSize: 25,
+    lineHeight: 35,
     fontWeight: '500',
     color: '#fff',
     textAlign: 'center'
@@ -156,9 +232,7 @@ const styles = StyleSheet.create({
     marginTop: (height - 300) / 2,
   },
   content: {
-    margin: 15,
-    padding: 20,
-    textAlign: 'justify'
+    padding: 20
   },
   floatFooter: {
     position: 'absolute',

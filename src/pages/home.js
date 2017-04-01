@@ -11,7 +11,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 import About from '@pages/about';
 import Archive from '@pages/archive';
 import Articles from '@pages/articles';
-import Guestbook from '@pages/guestbook';
+import Projects from '@pages/projects';
 
 // Components
 import Menu from '@components/menu';
@@ -49,8 +49,8 @@ const InitPage = ({navigator}) => {
         },
         {
           id: itemId++,
-          title: 'Guestbook',
-          element: <Guestbook navigator={navigator} title='Guestbook' />,
+          title: 'Projects',
+          element: <Projects navigator={navigator} title='Projects' />,
           androidIcon: <Icon name="favorite" size={androidIconSize} />,
           itemComponent: Ionicon.TabBarItem,
           iconName: 'ios-chatboxes-outline',

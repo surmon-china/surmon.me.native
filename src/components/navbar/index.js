@@ -4,10 +4,9 @@
 */
 
 import React from 'react';
-
-import { AppColors, AppFonts, AppSizes } from '@theme/';
-
 import { Platform, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+
+import { AppColors, AppFonts, AppSizes } from '@styles/';
 
 console.log(AppColors)
 

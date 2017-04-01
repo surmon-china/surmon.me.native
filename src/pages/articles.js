@@ -9,13 +9,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import NavBar from '@components/navbar';
 import PostList from '@components/article/post-list';
 
-// Pages
-import Articles from '@pages/articles';
-
 // Configs
 import Api from '@config/api';
 
-class NewsPage extends Component {
+class Articles extends Component {
   constructor(props) {
     super(props);
     const dataSource = new ListView.DataSource({
@@ -84,18 +81,7 @@ class NewsPage extends Component {
           : <PostList articles={ articles } navigator={this.props.navigator}/>
         }
 
-        <NavBar
-          title={this.props.title}
-          onRightPress={ () => {
-            this.props.navigator.push({
-              component: Articles,
-              title: 'Acerca de',
-            })
-          }}
-          onLeftPress={ () => {
-            Platform.OS === 'android' && this.props.openMenu();
-          }}
-          colorText='#eee' />
+        <NavBar title={this.props.title} colorText='#eee' />
       </View>
     )
   }
@@ -110,4 +96,4 @@ const styles = StyleSheet.create({
   }
 })
 
-export default NewsPage;
+export default Articles;

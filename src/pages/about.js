@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackAndroid, Platform, StyleSheet, Text, View } from 'react-native';
+import { BackAndroid, ActivityIndicator, Platform, StyleSheet, Text, View } from 'react-native';
 
 // External Libraries
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -7,22 +7,66 @@ import Ionicon from 'react-native-vector-icons/Ionicons';
 // Components
 import NavBar from '@components/navbar';
 
-BackAndroid.addEventListener('hardwareBackPress', () => {
-  _navigator.pop();
-  return true;
-});
+// Configs
+import Api from '@config/api';
 
-const Articles = ({navigator, title}) => {
-  const _navigator = navigator;
+class About extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      loading: false,
+      userInfo: null
+    };
+  }
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.p}>我是司马萌</Text>
-      <Text>查看我的开源项目</Text>
-      <NavBar title={title}
-              colorText='#eee' />
-    </View>
-  );
+  componentDidMount() {
+    BackAndroid.addEventListener('hardwareBackPress', this._handleBackBtnPress);
+    this.setState({loading: true});
+    Api.getUserInfo()
+    .then(data => {
+      this.setState({
+        userInfo: data.result,
+        loading: false
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+  }
+
+  componentWillUnmount() {
+    BackAndroid.removeEventListener('hardwareBackPress', this._handleBackBtnPress);
+  }
+
+  _handleBackBtnPress = () => {
+    if (this.props.navigator.getCurrentRoutes().length <= 1) {
+      Alert.alert(
+        'Logout',
+        'Would you like to logout?',
+        [
+          {text: 'NO', onPress: () => console.log('Cancel Pressed!')},
+          {text: 'YES', onPress: () => BackAndroid.exitApp()},
+        ]
+      )
+      return true;
+    }
+  }
+
+  render() {
+    const { userInfo, loading } = this.state;
+    _navigator = this.props.navigator;
+    return (
+      <View style={styles.container}>
+
+        { loading 
+          ? <ActivityIndicator size={'large'} color={Platform.OS === 'ios' ? "#262626" : null}/>
+          : <View style={styles.container}></View>
+        }
+
+        <NavBar title={this.props.title} colorText='#eee' />
+      </View>
+    )
+  }
 }
 
 var styles = StyleSheet.create({
@@ -38,4 +82,4 @@ var styles = StyleSheet.create({
   }
 });
 
-export default Articles;
+export default About;

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BackAndroid, Platform, StyleSheet, Text, View } from 'react-native';
+import { BackAndroid, Platform, StyleSheet, Text, View, WebView } from 'react-native';
 
 // External Libraries
 import Ionicon from 'react-native-vector-icons/Ionicons';
@@ -17,10 +17,13 @@ const Articles = ({navigator, title}) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.p}>这里面是projects</Text>
-      <NavBar title="projects"
-              containerStyle={{backgroundColor: '#303030'}}
-              colorText='#eee' />
+      <WebView style={styles.webview} 
+               source={{uri:'https://surmon.me/project'}}
+               startInLoadingState={true}
+               domStorageEnabled={true}
+               javaScriptEnabled={true}
+      />
+      <NavBar title="projects" colorText='#eee' />
     </View>
   );
 }
@@ -32,9 +35,10 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  p: {
-    fontWeight: '300',
-    textAlign: 'center',
+  webview: {
+    width: '100%',
+    height: 100,
+    marginTop: -20
   }
 });
 

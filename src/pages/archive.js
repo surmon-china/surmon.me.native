@@ -19,8 +19,7 @@ const Archive = ({navigator, title}) => {
     <View style={styles.container}>
       <Text style={styles.p}>我是司马萌</Text>
       <Text>这个是归档页面，有标签有分类</Text>
-      <NavBar title={title}
-              colorText='#eee' />
+      <NavBar title={title} colorText='#eee' />
     </View>
   );
 }

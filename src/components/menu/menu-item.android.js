@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { View, Text, TouchableNativeFeedback, StyleSheet } from 'react-native';
 
 const MenuItem = (props) => {

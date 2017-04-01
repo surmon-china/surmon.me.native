@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { TabBarIOS } from 'react-native';
 
 const MenuItem = (props) => {

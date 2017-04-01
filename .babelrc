@@ -3,14 +3,17 @@
     "react-native"
   ],
   "plugins": [[
-    "babel-plugin-module-alias", [
-      { "src": "./src", "expose": "@app" },
-      { "src": "./src/utils", "expose": "@utils" },
-      { "src": "./src/pages", "expose": "@pages" },
-      { "src": "./src/styles", "expose": "@styles" },
-      { "src": "./src/config", "expose": "@config" },
-      { "src": "./src/images", "expose": "@images" },
-      { "src": "./src/components", "expose": "@components" }
-    ]]
+    "module-resolver", {
+      "root": ["./src"],
+      "alias": {
+        "@app": "./src",
+        "@utils": "./src/utils",
+        "@pages": "./src/pages",
+        "@styles": "./src/styles",
+        "@config": "./src/config",
+        "@images": "./src/images",
+        "@components": "./src/components"
+      }
+    }]
   ]
 }

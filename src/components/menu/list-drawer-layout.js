@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { Dimensions, ListView, StyleSheet } from 'react-native';
 
 // Components

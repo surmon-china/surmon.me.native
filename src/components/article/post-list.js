@@ -3,7 +3,6 @@
 */
 
 import React from 'react';
-
 import { ListView, StyleSheet } from 'react-native';
 
 import PostItem from './post-item'
