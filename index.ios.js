@@ -9,4 +9,4 @@
 import { AppRegistry } from 'react-native';
 import AppContainer from './src/';
 
-AppRegistry.registerComponent('SurmonMeNative', () => AppContainer);
+AppRegistry.registerComponent('Surmon', () => AppContainer);

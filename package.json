@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": false,
   "scripts": {
+    "dev": "npm start --reset-cache",
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",

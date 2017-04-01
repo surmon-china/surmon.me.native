@@ -1,3 +1,4 @@
-rm -rf node_modules && npm install
 watchman watch-del-all
-npm start -- --reset-cache
+rm -rf node_modules && npm install --registry=https://registry.npm.taobao.org
+# rnpm link
+# react-native link

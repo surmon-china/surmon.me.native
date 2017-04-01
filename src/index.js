@@ -17,13 +17,12 @@ renderScene: 渲染场景
 */
 
 const AppContainer = () =>
-    <Navigator
-      initialRoute={{ component: HomePage }}
-      configureScene={ () => Navigator.SceneConfigs.PushFromRight }
-      renderScene={ (route, navigator) => {
-        let Component = route.component;
-        return React.createElement(Component, { ...route.passProps, navigator })
-      } } 
+    <Navigator  initialRoute={{ component: HomePage }}
+                configureScene={ () => Navigator.SceneConfigs.PushFromRight }
+                renderScene={ (route, navigator) => {
+                  let Component = route.component;
+                  return React.createElement(Component, { ...route.passProps, navigator })
+                }} 
     />
 
 export default AppContainer;

@@ -1,7 +1,33 @@
 # surmon.me.native
 A react-native applaction for surmon.me
 
+## Build Setup
+
+```bash
+# install dependencies
+$ npm install # Or yarn install
+
+# 清除缓存并开启服务器（不执行编译）
+$ npm run dev
+
+# 编译IOS并开启服务器
+$ npm run dev:ios
+
+# 编译Android并开启服务器
+$ npm run dev:android
+
+# 替换debug插件，仅项目初次安装完后执行
+$ npm run postinstall
+
+# 启用测试服务
+$ npm run test
+```
+
 ## 坑
+- run-ios失败的时候，可以需要删除ios/build文件夹重新编译
+- run起来提示，无法找到文件夹的时候，关掉js包服务器，在项目目录下执行`npm run dev`，这是由于babel的别名插件未通过`npm start`启动服务器造成的
+- iconsa略复杂
+- 项目出现诸多异常的时候，直接执行`. reset.sh`会自动清理缓存并重装，而后执行命令即可
 
 ## 目录结构
 ```
@@ -15,35 +41,21 @@ surmon.me.native/
    │   │
    │   │──components             * 所有组件
    │   │
-   │   └──constants              * 应用变量和配置
-   │   │
-   │   └──containers             * 'Smart-components' / the business logic.
+   │   └──pages                  * 所有页面
    │   │
    │   └──images                 * 本地图片资源
    │   │
-   │   └──lib                    * Utils, custom libraries, functions
+   │   └──utils                  * Utils, custom libraries, functions
    │   │
-   │   └──navigation             * Routes - wire up the router with any & all screens.
+   │   └──styles                 * 所有样式变量集中管理
    │   │
-   │   └──redux                  * Redux Reducers & Actions grouped by type. Read More
-   │   │
-   │   └──theme                  * 主题样式和变量
+   │   └──config                 * 全局配置
    │   │
    │   └──index.js               * Appp根组件
    │
    │──package.json               * 包信息
    │
-   │──.eslintrc.js               * Eslint配置
-   │
    │──.babelrc                   * Babel配置
    │
-   │──.gitignore                 * Git忽略文件配置
-   │
-   │──nuxt.config.js             * Nuxt.js程序配置
-   │
-   │──server.js                  * Nuxt.js程序入口文件（节省内存 + 优化内存）
-   │
-   │──ecosystem.config           * pm2部署配置（日志文件的路径需要自行修改）
-   │
-   └──.editorconfig              * 编码风格配置
+   └──reset.sj                   * 清空项目依赖并重新安装
 ```
