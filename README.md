@@ -28,6 +28,12 @@ $ npm run test
 - run起来提示，无法找到文件夹的时候，关掉js包服务器，在项目目录下执行`npm run dev`，这是由于babel的别名插件未通过`npm start`启动服务器造成的
 - iconsa略复杂
 - 项目出现诸多异常的时候，直接执行`. reset.sh`会自动清理缓存并重装，而后执行命令即可
+- react-native-vector-icons - Issues：
+   * [安装说明](https://github.com/oblador/react-native-vector-icons)
+   * Podfile的更新需要使用`gem`安装`cocoapods`
+      + http://code4app.com/article/cocoapods-install-usage
+      + https://github.com/CocoaPods/CocoaPods/issues/3692
+      + https://github.com/oblador/react-native-vector-icons/issues/394
 
 ## 目录结构
 ```

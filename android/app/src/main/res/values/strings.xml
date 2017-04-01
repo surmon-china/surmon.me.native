@@ -1,6 +1,3 @@
 <resources>
-
-
-
-    <string name="app_name">Surmon</string>
+    <string name="app_name">blogApp</string>
 </resources>
