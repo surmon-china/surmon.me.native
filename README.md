@@ -10,10 +10,13 @@ $ npm install # Or yarn install
 # 清除缓存并开启服务器（不执行编译）
 $ npm run dev
 
+# 编译两端并开启服务器（执行前需开启安卓模拟器）
+$ npm run dev:all
+
 # 编译IOS并开启服务器
 $ npm run dev:ios
 
-# 编译Android并开启服务器
+# 编译Android并开启服务器（执行前需开启安卓模拟器）
 $ npm run dev:android
 
 # 替换debug插件，仅项目初次安装完后执行
@@ -27,7 +30,8 @@ $ npm run test
 
 ### 项目问题
 - run-ios失败的时候，可以需要删除ios/build文件夹重新编译
-- run起来提示，无法找到文件夹的时候，关掉js包服务器，在项目目录下执行`npm run dev`，这是由于babel的别名插件未通过`npm start`启动服务器造成的
+- 不再使用`babel-plugin-module-resolver`插件，使用内fbjs模块管理别名
+- 
 - 项目出现诸多异常的时候，直接执行`. reset.sh`会自动清理缓存并重装，而后执行命令即可
 
 ### Icons图标库问题

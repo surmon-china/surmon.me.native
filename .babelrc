@@ -1,19 +1,5 @@
 {
   "presets": [
     "react-native"
-  ],
-  "plugins": [[
-    "module-resolver", {
-      "root": ["./src"],
-      "alias": {
-        "@app": "./src",
-        "@utils": "./src/utils",
-        "@pages": "./src/pages",
-        "@styles": "./src/styles",
-        "@config": "./src/config",
-        "@images": "./src/images",
-        "@components": "./src/components"
-      }
-    }]
   ]
 }

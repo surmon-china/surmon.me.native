@@ -17,7 +17,7 @@ const descLimit = (description, limit = 80) => {
 }
 
 // 缩略图构造
-const localThumb = require('@images/thumb-article.jpg')
+const localThumb = require('@app/images/thumb-article.jpg')
 const buildThumb = thumb => {
   return thumb ? {uri: thumb} : localThumb
 }

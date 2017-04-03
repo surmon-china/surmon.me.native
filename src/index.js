@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { Navigator } from 'react-native';
 
 // init Home
-import HomePage from './pages/home';
+import Layout from './layout';
 
 /*
 initialRoute：初始化路由
@@ -17,7 +17,7 @@ renderScene: 渲染场景
 */
 
 const AppContainer = () =>
-    <Navigator  initialRoute={{ component: HomePage }}
+    <Navigator  initialRoute={{ component: Layout }}
                 configureScene={ () => Navigator.SceneConfigs.PushFromRight }
                 renderScene={ (route, navigator) => {
                   let Component = route.component;

@@ -1,10 +1,16 @@
-import React, { Component } from 'react';
 
+/*
+*
+* Android边栏菜单组件
+*
+*/
+
+import React, { Component } from 'react';
 import { DrawerLayoutAndroid, TouchableNativeFeedback, View } from 'react-native';
 
 // Components
-import ListDrawerLayout from './ListDrawerLayout';
-import HeaderDrawerLayout from './HeaderDrawerLayout';
+import MenuList from './android/menu-list';
+import MneuHeader from './android/menu-header';
 
 class Menu extends Component {
   constructor(props) {
@@ -26,8 +32,8 @@ class Menu extends Component {
   _renderNavigationView = () => {
     return (
       <View style={this.props.containerStyle}>
-        <HeaderDrawerLayout />
-        <ListDrawerLayout
+        <MneuHeader userInfo={this.props.userInfo}/>
+        <MenuList
           items={this.props.entries}
           selectedItem={this.state.selectedItem}
           tintColor={this.props.tintColor}

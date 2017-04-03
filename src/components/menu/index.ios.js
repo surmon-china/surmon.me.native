@@ -1,9 +1,15 @@
-import React, { Component } from 'react';
 
+/*
+*
+* IOS底部菜单组件
+*
+*/
+
+import React, { Component } from 'react';
 import { TabBarIOS } from 'react-native';
 
 // Components
-import MenuItem from './MenuItem';
+import MenuItem from './ios/menu-item';
 
 class Menu extends Component {
   constructor(props) {
