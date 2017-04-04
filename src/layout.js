@@ -84,18 +84,7 @@ class Layout extends Component {
             selectedIconName: 'ios-person',
             iconSize: iOSiconSize,
             androidBackground: (TouchableNativeFeedback.Ripple) ? TouchableNativeFeedback.Ripple('grey', false) : null
-          },
-          // {
-          //   id: itemId++,
-          //   title: 'Guestbook',
-          //   element: <Guestbook navigator={navigator} title='Guestbook' />,
-          //   androidIcon: <Ionicon name="access-time" size={androidIconSize} />,
-          //   itemComponent: Ionicon.TabBarItem,
-          //   iconName: 'ios-archive-outline',
-          //   selectedIconName: 'ios-archive',
-          //   iconSize: iOSiconSize,
-          //   androidBackground: (TouchableNativeFeedback.Ripple) ? TouchableNativeFeedback.Ripple('grey', false) : null
-          // }
+          }
         ]}
       />
     )

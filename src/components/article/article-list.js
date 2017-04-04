@@ -1,13 +1,21 @@
+
 /*
+*
 * 文章列表组件
+*
 */
 
 import React, { Component } from 'react';
-import { ListView, Platform, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { ListView, Dimensions, Platform, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 
 // 加载刷新组件
 import GiftedListView from 'react-native-gifted-listview';
-import GiftedSpinner from 'react-native-gifted-spinner';
+
+// External Libraries
+import Ionicon from 'react-native-vector-icons/Ionicons';
+
+// Components
+import AutoActivityIndicator from '@app/components/common/activity-indicator';
 
 // Item
 import ArticleListItem from './article-list-item'
@@ -15,84 +23,68 @@ import ArticleListItem from './article-list-item'
 // Service
 import { Api } from '@app/service';
 
+// Styles
+import { AppColors, AppSizes, AppFonts } from '@app/style';
+
 // list styles
 const styles = StyleSheet.create({
-  listView: {
-    marginBottom: 10
+  listViewContainer: {
+    position: 'relative',
+    flex: 1
+  },
+  ArticleListView: {
+    // marginTop: 10
+  },
+  ArticleListIndicator: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppColors.background
+  },
+  ArticleListIndicatorTitle: {
+    textAlign: 'center',
+    width: AppSizes.screen.width,
+    marginTop: AppSizes.padding / 2,
+    color: AppColors.textDefault
   }
 });
 
 // component styles
-const customStylesa = {
-  paginationView: {
-    backgroundColor: '#eee',
-  }
-}
-
-const customStyles = {
-  separator: {
-    height: 1,
-    backgroundColor: '#CCC'
-  },
-  refreshableView: {
-    height: 50,
-    backgroundColor: '#fff',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+const customListStyles = {
+  // 各种行为按钮的样式
   actionsLabel: {
-    fontSize: 20,
-    color: '#007aff',
+    fontSize: AppFonts.h2.fontSize,
+    color: AppColors.brand.primary,
   },
+  // 翻页组件
   paginationView: {
-    height: 44,
+    height: AppSizes.padding * 2,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#FFF',
+    backgroundColor: AppColors.cardBackground,
+    marginLeft: AppSizes.padding / 2,
+    marginRight: AppSizes.padding / 2,
+    marginBottom: AppSizes.padding / 2
   },
+  // 首次请求无数据的组件
   defaultView: {
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+    padding: AppSizes.padding,
   },
+  // 首次请求无数据的组件
   defaultViewTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    marginBottom: 15,
-  },
-  row: {
-    padding: 10,
-    height: 44,
-  },
-  header: {
-    backgroundColor: '#50a4ff',
-    padding: 10,
-  },
-  headerTitle: {
-    color: '#fff',
-  },
-};
-
-const screenStyles = {
-  container: {
-    flex: 1,
-    backgroundColor: '#FFF',
-  },
-  navBar: {
-    height: 64,
-    backgroundColor: '#007aff',
-
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  navBarTitle: {
-    color: '#fff',
-    fontSize: 16,
-    marginTop: 12,
+    ...AppFonts.h4,
+    color: AppColors.textDefault,
+    marginBottom: AppSizes.padding * 0.75
   }
 };
 
-class PostList extends Component {
+class ArticleList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -105,23 +97,21 @@ class PostList extends Component {
   renderRowView(article, sectionID, rowID) {
     return (
       <ArticleListItem article={article} 
+                       rowID={rowID}
                        key={`sep:${sectionID}:${rowID}`} 
                        navigator={this.props.navigator} />
-    );
-  };
+    )
+  }
 
   // 请求数据
-  onFetch(page = 1, callback, options) {
-    console.log('onFetch')
+  getArticles(page = 1, callback, options) {
     this.setState({ loading: true });
-    Api.getArticleList()
+    Api.getArticleList(page)
     .then(data => {
-      this.setState({
-        loading: false,
-        firstLoader: false
-      });
+      this.setState({ loading: false, firstLoader: false });
+      const pagination = data.result.pagination;
       callback(data.result.data, {
-        allLoaded: false,
+        allLoaded: pagination.total_page < 2 || pagination.current_page >= pagination.total_page,
       });
     })
     .catch(err => {
@@ -129,155 +119,102 @@ class PostList extends Component {
     });
   }
 
-  /**
-   * 已下拉等待释放前的组件
-   * refreshCallback用于触发刷新
-   */
-  renderRefreshableWaitingView(refreshCallback) {
-    if (Platform.OS !== 'android') {
-      return (
-        <View style={customStyles.refreshableView}>
-          <Text style={customStyles.actionsLabel}>
-            ↓
-          </Text>
-        </View>
-      );
-    } else {
-      return (
-        <TouchableHighlight
-          underlayColor='#c8c7cc'
-          onPress={refreshCallback}
-          style={customStyles.refreshableView}
-        >
-          <Text style={customStyles.actionsLabel}>
-            ↻
-          </Text>
+  // 在第一次读取时没有行显示时呈现视图，refreshcallback函数的函数调用刷新列表
+  renderEmptyView(refreshCallback) {
+    return (
+      <View style={customListStyles.defaultView}>
+        <Text style={customListStyles.defaultViewTitle}>暂无数据，下拉刷新重试</Text>
+        <TouchableHighlight underlayColor={AppColors.textDefault} onPress={refreshCallback}>
+          <Ionicon name="md-refresh" size={22} style={{color: AppColors.textDefault}}/>
         </TouchableHighlight>
-      );
-    }
-  }
-
-  // 渲染刷新视图的下拉刷新时被激活，准备刷新  
-  renderRefreshableWillRefreshView() {
-    return (
-      <View style={customStyles.refreshableView}>
-        <Text style={customStyles.actionsLabel}>
-          ↻
-        </Text>
       </View>
     );
   }
 
-  // 正在刷新试图   
-  renderRefreshableFetchingView() {
-    return (
-      <View style={customStyles.refreshableView}>
-        <GiftedSpinner />
-      </View>
-    );
-  }
-
-  // 翻页正在请求中时的状态
+  // 翻页正常状态
   renderPaginationWaitingView(paginateCallback) {
     return (
       <TouchableHighlight
-        underlayColor='#c8c7cc'
-        onPress={paginateCallback}
-        style={customStyles.paginationView}
-      >
-        <Text style={[customStyles.actionsLabel, {fontSize: 13}]}>
-          Load more
-        </Text>
+          onPress={paginateCallback}
+          underlayColor={AppColors.textMuted}
+          style={customListStyles.paginationView}>
+        <Text style={
+          [customListStyles.actionsLabel, { 
+            fontSize: AppFonts.base.fontSize, 
+            color: AppColors.textDefault
+          }]
+        }>加载更多</Text>
       </TouchableHighlight>
     );
   }
 
-  // 正在请求时的翻页状态
-  renderPaginationFetchigView() {
+  // 翻页在请求时的状态
+  renderPaginationFetchingView() {
     return (
-      <View style={customStyles.paginationView}>
-        <GiftedSpinner />
+      <View style={[customListStyles.paginationView, { backgroundColor: 'transparent' }]}>
+        <AutoActivityIndicator size={'small'} />
       </View>
-    );
+    )
   }
 
-  // 文章全部加载完时翻页的状态
+  // 翻页在文章全部加载完时的状态
   renderPaginationAllLoadedView() {
     return (
-      <View style={customStyles.paginationView}>
-        <Text style={customStyles.actionsLabel}>
-          ~
-        </Text>
+      <View style={[customListStyles.paginationView, {
+        height: AppSizes.padding * 1.5,
+        marginBottom: AppSizes.padding / 2,
+        backgroundColor: AppColors.background 
+      }]}>
+         <Text style={
+          [customListStyles.actionsLabel, { 
+            fontSize: AppFonts.base.fontSize, 
+            color: AppColors.textMuted
+          }]
+        }>到底啦~</Text>
       </View>
-    );
-  }
-
-  // 在第一次读取时没有行显示时呈现视图
-  // @param { } refreshcallback函数的函数调用刷新列表
-  renderEmptyView(refreshCallback) {
-    return (
-      <View style={customStyles.defaultView}>
-        <Text style={customStyles.defaultViewTitle}>
-          Sorry, there is no content to display
-        </Text>
-
-        <TouchableHighlight
-          underlayColor='#c8c7cc'
-          onPress={refreshCallback}
-        >
-          <Text>
-            ↻
-          </Text>
-        </TouchableHighlight>
-      </View>
-    );
+    )
   }
 
   render(){
     return (
-      <GiftedListView
-        rowView={this.renderRowView.bind(this)}
-        onFetch={this.onFetch.bind(this)}
-        firstLoader={this.state.firstLoader}
-        initialListSize={10}
-        withSections={false}
-        enableEmptySections={true}
-        style={
-          styles.listView
+      <View style={styles.listViewContainer}>
+        <GiftedListView
+          style={styles.ArticleListView}
+          firstLoader={true}
+          initialListSize={10}
+          withSections={false}
+          enableEmptySections={true}
+          rowView={this.renderRowView.bind(this)}
+          onFetch={this.getArticles.bind(this)}
+          rowHasChanged={(r1,r2) => { r1.id !== r2.id }}
+
+          emptyView={this.renderEmptyView}
+
+          refreshable={true}
+          refreshableTitle={'更新数据...'}
+          refreshableTintColor={AppColors.brand.black}
+          refreshableColors={[AppColors.brand.primary]}
+
+          pagination={true}
+          paginationFetchingView={this.renderPaginationFetchingView}
+          paginationWaitingView={this.renderPaginationWaitingView}
+          paginationAllLoadedView={this.renderPaginationAllLoadedView}
+        />
+        {
+          this.state.firstLoader
+          ?  <View style={styles.ArticleListIndicator}>
+              <AutoActivityIndicator />
+              {
+                Platform.OS == 'ios'
+                ? <Text style={styles.ArticleListIndicatorTitle}>数据加载中...</Text>
+                : null
+              }
+            </View>
+          : null
         }
-        customStyles={{
-          paginationView: {
-            backgroundColor: '#eee',
-          }
-        }}
-
-        emptyView={this.renderEmptyView}
-
-        PullToRefreshViewAndroidProps={{
-          colors: ['#fff'],
-          progressBackgroundColor: '#003e82',
-        }}
-
-        rowHasChanged={(r1,r2)=>{
-          r1.id !== r2.id
-        }}
-
-        refreshableTintColor="blue"
-        refreshable={true}
-        refreshableViewHeight={50}
-        refreshableDistance={40}
-        refreshableFetchingView={this.renderRefreshableFetchingView}
-        refreshableWillRefreshView={this.renderRefreshableWillRefreshView}
-        refreshableWaitingView={this.renderRefreshableWaitingView}
-
-        pagination={false}
-        pagination={true}
-        paginationFetchigView={this.renderPaginationFetchigView}
-        paginationAllLoadedView={this.renderPaginationAllLoadedView}
-        paginationWaitingView={this.renderPaginationWaitingView}
-      />
+      </View>
     )
   }
 }
 
-export default PostList;
+export default ArticleList;

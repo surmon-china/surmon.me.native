@@ -7,6 +7,7 @@ import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // third libs
 import HTMLView from 'react-native-htmlview';
+import Markdown from 'react-native-simple-markdown';
 
 // Components
 import NavBar from '@app/components/navbar';
@@ -16,39 +17,140 @@ import AutoActivityIndicator from '@app/components/common/activity-indicator';
 import { Api } from '@app/service';
 
 // Utils
-import marked from '@app/utils/marked';
 import filters from '@app/utils/filters';
 const { toYMD, descLimit, buildThumb } = filters;
 import HandleBackBtnPress from '@app/utils/handle-back-btn-press';
 
 // Styles
-import { AppSizes } from '@app/style';
+import { AppColors, AppSizes, AppFonts } from '@app/style';
 
-// 处理html解析
-const renderNode = (node, index, siblings, parent) => {
-  if (node.name == 'iframe') {
-    const a = node.attribs;
-    return (
-      <View key={index} style={{width: Number(a.width), height: Number(a.height)}}>
-        <WebView source={{html: `<iframe src="${a.src}"></iframe>`}} />
-      </View>
-    );
-  } else if (node.name == 'img') {
-    return (
-      <View key={index} style={{width: 100, height: 100}}>
-        <Image source={{uri: node.attribs.src}} style={htmlStyles.img} />
-      </View>
-    )
-  } else if (node.type == 'text') {
-    // console.log(node)
-    if (node.parent && node.parent && node.parent.name == 'p') {
-      node.data = `         ${node.data}`
-    } else {
-      node.data = `    ${node.data}`
+// markdown styles
+const markdownStyles = {
+  // 链接
+  link: {
+    fontWeight: 'bold',
+    color: AppColors.textTitle,
+    textDecorationLine: 'underline'
+  },
+  mailTo: {
+    color: 'orange',
+  },
+  // 段落
+  text: {
+    color: AppColors.textTitle,
+    fontSize: AppFonts.base.size,
+    fontFamily: AppFonts.base.family,
+    lineHeight: Platform.OS == 'ios' ? AppFonts.h3.lineHeight : AppFonts.h2.lineHeight
+  },
+  // 图片
+  image: {
+    flex: 1,
+    width: AppSizes.screen.width - AppSizes.padding * 2,
+    height: 200,
+    resizeMode: 'contain',
+    marginBottom: 0
+  },
+  heading1: {
+    ...AppFonts.h1
+  },
+  heading2: {
+    ...AppFonts.h2
+  },
+  heading3: {
+    ...AppFonts.h3
+  },
+  heading4: {
+    ...AppFonts.h4
+  },
+  heading5: {
+    ...AppFonts.h5
+  },
+  list: {
+    paddingLeft: AppSizes.padding,
+    marginBottom: AppSizes.padding / 2
+  }
+}
+
+const styles = StyleSheet.create({
+  image: {
+    flex: 1,
+    width: AppSizes.screen.width,
+    height: 260,
+    resizeMode: 'cover',
+    flexDirection: 'row',
+    backgroundColor: 'rgba(0,0,0,0.8)'
+  },
+  innerImage: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: 200
+  },
+  title: {
+    margin: 15,
+    ...AppFonts.h1,
+    lineHeight: 40,
+    fontWeight: '500',
+    textAlign: 'center',
+    color: AppColors.cardBackground
+  },
+  meta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingTop: AppSizes.padding / 2,
+    borderTopColor: AppColors.cardBackground,
+    borderTopWidth: 1
+  },
+  metaItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  metaItemLeft: {
+    marginRight: AppSizes.padding / 2,
+  },
+  metaIcon: {
+    padding: 3,
+    marginRight: 5
+  },
+  metaText: {
+    color: AppColors.cardBackground
+  },
+  metaDateIcon: {
+    marginTop: 2
+  },
+  indicator: {
+    marginTop: (AppSizes.screen.height - 260) / 2
+  },
+  content: {
+    padding: AppSizes.padding
+  },
+  floatFooter: {
+    position: 'absolute',
+    bottom: 0
+  }
+})
+
+const markdownRules = {
+  text: {
+    react(node, output, state) {
+      return (
+        <Text style={markdownStyles.text} key={state.key}>{`\u00A0\u00A0\u00A0\u00A0${node.content}`}</Text>
+      )
     }
-  } else if (['pre', 'br', 'p'].includes(node.name) || node.name.includes('h')) {
-    // console.log(node)
-    // return null
+  },
+  image: {
+    react(node, output, state) {
+      const imageSrc = node.target.replace(/^http:\/\//ig, "https://surmon.me/proxy/");
+      return (
+        <Image
+          key={state.key}
+          source={{uri: imageSrc}}
+          style={markdownStyles.image}
+        />
+      )
+    }
   }
 }
 
@@ -59,8 +161,8 @@ class Detail extends Component {
     this.state = {
       loading: false,
       article: this.props.article,
-      articleContent: '<p>loading...</p>'
-    };
+      articleContent: ''
+    }
   }
 
   // 组件加载完成
@@ -69,17 +171,15 @@ class Detail extends Component {
     this.setState({loading: true});
     Api.getArticleDetail(this.props.article.id).then(data => {
       this.setState({
+        loading: false,
         article: data.result,
-        articleContent: String(marked(data.result.content || ' ')),
-        loading: false
-      });
-      // console.log(this.state.articleContent);
-    });
+        articleContent: String(data.result.content || ' ')
+      })
+    })
   }
 
   // 组件即将释放
   componentWillUnmount() {
-    // 移除安卓物理按键监听
     BackAndroid.removeEventListener('hardwareBackPress', HandleBackBtnPress.bind(this));
   }
 
@@ -113,110 +213,17 @@ class Detail extends Component {
           </Image>
           { loading 
               ? <AutoActivityIndicator style={styles.indicator}/>
-              : <View style={styles.content}><HTMLView value={articleContent} stylesheet={htmlStyles} renderNode={renderNode}/></View>
+              : <View style={styles.content}>
+                  <Markdown styles={markdownStyles} rules={markdownRules}>{articleContent}</Markdown>
+                </View>
           }
           <NavBar leftOn={true}
+                  navigator={this.props.navigator}
                   containerStyle={{backgroundColor: 'transparent'}} />
         </ScrollView>
       </View>
     )
   }
 }
-
-const htmlStyles = StyleSheet.create({
-  a: {
-    fontWeight: 'bold',
-    color: '#555',
-    textDecorationLine: 'underline'
-  },
-  p: {
-    width: 100,
-    marginTop: 0,
-    marginBottom: 0,
-    paddingTop: 0,
-    paddingBottom: 0,
-    lineHeight: 26
-  },
-  img: {
-    flex: 1,
-    width: AppSizes.screen.width - 40,
-    resizeMode: 'cover',
-    overflow: 'visible'
-  },
-  h3: {
-    lineHeight: 30
-  },
-  h4: {
-    lineHeight: 30
-  },
-  li: {
-    paddingLeft: 20,
-    lineHeight: 28,
-    marginBottom: 0
-  }
-});
-
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    width: AppSizes.screen.width,
-    height: 300,
-    resizeMode: 'cover',
-    flexDirection: 'row',
-    backgroundColor: 'rgba(0,0,0,0.8)',
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3
-  },
-  innerImage: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 200
-  },
-  title: {
-    margin: 15,
-    fontSize: 25,
-    lineHeight: 35,
-    fontWeight: '500',
-    color: '#fff',
-    textAlign: 'center'
-  },
-  meta: {
-    flexDirection: 'row',
-    borderTopColor: '#eaeaea',
-    borderTopWidth: 1,
-    paddingTop: 10,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  metaItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  metaItemLeft: {
-    marginRight: 10,
-  },
-  metaIcon: {
-    padding: 3,
-    marginRight: 5
-  },
-  metaText: {
-    color: '#fff'
-  },
-  metaDateIcon: {
-    marginTop: 2
-  },
-  indicator: {
-    marginTop: (AppSizes.screen.height - 300) / 2,
-  },
-  content: {
-    padding: 20
-  },
-  floatFooter: {
-    position: 'absolute',
-    bottom: 0
-  }
-})
 
 export default Detail;

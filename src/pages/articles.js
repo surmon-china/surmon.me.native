@@ -8,8 +8,8 @@ import ArticleList from '@app/components/article/article-list';
 // Utils
 import HandleBackBtnPress from '@app/utils/handle-back-btn-press';
 
-// style
-import { AppColors } from '@app/style';
+// Styles
+import { AppColors, AppSizes } from '@app/style';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: AppColors.background,
-    paddingTop: Platform.OS == 'ios' ? 72 : 80,
-    marginBottom: Platform.OS == 'ios' ? 50 : 0
+    paddingTop: AppSizes.navbarHeight + AppSizes.statusBarHeight,
+    marginBottom: Platform.OS == 'ios' ? AppSizes.navbarHeight : 0
   }
 })
 

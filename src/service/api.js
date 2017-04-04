@@ -27,13 +27,14 @@ const fetchService = (url, options = {}) => {
 export default class Api {
 
   // 获取文章列表
-  static getArticleList() {
-    return fetchService(`${baseApi}/article`)
+  static getArticleList(page) {
+    const queryParams = page ? `?page=${page}` : '';
+    return fetchService(`${baseApi}/article${queryParams}`);
   }
 
   // 获取文章详情
   static getArticleDetail(article_id) {
-    return fetchService(`${baseApi}/article/${article_id}`)
+    return fetchService(`${baseApi}/article/${article_id}`);
   }
 
   // 给文章或主站点赞

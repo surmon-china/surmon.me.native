@@ -6,7 +6,7 @@
 */
 
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Platform, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 // Icons
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -15,16 +15,73 @@ import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 // Pages
 import Detail from '@app/pages/detail';
 
-// utils
+// Utils
 import filters from '@app/utils/filters';
 const { toYMD, descLimit, buildThumb } = filters;
 
-const PostItem = ({article, navigator}) => {
+// Styles
+import { AppColors, AppSizes, AppFonts } from '@app/style';
+
+const styles = StyleSheet.create({
+  container: {
+    margin: AppSizes.padding / 2,
+    backgroundColor: AppColors.cardBackground
+  },
+  thumb: {
+    flex: 1,
+    maxWidth: AppSizes.screen.width - 20,
+    height: 150,
+    resizeMode: 'cover'
+  },
+  title: {
+    margin: AppSizes.padding * 0.75,
+    marginBottom: 0,
+    ...AppFonts.h3,
+    color: AppColors.textTitle,
+    fontWeight: '500'
+  },
+  description: {
+    margin: AppSizes.padding * 0.75,
+    marginTop: AppSizes.padding / 3,
+    fontSize: 13,
+    lineHeight: 20,
+    textAlign: 'left',
+    color: AppColors.textDefault
+  },
+  meta: {
+    flexDirection: 'row',
+    borderTopColor: AppColors.textPrimary,
+    borderTopWidth: 1,
+    padding: AppSizes.padding / 2,
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+  metaItem: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  metaIcon: {
+    padding: AppSizes.padding * 0.15,
+    marginRight: 5,
+    color: AppColors.textDefault
+  },
+  metaDateIcon: {
+    marginTop: Platform.OS == 'ios' ? 2 : 0
+  },
+  metaText: {
+    color: AppColors.textDefault
+  }
+});
+
+const PostItem = ({article, rowID, navigator}) => {
 
   // 组件
   return (
     <TouchableOpacity activeOpacity={0.6}
-                      style={styles.container}
+                      style={[styles.container, {
+                        marginTop: rowID == 0 ? AppSizes.padding : AppSizes.padding / 2
+                      }]}
                       onPress={() => {
                         navigator.push({component: Detail, passProps: {article}})
                       }}>
@@ -51,58 +108,6 @@ const PostItem = ({article, navigator}) => {
       </View>
     </TouchableOpacity>
   )
- }
-
- const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-    backgroundColor: '#fff'
-  },
-  thumb: {
-    flex: 1,
-    height: 150,
-    resizeMode: 'cover',
-    borderTopLeftRadius: 3,
-    borderTopRightRadius: 3,
-  },
-  title: {
-    margin: 15,
-    marginBottom: 0,
-    fontSize: 17,
-    fontWeight: '500'
-  },
-  description: {
-    margin: 15,
-    marginTop: 7,
-    fontSize: 13,
-    lineHeight: 20,
-    textAlign: 'left',
-    color: '#aaa'
-  },
-  meta: {
-    flexDirection: 'row',
-    borderTopColor: '#eaeaea',
-    borderTopWidth: 1,
-    padding: 10,
-    justifyContent: 'space-between',
-    alignItems: 'center'
-  },
-  metaItem: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  metaIcon: {
-    padding: 3,
-    marginRight: 5,
-    color: '#aaa'
-  },
-  metaDateIcon: {
-    marginTop: 2
-  },
-  metaText: {
-    color: '#aaa'
-  }
- });
+}
 
  export default PostItem;

@@ -19,7 +19,8 @@ class AutoActivityIndicator extends Component {
 
   render() {
     return (
-    	<ActivityIndicator size={'large'} 
+    	<ActivityIndicator size={this.props.size || 'large'} 
+                         style={this.props.style}
     										 color={ 
     										 		Platform.OS === 'ios'
     										 		? AppColors.brand.secondary 

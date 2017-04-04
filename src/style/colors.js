@@ -7,8 +7,7 @@
 
 const app = {
   background: '#EEEEEE',
-  cardBackground: '#FFFFFF',
-
+  cardBackground: '#FFFFFF'
 };
 
 const brand = {
@@ -20,9 +19,12 @@ const brand = {
 };
 
 const text = {
+  textTitle: '#555',
+  textDefault: '#AAA',
   textPrimary: '#EEE',
   textSecondary: '#333333',
-  textLink: '#009688'
+  textLink: '#009688',
+  textMuted: '#c8c7cc'
 };
 
 export default {

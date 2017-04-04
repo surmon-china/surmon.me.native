@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
 
 const NavBar = ({
   leftIsBack,
+  navigator,
 
   title, 
   colorText,
@@ -93,7 +94,7 @@ const NavBar = ({
   // left menu options
   leftText = leftText || defaultLeftMenuText;
   colorText = colorText || AppColors.textPrimary;
-  onLeftPress = onLeftPress || (() => { _navigator.pop()});
+  onLeftPress = onLeftPress || (() => {navigator.pop()});
   containerStyle = containerStyle || {};
   containerStyle.backgroundColor = containerStyle.backgroundColor || AppColors.brand.primary;
 
