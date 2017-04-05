@@ -107,7 +107,7 @@ const NavBar = ({
             barStyle="light-content"
             showHideTransition='slide'
             style={styles.statusBar}
-            hidden={ false }
+            hidden={false}
         />
       </View>
       <View style={styles.navBar}>

@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { Navigator } from 'react-native';
 
-// init Home
-import Layout from './layout';
+// Init Layout
+import Layout from './layouts/layout';
 
 /*
 initialRoute：初始化路由

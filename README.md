@@ -1,6 +1,19 @@
 # surmon.me.native
 A react-native applaction for surmon.me
 
+## Screenshot
+
+### IOS
+
+### Android
+
+## 页面结构
+
+**暂时只有三个**
+- Home（Articles => Detail）
+- Projects(WebView)
+- About me(About)
+
 ## Build Setup
 
 ```bash
@@ -31,15 +44,13 @@ $ npm run test
 ### 项目问题
 - run-ios失败的时候，可以需要删除ios/build文件夹重新编译
 - 不再使用`babel-plugin-module-resolver`插件，使用内fbjs模块管理别名
-- 
 - 项目出现诸多异常的时候，直接执行`. reset.sh`会自动清理缓存并重装，而后执行命令即可
 
 ### Icons图标库问题
+安装完毕若有异常，则需要执行`rnpm link`/`react-native link`
 
-#### IOS下
-
-#### Android下
-- icons略复杂
+### Markdown解析库异常
+使用了[react-native-simple-markdown](https://github.com/CharlesMangwa/react-native-simple-markdown)，由于其暂不支持多层列表，故使用黑名单去除了list的解析，同时由于其内部的组件机制，导致无法使用[react-native-fit-image](https://github.com/huiseoul/react-native-fit-image)组件
 
 ### IOS
 - react-native-vector-icons - Issues：
@@ -48,8 +59,16 @@ $ npm run test
       + http://code4app.com/article/cocoapods-install-usage
       + https://github.com/CocoaPods/CocoaPods/issues/3692
       + https://github.com/oblador/react-native-vector-icons/issues/394
+- AppName和启动页修改 http://www.cnblogs.com/allenxieyusheng/p/5802179.html
+- App图标尺寸 
+   + http://blog.csdn.net/leiyu231/article/details/52830151
+   + https://medium.com/the-react-native-log/change-default-launch-screen-in-react-native-ios-app-544f94f1e947
+- 打包为IPA包的步骤 
+   + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
+   + 中文版 http://www.jianshu.com/p/7683efdd31f5
 
 ### Android
+- 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
 - 安卓打包签名问题
    + Build failed with an exception：https://github.com/soliury/noder-react-native/issues/44
    + http://reactnative.cn/docs/0.42/signed-apk-android.html#content
@@ -60,7 +79,10 @@ $ npm run test
    + https://github.com/facebook/react-native/issues/2711
 - 版本不兼容问题
    + http://stackoverflow.com/questions/34749299/gradle-version-2-2-is-required-current-version-is-2-10
-- 
+- AppName修改路径 android/app/src/main/res/values/strings.xml
+- AppName和启动页修改 
+   + http://www.cnblogs.com/allenxieyusheng/p/5804023.html
+   + http://stackoverflow.com/questions/33390013/how-to-create-some-kind-of-splash-screen-launching-screen-which-disappears-afte
 
 
 ## 目录结构
@@ -79,11 +101,11 @@ surmon.me.native/
    │   │
    │   └──images                 * 本地图片资源
    │   │
-   │   └──utils                  * Utils, custom libraries, functions
+   │   └──utils                  * Utils
    │   │
    │   └──styles                 * 所有样式变量集中管理
    │   │
-   │   └──config                 * 全局配置
+   │   └──service                * 封装服务性质的包，如api网络服务、全局配置、缓存封装..
    │   │
    │   └──index.js               * App入口
    │
@@ -91,5 +113,5 @@ surmon.me.native/
    │
    │──.babelrc                   * Babel配置
    │
-   └──reset.sj                   * 清空项目依赖并重新安装
+   └──reset.sh                   * 清空项目依赖并重新安装
 ```

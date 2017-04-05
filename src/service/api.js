@@ -38,17 +38,14 @@ export default class Api {
   }
 
   // 给文章或主站点赞
-  static likeArticleOrSite(article_id) {
+  static likeArticleOrSite(like_data) {
     return fetchService(`${baseApi}/like`, {
       method: 'POST',
       headers: {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        firstParam: 'yourValue',
-        secondParam: 'yourOtherValue',
-      })
+      body: JSON.stringify(like_data)
     })
   }
 

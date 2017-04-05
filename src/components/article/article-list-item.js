@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     margin: AppSizes.padding * 0.75,
     marginTop: AppSizes.padding / 3,
     fontSize: 13,
-    lineHeight: 20,
+    lineHeight: Platform.OS == 'ios' ? 20 : 24,
     textAlign: 'left',
     color: AppColors.textDefault
   },
@@ -74,7 +74,7 @@ const styles = StyleSheet.create({
   }
 });
 
-const PostItem = ({article, rowID, navigator}) => {
+const PostItem = ({article, liked, rowID, navigator}) => {
 
   // 组件
   return (
@@ -98,7 +98,9 @@ const PostItem = ({article, rowID, navigator}) => {
           <Text style={styles.metaText}>{ article.meta.comments }</Text>
         </View>
         <View style={styles.metaItem}>
-          <Icon name="favorite" size={17} style={styles.metaIcon}/>
+          <Icon name="favorite" size={17} style={[styles.metaIcon, {
+            color: liked ? 'red' : AppColors.textDefault
+          }]}/>
           <Text style={styles.metaText}>{ article.meta.likes }</Text>
         </View>
         <View style={styles.metaItem}>

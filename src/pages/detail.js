@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
-import { ActivityIndicator, WebView, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import React, { Component, createElement } from 'react';
+import { TouchableOpacity, AsyncStorage, WebView, Alert, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // Icons
-import Ionicon from 'react-native-vector-icons/Ionicons';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 import CommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // third libs
 import HTMLView from 'react-native-htmlview';
 import Markdown from 'react-native-simple-markdown';
+import _ from 'lodash'
 
 // Components
 import NavBar from '@app/components/navbar';
@@ -24,6 +25,8 @@ import HandleBackBtnPress from '@app/utils/handle-back-btn-press';
 // Styles
 import { AppColors, AppSizes, AppFonts } from '@app/style';
 
+const containerWidth = AppSizes.screen.width - AppSizes.padding * 2;
+
 // markdown styles
 const markdownStyles = {
   // 链接
@@ -33,7 +36,12 @@ const markdownStyles = {
     textDecorationLine: 'underline'
   },
   mailTo: {
-    color: 'orange',
+    fontWeight: 'bold',
+    color: AppColors.textTitle,
+    textDecorationLine: 'underline'
+  },
+  del: {
+    textDecorationLine:'line-through'
   },
   // 段落
   text: {
@@ -42,32 +50,75 @@ const markdownStyles = {
     fontFamily: AppFonts.base.family,
     lineHeight: Platform.OS == 'ios' ? AppFonts.h3.lineHeight : AppFonts.h2.lineHeight
   },
+  // 粗体
+  strong: {
+    fontWeight: '900',
+    marginTop: 0,
+    marginBottom: 10
+  },
+  // 引用
+  blockQuoteSection: {
+    padding: 10,
+    paddingTop: 5,
+    marginTop: 10,
+    marginBottom: 10,
+    flexDirection: 'row',
+    backgroundColor: AppColors.textPrimary
+  },
+  blockQuoteSectionBar: {
+    height: null,
+    backgroundColor: AppColors.textMuted
+  },
+  // 行内代码块
+  inlineCode: {
+    margin: 3,
+    padding: 3,
+    fontFamily: 'Courier',
+    fontWeight: '200',
+    color: AppColors.brand.black
+  },
   // 图片
   image: {
     flex: 1,
-    width: AppSizes.screen.width - AppSizes.padding * 2,
-    height: 200,
+    width: containerWidth,
+    height: Platform.OS == 'ios' ? 166 : (containerWidth) * 2,
     resizeMode: 'contain',
     marginBottom: 0
   },
   heading1: {
-    ...AppFonts.h1
+    ...AppFonts.h1,
+    color: AppColors.textTitle,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 10
   },
   heading2: {
-    ...AppFonts.h2
+    ...AppFonts.h2,
+    color: AppColors.textTitle,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 10
   },
   heading3: {
-    ...AppFonts.h3
+    ...AppFonts.h3,
+    color: AppColors.textTitle,
+    fontWeight: '600',
+    marginTop: 10,
+    marginBottom: 10
   },
   heading4: {
-    ...AppFonts.h4
+    ...AppFonts.h4,
+    color: AppColors.textTitle,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 10
   },
   heading5: {
-    ...AppFonts.h5
-  },
-  list: {
-    paddingLeft: AppSizes.padding,
-    marginBottom: AppSizes.padding / 2
+    ...AppFonts.h5,
+    color: AppColors.textTitle,
+    fontWeight: '800',
+    marginTop: 10,
+    marginBottom: 10
   }
 }
 
@@ -124,15 +175,46 @@ const styles = StyleSheet.create({
     marginTop: (AppSizes.screen.height - 260) / 2
   },
   content: {
-    padding: AppSizes.padding
+    padding: AppSizes.padding,
+    marginBottom: AppSizes.padding * 2
   },
-  floatFooter: {
+  footer: {
     position: 'absolute',
-    bottom: 0
+    left: 0,
+    bottom: 0,
+    width: AppSizes.screen.width,
+    height: AppSizes.padding * 2.2,
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: AppColors.background
+  },
+  footerItem: {
+    width: AppSizes.screen.width / 2,
+    height: AppSizes.padding * 2.2,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  footerItemIcon: {
+    marginRight: 10,
+    color: AppColors.textTitle
+  },
+  footerItemIconText: {
+    color: AppColors.textTitle
   }
 })
 
 const markdownRules = {
+  inlineCode: {
+    react(node, output, state) {
+      state.withinText = true;
+      return (
+        <Text style={markdownStyles.inlineCode} key={state.key}>{node.content}</Text>
+      )
+    }
+  },
   text: {
     react(node, output, state) {
       return (
@@ -161,8 +243,16 @@ class Detail extends Component {
     this.state = {
       loading: false,
       article: this.props.article,
-      articleContent: ''
+      articleContent: '',
+      liked: false
     }
+    // 获取本地存储记录
+    AsyncStorage.getItem('user_like_history')
+    .then(historyLikes => {
+      this.historyLikes = historyLikes ? JSON.parse(historyLikes) : []
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   // 组件加载完成
@@ -173,9 +263,38 @@ class Detail extends Component {
       this.setState({
         loading: false,
         article: data.result,
-        articleContent: String(data.result.content || ' ')
+        articleContent: data.result.content
       })
+      if (this.historyLikes.length) {
+        if (this.historyLikes.includes(this.state.article.id)) {
+          this.setState({ liked: true });
+        }
+      }
+    }).catch(err => {
+      console.log(err);
     })
+  }
+
+  // 喜欢文章
+  likeArticle() {
+    if (this.state.liked) return false;
+    Api.likeArticleOrSite({
+      type: 2,
+      id: this.props.article.id
+    }).then(data => {
+      this.state.liked = true;
+      this.state.article.meta.likes += 1;
+      this.forceUpdate();
+      this.historyLikes.push(this.state.article.id);
+      AsyncStorage.setItem('user_like_history', JSON.stringify(this.historyLikes))
+    }).catch(err => {
+      console.log(err);
+    })
+  }
+
+  // 去留言板
+  toComment() {
+    Alert.alert('功能还没做');
   }
 
   // 组件即将释放
@@ -214,13 +333,31 @@ class Detail extends Component {
           { loading 
               ? <AutoActivityIndicator style={styles.indicator}/>
               : <View style={styles.content}>
-                  <Markdown styles={markdownStyles} rules={markdownRules}>{articleContent}</Markdown>
+                  <Markdown styles={markdownStyles} 
+                  rules={markdownRules}
+                  blacklist={['list']}>{articleContent}</Markdown>
                 </View>
           }
           <NavBar leftOn={true}
                   navigator={this.props.navigator}
                   containerStyle={{backgroundColor: 'transparent'}} />
         </ScrollView>
+        <View style={styles.footer}>
+          <TouchableOpacity style={styles.footerItem} onPress={this.toComment}>
+            <Icon name="comment" size={17} style={styles.footerItemIcon}/>
+            <Text style={styles.footerItemIconText}>{ `评论 (${article.meta.comments})` }</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.footerItem} onPress={this.likeArticle.bind(this)}>
+            <Icon name={this.state.liked ? 'favorite' : 'favorite-border'} 
+                  size={17} 
+                  style={[styles.footerItemIcon, {
+                    color: this.state.liked ? 'red' : AppColors.textTitle
+                  }]}/>
+            <Text style={[styles.footerItemIconText, {
+                    color: this.state.liked ? 'red' : AppColors.textTitle
+                  }]}>{ `${this.state.liked ? '已' : ''}喜欢 (${article.meta.likes})` }</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     )
   }

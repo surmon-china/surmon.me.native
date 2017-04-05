@@ -6,7 +6,7 @@
 */
 
 import React, { Component } from 'react';
-import { ListView, Dimensions, Platform, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
+import { ListView, Dimensions, AsyncStorage, Platform, StyleSheet, View, Text, TouchableHighlight } from 'react-native';
 
 // 加载刷新组件
 import GiftedListView from 'react-native-gifted-listview';
@@ -91,13 +91,25 @@ class ArticleList extends Component {
       loading: false,
       firstLoader: true
     };
+    // 获取本地存储记录
+    AsyncStorage.getItem('user_like_history')
+    .then(historyLikes => {
+      this.historyLikes = historyLikes ? JSON.parse(historyLikes) : []
+    }).catch(err => {
+      console.log(err)
+    })
   }
 
   // article item render
   renderRowView(article, sectionID, rowID) {
+    let liked = false;
+    if (this.historyLikes && this.historyLikes.length && this.historyLikes.includes(article.id)) {
+      liked = true;
+    }
     return (
       <ArticleListItem article={article} 
                        rowID={rowID}
+                       liked={liked}
                        key={`sep:${sectionID}:${rowID}`} 
                        navigator={this.props.navigator} />
     )

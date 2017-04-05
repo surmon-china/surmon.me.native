@@ -52,7 +52,7 @@ class Projects extends Component {
   // webview状态改变
   onNavigationStateChange(navState) {
     this.setState({ canGoBack: navState.canGoBack });
-    console.log(this.refs.WEBVIEW_REF);
+    // console.log(this.refs.WEBVIEW_REF);
   }
 
   // 返回上一页Webview
