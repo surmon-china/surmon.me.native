@@ -1,45 +1,45 @@
 # surmon.me.native
-A react-native applaction for surmon.me
+A react-native applaction for [surmon.me](https://surmon.me)
+
+一个非常适合入门学习的react-native项目，代码清晰、结构合理
 
 ## Screenshot
 
 ### IOS
 
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/ios/full-01.jpg)
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/ios/full-02.jpg)
+
 ### Android
 
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/android/full-01.jpg)
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/android/full-02.jpg)
+
 ## 页面结构
+- Welcome(安卓下首屏启动页)
+   + 1.666秒后跳渲染布局组件
+- Home
+   + 文章列表组件
+   + 可下拉刷新
+   + 上拉点击加载更多
+- Detail 文章详情页
+   + markdown解析器
+- Projects
+   + 一个Webview组件
+- About
+   + 一些图标组件
 
-**暂时只有三个**
-- Home（Articles => Detail）
-- Projects(WebView)
-- About me(About)
+## 程序结构
+- 组件:components（公用组件抽象）
+- 页面:pages（主程序的主要构成部分）
+- 布局:layouts（既将两端公用的布局进行封装、又可以用于不同页面下的不同布局，类似nuxt.js中的layout）
+- 服务:service（公共服务抽象，如：网络、缓存...）
+- 样式:styles（类似Web端对样式变量的内聚管理，如果项目较大，路由也可类似管理）
+- 扩展:utils（将任何不涉及依赖的复用纯函数进行封装）
 
-## Build Setup
-
-```bash
-# install dependencies
-$ npm install # Or yarn install
-
-# 清除缓存并开启服务器（不执行编译）
-$ npm run dev
-
-# 编译两端并开启服务器（执行前需开启安卓模拟器）
-$ npm run dev:all
-
-# 编译IOS并开启服务器
-$ npm run dev:ios
-
-# 编译Android并开启服务器（执行前需开启安卓模拟器）
-$ npm run dev:android
-
-# 替换debug插件，仅项目初次安装完后执行
-$ npm run postinstall
-
-# 启用测试服务
-$ npm run test
-```
-
-## 坑
+## 坑和经验
 
 ### 项目问题
 - run-ios失败的时候，可以需要删除ios/build文件夹重新编译
@@ -114,4 +114,30 @@ surmon.me.native/
    │──.babelrc                   * Babel配置
    │
    └──reset.sh                   * 清空项目依赖并重新安装
+```
+
+
+## Build Setup
+
+```bash
+# install dependencies
+$ npm install # Or yarn install
+
+# 清除缓存并开启服务器（不执行客户端）
+$ npm run dev
+
+# 编译两端并开启服务器（执行前需开启安卓模拟器）
+$ npm run dev:all
+
+# 编译IOS并开启服务器
+$ npm run dev:ios
+
+# 编译Android并开启服务器（执行前需开启安卓模拟器）
+$ npm run dev:android
+
+# 替换debug插件，仅项目初次安装完后执行
+$ npm run postinstall
+
+# 启用测试服务
+$ npm run test
 ```
