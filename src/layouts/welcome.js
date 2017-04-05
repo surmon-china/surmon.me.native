@@ -28,7 +28,7 @@ class Welcome extends Component {
   componentWillMount () {
     var navigator = this.props.navigator;
     setTimeout (() => {
-      navigator.push({component: Layout, passProps: { navigator }});
+      navigator.replace({component: Layout, passProps: { navigator }});
     }, 1666);
   }
 
