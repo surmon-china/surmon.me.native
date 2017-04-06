@@ -21,27 +21,27 @@ A react-native applaction for [surmon.me](https://surmon.me)
 
 
 ## 页面结构
-- Welcome(安卓下首屏启动页)
-   + 1.666秒后跳渲染布局组件
-- Layout
+- **Welcome**
+   + 安卓下首屏启动页（1.666秒后跳渲染布局组件）
+- **Layout**
    + 总布局组件
-- Articles
+- **Articles**
    + 文章列表组件
    + 可下拉刷新
    + 上拉点击加载更多
-- Detail 文章详情页
-   + markdown解析器
-- Projects
-   + 一个Webview组件
-- About
+- **Detail** 
+   + 文章详情页（markdown解析器）
+- **Projects**
+   + Webview组件
+- **About**
    + 一些图标组件
-- component/navbar
+- **component/navbar**
    + 顶部栏组件（StatusBar）
-- component/menu
+- **component/menu**
    + 菜单栏组件（DrawerLayoutAndroid/TabBarIOS）的封装
-- component/AutoActivityIndicator
+- **component/AutoActivityIndicator**
    + 加载指示器组件（ActivityIndicator）的封装
-- component/articel
+- **component/articel**
    + 文章列表所需的组件
 
 ## 两端异同
