@@ -130,6 +130,9 @@ $ npm run dev:android
 # 编译IOS的包并输出到./ios/react.bundle
 $ npm run build:ios
 
+# 编译Android的包并输出到android/app/build/outputs/apk/app-release.apk
+$ npm run build:android
+
 # 替换debug插件，仅项目初次安装完后执行
 $ npm run postinstall
 

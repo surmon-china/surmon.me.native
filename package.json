@@ -9,7 +9,9 @@
     "dev:android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "build:ios": "react-native bundle --entry-file index.ios.js --platform ios --bundle-output ./ios/react.bundle",
+    "build:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
+    "release:android": "cd android && ./gradlew installRelease",
     "postinstall": "rndebugger-open"
   },
   "dependencies": {
