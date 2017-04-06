@@ -68,6 +68,8 @@ A react-native applaction for [surmon.me](https://surmon.me)
 - 打包为IPA包的步骤 
    + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
    + 中文版 http://www.jianshu.com/p/7683efdd31f5
+- 开发者账户显示测试机id不符合
+   + http://stackoverflow.com/questions/39754341/none-of-your-accounts-are-a-member-code-signing-errors-after-upgrading-to-xcode 
 
 ### Android
 - 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
