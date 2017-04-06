@@ -15,11 +15,5 @@ export default {
   DEV: __DEV__,
 
   // Google Analytics - uses a 'dev' account while we're testing
-  gaTrackingId: 'UA-84887611-3',
-
-  // URLs
-  urls: {
-    resetPassword: 'http://wp-api.mcnam.ee/wp-login.php?action=lostpassword',
-    signUp: 'http://wp-api.mcnam.ee/wp-login.php?action=register',
-  }
+  gaTrackingId: 'UA-84887611-3'
 };
