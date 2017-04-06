@@ -1,7 +1,9 @@
 # surmon.me.native
 A react-native applaction for [surmon.me](https://surmon.me)
 
-一个非常适合入门学习的react-native项目，代码清晰、结构合理
+一个非常适合入门学习的react-native项目，代码清晰、结构合理。
+
+相关的其他项目：[Web（Nuxt.js）](https://github.com/surmon-china/surmon.me)、[服务端（Node.js）](https://github.com/surmon-china/nodepress)、[Web后台（Angular4）](https://github.com/surmon-china/surmon.me)
 
 ## Screenshot
 
