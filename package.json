@@ -8,6 +8,7 @@
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
+    "build:ios": "react-native bundle --entry-file index.ios.js --platform ios --bundle-output ./ios/react.bundle",
     "test": "jest",
     "postinstall": "rndebugger-open"
   },

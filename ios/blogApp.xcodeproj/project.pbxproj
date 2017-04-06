@@ -23,6 +23,8 @@
 		140ED2AC1D01E1AD002B40FF /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		146834051AC3E58100842450 /* libReact.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 146834041AC3E56700842450 /* libReact.a */; };
 		281435571E95477D0091E9EB /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 281435551E95477D0091E9EB /* LaunchScreen.xib */; };
+		28F5A0891E95F8C10070A7A0 /* react.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 28F5A0871E95F8C10070A7A0 /* react.bundle */; };
+		28F5A08A1E95F8C10070A7A0 /* react.bundle.meta in Resources */ = {isa = PBXBuildFile; fileRef = 28F5A0881E95F8C10070A7A0 /* react.bundle.meta */; };
 		292E555CACE34DB9BCA45E43 /* MaterialCommunityIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 35CA18180A5C4C7A937F54AE /* MaterialCommunityIcons.ttf */; };
 		40B9306D67CD456BBFA54D96 /* Foundation.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CD4C48EA11224E69B1F14454 /* Foundation.ttf */; };
 		46DC40E9953F4116BE78B354 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2E216F41437C471387986A0E /* Octicons.ttf */; };
@@ -260,6 +262,8 @@
 		146833FF1AC3E56700842450 /* React.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = React.xcodeproj; path = "../node_modules/react-native/React/React.xcodeproj"; sourceTree = "<group>"; };
 		22E75D736CAE4E1FAC7E1C0D /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = SimpleLineIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; };
 		281435561E95477D0091E9EB /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = ../../surmon.me.native/ios/blogApp/Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		28F5A0871E95F8C10070A7A0 /* react.bundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = react.bundle; sourceTree = "<group>"; };
+		28F5A0881E95F8C10070A7A0 /* react.bundle.meta */ = {isa = PBXFileReference; lastKnownFileType = file; path = react.bundle.meta; sourceTree = "<group>"; };
 		2E216F41437C471387986A0E /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		30DB1CE8890A4343A744675B /* Zocial.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Zocial.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; };
 		356A375B05A64D58ACE0B3B6 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
@@ -388,6 +392,8 @@
 		13B07FAE1A68108700A75B9A /* blogApp */ = {
 			isa = PBXGroup;
 			children = (
+				28F5A0871E95F8C10070A7A0 /* react.bundle */,
+				28F5A0881E95F8C10070A7A0 /* react.bundle.meta */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -852,6 +858,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
+				28F5A0891E95F8C10070A7A0 /* react.bundle in Resources */,
 				DEEEFEB43F3B438BA01493B9 /* Entypo.ttf in Resources */,
 				64D834C32A6E4A138FFE721F /* EvilIcons.ttf in Resources */,
 				065CB6AF7037439FB5CF1C18 /* FontAwesome.ttf in Resources */,
@@ -863,6 +870,7 @@
 				46DC40E9953F4116BE78B354 /* Octicons.ttf in Resources */,
 				D7010D89363B4B7A971FC9B8 /* SimpleLineIcons.ttf in Resources */,
 				EE84C5FA9AD34F6DA2E93C92 /* Zocial.ttf in Resources */,
+				28F5A08A1E95F8C10070A7A0 /* react.bundle.meta in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,6 +33,12 @@ A react-native applaction for [surmon.me](https://surmon.me)
 - About
    + 一些图标组件
 
+## 两端异同
+- 这个项目本身有很强的学习和个人性质，希望他能用少的内容尽量体现出多的东西
+- 同时也是因为 IOS 上和 android 上 RN（本身）分别提供了不同的菜单栏（DrawerLayoutAndroid/TabBarIOS），就尽量利用起来了，翻翻 API 其实很简单，就是简单封装了下可以再某个地方尽量优雅地复用。
+- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏。
+- 其他都一样。😁
+
 ## 程序结构
 - 组件:components（公用组件抽象）
 - 页面:pages（主程序的主要构成部分）
@@ -47,7 +53,6 @@ A react-native applaction for [surmon.me](https://surmon.me)
 - run-ios失败的时候，可以需要删除ios/build文件夹重新编译
 - 不再使用`babel-plugin-module-resolver`插件，使用内fbjs模块管理别名
 - 项目出现诸多异常的时候，直接执行`. reset.sh`会自动清理缓存并重装，而后执行命令即可
-
 ### Icons图标库问题
 安装完毕若有异常，则需要执行`rnpm link`/`react-native link`
 
@@ -65,11 +70,15 @@ A react-native applaction for [surmon.me](https://surmon.me)
 - App图标尺寸 
    + http://blog.csdn.net/leiyu231/article/details/52830151
    + https://medium.com/the-react-native-log/change-default-launch-screen-in-react-native-ios-app-544f94f1e947
-- 打包为IPA包的步骤 
+- 打包和生产模式的切换步骤 
    + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
    + 中文版 http://www.jianshu.com/p/7683efdd31f5
+- 打包为IPA包
+   + http://www.jianshu.com/p/a19d2d0747ee
 - 开发者账户显示测试机id不符合
    + http://stackoverflow.com/questions/39754341/none-of-your-accounts-are-a-member-code-signing-errors-after-upgrading-to-xcode 
+- 机构id备份
+   + `org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)`
 
 ### Android
 - 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
