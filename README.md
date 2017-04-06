@@ -1,7 +1,7 @@
 # surmon.me.native
 A react-native applaction for [surmon.me](https://surmon.me)
 
-一个非常适合入门学习的react-native项目，代码清晰、结构合理。
+一个非常适合入门学习的react-native项目，有借鉴自其他种子项目的组织方式，代码清晰、结构合理。
 
 相关的其他项目：[Web（Nuxt.js）](https://github.com/surmon-china/surmon.me)、[服务端（Node.js）](https://github.com/surmon-china/nodepress)、[Web后台（Angular4）](https://github.com/surmon-china/angular-admin)
 
@@ -19,10 +19,13 @@ A react-native applaction for [surmon.me](https://surmon.me)
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/android/full-02.jpg)
 
+
 ## 页面结构
 - Welcome(安卓下首屏启动页)
    + 1.666秒后跳渲染布局组件
-- Home
+- Layout
+   + 总布局组件
+- Articles
    + 文章列表组件
    + 可下拉刷新
    + 上拉点击加载更多
@@ -32,11 +35,19 @@ A react-native applaction for [surmon.me](https://surmon.me)
    + 一个Webview组件
 - About
    + 一些图标组件
+- component/navbar
+   + 顶部栏组件（StatusBar）
+- component/menu
+   + 菜单栏组件（DrawerLayoutAndroid/TabBarIOS）的封装
+- component/AutoActivityIndicator
+   + 加载指示器组件（ActivityIndicator）的封装
+- component/articel
+   + 文章列表所需的组件
 
 ## 两端异同
 - 这个项目本身有很强的学习和个人性质，希望他能用少的内容尽量体现出多的东西
-- 同时也是因为 IOS 上和 android 上 RN（本身）分别提供了不同的菜单栏（DrawerLayoutAndroid/TabBarIOS），就尽量利用起来了，翻翻 API 其实很简单，就是简单封装了下可以再某个地方尽量优雅地复用。
-- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏。
+- 菜单栏：因为 IOS 上和 android 上 RN（本身）分别提供了不同的菜单栏（DrawerLayoutAndroid/TabBarIOS），就简单封装了下可在入口尽量优雅地复用
+- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏，所以案桌上多了一层
 - 其他都一样。😁
 
 ## 程序结构
@@ -98,6 +109,35 @@ A react-native applaction for [surmon.me](https://surmon.me)
    + http://stackoverflow.com/questions/33390013/how-to-create-some-kind-of-splash-screen-launching-screen-which-disappears-afte
 
 
+## Build Setup
+
+```bash
+# install dependencies
+$ npm install # Or yarn install
+
+# 清除缓存并开启服务器（不执行客户端）
+$ npm run dev
+
+# 编译两端并开启服务器（执行前需开启安卓模拟器）
+$ npm run dev:all
+
+# 编译IOS并开启服务器
+$ npm run dev:ios
+
+# 编译Android并开启服务器（执行前需开启安卓模拟器）
+$ npm run dev:android
+
+# 编译IOS的包并输出到./ios/react.bundle
+$ npm run build:ios
+
+# 替换debug插件，仅项目初次安装完后执行
+$ npm run postinstall
+
+# 启用测试服务
+$ npm run test
+```
+
+
 ## 目录结构
 ```
 surmon.me.native/
@@ -127,30 +167,4 @@ surmon.me.native/
    │──.babelrc                   * Babel配置
    │
    └──reset.sh                   * 清空项目依赖并重新安装
-```
-
-
-## Build Setup
-
-```bash
-# install dependencies
-$ npm install # Or yarn install
-
-# 清除缓存并开启服务器（不执行客户端）
-$ npm run dev
-
-# 编译两端并开启服务器（执行前需开启安卓模拟器）
-$ npm run dev:all
-
-# 编译IOS并开启服务器
-$ npm run dev:ios
-
-# 编译Android并开启服务器（执行前需开启安卓模拟器）
-$ npm run dev:android
-
-# 替换debug插件，仅项目初次安装完后执行
-$ npm run postinstall
-
-# 启用测试服务
-$ npm run test
 ```
