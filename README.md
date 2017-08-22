@@ -1,5 +1,5 @@
-# surmon.me.native
-A react-native applaction for [surmon.me](https://surmon.me)
+# surmon.me.native 
+[![](https://badge.juejin.im/entry/58e53578a0bb9f0069055b23/likes.svg?style=flat-square)](https://juejin.im/entry/58e53578a0bb9f0069055b23/detail)  A react-native applaction for [surmon.me](https://surmon.me) 
 
 一个非常适合入门学习的react-native项目，有借鉴自其他种子项目的组织方式，代码清晰、结构合理。
 
