@@ -53,7 +53,7 @@ A react-native applaction for [surmon.me](https://surmon.me)
 ## 两端异同
 - 这个项目本身有很强的学习和个人性质，希望他能用少的内容尽量体现出多的东西
 - 菜单栏：因为 IOS 上和 android 上 RN（本身）分别提供了不同的菜单栏（DrawerLayoutAndroid/TabBarIOS），就简单封装了下可在入口尽量优雅地复用
-- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏，所以案桌上多了一层
+- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏，所以安卓上多了一层
 - 其他都一样。😁
 
 ## 程序结构
