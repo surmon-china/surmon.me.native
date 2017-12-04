@@ -1,5 +1,11 @@
-# surmon.me.native
-A react-native applaction for [surmon.me](https://surmon.me)
+# surmon.me.native 
+
+[![](https://badge.juejin.im/entry/58e53578a0bb9f0069055b23/likes.svg?style=flat-square)](https://juejin.im/entry/58e53578a0bb9f0069055b23/detail)
+[![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/issues)
+[![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/network)
+[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/stargazers)
+
+A react-native applaction for [surmon.me](https://surmon.me) 
 
 一个非常适合入门学习的react-native项目，有借鉴自其他种子项目的组织方式，代码清晰、结构合理。
 
@@ -47,7 +53,7 @@ A react-native applaction for [surmon.me](https://surmon.me)
 ## 两端异同
 - 这个项目本身有很强的学习和个人性质，希望他能用少的内容尽量体现出多的东西
 - 菜单栏：因为 IOS 上和 android 上 RN（本身）分别提供了不同的菜单栏（DrawerLayoutAndroid/TabBarIOS），就简单封装了下可在入口尽量优雅地复用
-- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏，所以案桌上多了一层
+- 启动屏几乎是个标配，Android 只能通过自定义方式来定义启动屏，所以安卓上多了一层
 - 其他都一样。😁
 
 ## 程序结构
