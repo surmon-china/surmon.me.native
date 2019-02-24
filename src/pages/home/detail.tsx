@@ -1,5 +1,5 @@
 import React, { Component, createElement } from 'react';
-import { TouchableOpacity, AsyncStorage, WebView, Alert, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { TouchableOpacity, AsyncStorage, Alert, BackAndroid, Dimensions, Image, Platform, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 // Icons
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -18,7 +18,7 @@ import { Api } from '@app/service/http';
 
 // Utils
 import filters from '@app/utils/filters';
-const { toYMD, descLimit, buildThumb } = filters;
+const { toYMD, stringLimit, buildThumb } = filters;
 import HandleBackBtnPress from '@app/utils/handle-back-btn-press';
 
 // Styles
@@ -237,6 +237,9 @@ const markdownRules = {
 
 // component
 class Detail extends Component {
+
+  // static navigationOptions = () => ({ title: i18n.t(LANGUAGE.ABOUT) })
+
   constructor(props) {
     super(props);
     this.state = {

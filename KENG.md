@@ -41,7 +41,7 @@ npm run test
 ```bash
 # in terminal in root of the project:
 # it generates 'IOS' and 'Android' folders again
-react-native upgrade
+react-native upgrade n - yyyyyyyy
 react-native link
 ```
 

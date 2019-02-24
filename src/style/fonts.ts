@@ -11,15 +11,17 @@ function lineHeight(fontSize: number) {
   return parseInt(String(fontSize + (fontSize * multiplier)), 10);
 }
 
+export const fontFamily = 'DIN-Regular'
+
 export const base = {
   fontSize: 14,
   lineHeight: lineHeight(14),
   ...Platform.select({
     ios: {
-      // fontFamily: 'DIN-Regular',
+      fontFamily
     },
     android: {
-      fontFamily: 'DIN-Regular',
+      fontFamily
     },
   }),
 };

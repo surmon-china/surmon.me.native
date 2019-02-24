@@ -1,33 +1,29 @@
 
-/*
-*
-* 封装兼容的Loading组件
-*
-*/
+import React, { Component } from 'react'
+import { observer } from 'mobx-react/native'
+import { ActivityIndicator, ViewStyle } from 'react-native'
+import { IS_IOS } from '@app/config'
+import colors from '@app/style/colors'
 
-import React, { Component } from 'react';
-import { ActivityIndicator, Platform } from 'react-native';
+interface IProps {
+  size?: number | 'small' | 'large'
+  style?: ViewStyle
+}
 
-// Styles
-import { AppColors } from '@app/style';
-
-class AutoActivityIndicator extends Component {
+@observer export class AutoActivityIndicator extends Component<IProps> {
   
-  constructor(props) {
-    super(props);
+  constructor(props: IProps) {
+    super(props)
   }
 
   render() {
     return (
-    	<ActivityIndicator size={this.props.size || 'large'} 
-                         style={this.props.style}
-    										 color={ 
-    										 		Platform.OS === 'ios'
-    										 		? AppColors.brand.secondary 
-    										 		: AppColors.brand.primary
-    										 	}/>
+      <ActivityIndicator
+        animating={true}
+        size={this.props.size || 'small'} 
+        color={IS_IOS ? colors.secondary : colors.primary}
+        style={this.props.style}
+      />
     )
   }
 }
-
-export default AutoActivityIndicator;
