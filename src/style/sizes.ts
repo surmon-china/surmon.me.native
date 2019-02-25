@@ -28,5 +28,6 @@ export const navbarHeight = IS_IOS ? 50 : 50
 export const statusBarHeight = IS_IOS ? 16 : 24
 
 // base
+export const touchOpacity = 0.6
 export const borderWidth = StyleSheet.hairlineWidth
 export const gap = 20

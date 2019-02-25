@@ -6,7 +6,7 @@
  */
 import { Platform } from 'react-native';
 
-function lineHeight(fontSize: number) {
+function lineHeight(fontSize: number): number {
   const multiplier = (fontSize > 20) ? 0.1 : 0.33;
   return parseInt(String(fontSize + (fontSize * multiplier)), 10);
 }
@@ -22,8 +22,8 @@ export const base = {
     },
     android: {
       fontFamily
-    },
-  }),
+    }
+  })
 };
 
 export const small = { ...base, fontSize: base.fontSize * 0.85, lineHeight: lineHeight(base.fontSize) }

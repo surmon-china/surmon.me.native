@@ -61,3 +61,12 @@ yarn
 rm -rf ios/build
 npm run dev:ios
 ```
+
+### null is not an object (evaluating 'RNGestureHandlerModule.State')
+
+pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler/ios'
+
+### Print: Entry, ":CFBundleIdentifier", Does Not Exist
+
+rm -rf ~/.rncache/* | https://github.com/facebook/react-native/issues/14423#issuecomment-311927464
+

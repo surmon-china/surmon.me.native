@@ -49,7 +49,7 @@ export class ArticleListItem extends PureComponent<IArtileListItem> {
     const { styles } = obStyles
     return (
       <TouchableOpacity
-        activeOpacity={0.6}
+        activeOpacity={sizes.touchOpacity}
         style={styles.container}
         onPress={() => onPress(article.id)}
       >

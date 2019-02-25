@@ -1,15 +1,16 @@
 
 import React, { Component } from 'react'
-import { observable, computed, action } from 'mobx'
-import { observer } from 'mobx-react/native'
-import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, Text, View, Alert } from 'react-native'
-import { NavigationContainerProps } from "react-navigation"
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Foundation from 'react-native-vector-icons/Foundation'
+import { observer } from 'mobx-react/native'
+import { observable, computed, action } from 'mobx'
+import { NavigationContainerProps } from "react-navigation"
+import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, Text, View, Alert } from 'react-native'
+import { Remind } from '@app/components/common/remind'
+import { EAboutRoutes } from '@app/routes'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
-import { EAboutRoutes } from '@app/index'
 import * as fonts from '@app/style/fonts'
 import * as sizes from '@app/style/sizes'
 import * as fetch from '@app/services/fetch'
@@ -236,6 +237,7 @@ interface IProps extends NavigationContainerProps {}
             ItemSeparatorComponent={() => <View style={styles.lineItemSeparator}></View>}
             renderItem={({ item, index, section }) => (
               <TouchableOpacity
+                activeOpacity={sizes.touchOpacity}
                 style={[
                   styles.line,
                   index === 0 ? styles.firstLineSeparator : null,
@@ -256,7 +258,7 @@ interface IProps extends NavigationContainerProps {}
                   }
                   <Text style={styles.lineTitle}>{item.name}</Text>
                   {item.remind && (
-                    <FontAwesome style={[styles.lineTitle, styles.lineRemindIcon]} size={8} name="circle" />
+                    <Remind style={[styles.lineTitle, styles.lineRemindIcon]} />
                   )}
                 </View>
                 <FontAwesome style={[styles.lineDetailIcon, styles.lineTitle]} name="angle-right" />
@@ -377,8 +379,7 @@ const obStyles = observable({
         color: colors.textDefault
       },
       lineRemindIcon: {
-        marginLeft: sizes.gap / 2,
-        color: colors.red
+        marginLeft: sizes.gap / 2
       },
       lineItemSeparator: {
         height: sizes.borderWidth,

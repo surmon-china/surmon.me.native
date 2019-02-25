@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "esnext",
+    "target": "es2015",
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
@@ -19,5 +19,7 @@
       "@app/*": ["./src/*"]
     }
   },
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules"
+  ]
 }

@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react'
+import { observable, action } from 'mobx'
+import { observer } from 'mobx-react/native'
 import { StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { NavigationContainerProps } from "react-navigation"
-import { observable, action } from 'mobx'
-import { observer } from 'mobx-react/native'
 import colors from '@app/style/colors'
 import * as sizes from '@app/style/sizes'
 

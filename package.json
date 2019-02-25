@@ -13,7 +13,9 @@
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build:ios": "react-native bundle --entry-file index.ios.js --platform ios --bundle-output ./ios/react.bundle",
+    "start:new": "react-native start --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js",
+    "build:ios:old": "react-native bundle --entry-file index.ios.js --platform ios --bundle-output ./ios/react.bundle",
+    "build:ios": "react-native bundle --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js --entry-file index.tsx --dev false --platform ios --bundle-output ./ios/react.bundle",
     "build:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
     "tsc": "tsc",
@@ -27,13 +29,13 @@
     "query-string": "^6.2.0",
     "react": "^16.7.0",
     "react-native": "^0.58.4",
-    "react-native-gesture-handler": "^1.0.15",
+    "react-native-gesture-handler": "^1.0.16",
     "react-native-gifted-listview": "git+https://github.com/FaridSafi/react-native-gifted-listview.git",
     "react-native-root-toast": "^3.0.2",
     "react-native-simple-markdown": "^1.0.60-rc.3",
     "react-native-vector-icons": "^6.2.0",
     "react-native-webview": "^5.2.1",
-    "react-navigation": "^3.0.9"
+    "react-navigation": "^3.3.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-decorators": "^7.3.0",
@@ -50,8 +52,9 @@
     "jest": "24.0.0",
     "metro-react-native-babel-preset": "0.51.1",
     "react-native-debugger-open": "^0.3.3",
+    "react-native-typescript-transformer": "^1.2.11",
     "react-test-renderer": "16.7.0",
-    "typescript": "^3.2.4"
+    "typescript": "^3.3.3333"
   },
   "jest": {
     "preset": "react-native"

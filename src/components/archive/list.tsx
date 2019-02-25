@@ -1,16 +1,17 @@
 
 import React, { Component } from 'react'
-import { observer } from 'mobx-react/native'
+import Feather from 'react-native-vector-icons/Feather'
 import { Observer } from 'mobx-react'
+import { observer } from 'mobx-react/native'
 import { observable, action, computed } from 'mobx'
 import { NavigationContainerProps } from 'react-navigation'
 import { FlatList, StyleSheet, View, Text, TouchableHighlight } from 'react-native'
 import { boundMethod } from 'autobind-decorator'
-import Feather from 'react-native-vector-icons/Feather'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
 import { IArticle } from '@app/types/business'
 import { ArticleListItem } from './item'
+import { ArticleListHeader } from './header'
 import globalStore from '@app/stores/global'
 import colors from '@app/style/colors'
 import * as sizes from '@app/style/sizes'
@@ -21,7 +22,9 @@ import * as STORAGE from '@app/constants/storage'
 
 type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
 
-interface IProps extends NavigationContainerProps {}
+interface IProps extends NavigationContainerProps {
+  getListRef?(ref: any): void
+}
 
 @observer export class ArticleList extends Component<IProps> {
  
@@ -37,19 +40,19 @@ interface IProps extends NavigationContainerProps {}
   @observable.ref private pagination: IHttpPaginate | null = null
   @observable.shallow private articles: IArticle[] = []
 
-  @action.bound private updateLoadingState(loading: boolean) {
+  @action private updateLoadingState(loading: boolean) {
     this.isLoading = loading
   }
 
-  @action.bound private updatePagination(pagination: IHttpPaginate) {
+  @action private updatePagination(pagination: IHttpPaginate) {
     this.pagination = pagination
   }
 
-  @action.bound private updateArticleLikes(articleLikes: number[]) {
+  @action private updateArticleLikes(articleLikes: number[]) {
     this.articleLikes = articleLikes || []
   }
 
-  @action.bound private updateArticles(articles: IArticle[], isAdd: boolean) {
+  @action private updateArticles(articles: IArticle[], isAdd: boolean) {
     if (isAdd) {
       this.articles.push(...articles)
     } else {
@@ -57,7 +60,7 @@ interface IProps extends NavigationContainerProps {}
     }
   }
 
-  @action.bound private updateResultData(resultData: THttpResultPaginateArticles) {
+  @action private updateResultData(resultData: THttpResultPaginateArticles) {
     const { data, pagination } = resultData
     this.updateLoadingState(false)
     this.updateArticles(data, pagination.current_page > 1)
@@ -160,20 +163,6 @@ interface IProps extends NavigationContainerProps {}
   }
 
   /**
-   * 渲染过滤器
-   * @function renderFilterView
-   * @description 渲染文章列表 tag | catergoy | search 三种过滤条件的过滤状态
-   */
-  @boundMethod private renderFilterView(): JSX.Element {
-    const { styles } = obStyles
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.h4Title}>这里会有搜索框或者其他的标签等过滤数据</Text>
-      </View>
-    )
-  }
-
-  /**
    * 渲染加载更多
    * @function renderLoadmoreView
    * @description 渲染文章列表加载更多时的三种状态：加载中、无更多、上拉加载
@@ -207,10 +196,11 @@ interface IProps extends NavigationContainerProps {}
     const { styles } = obStyles
     return (
       <View style={styles.listViewContainer}>
-        {/* {this.renderFilterView()} */}
+        <ArticleListHeader />
         <FlatList
           style={styles.articleListView}
           data={this.articleListData}
+          ref={this.props.getListRef}
           // 首屏渲染多少个数据
           initialNumToRender={3}
           // 手动维护每一行的高度以优化性能

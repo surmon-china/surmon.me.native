@@ -6,11 +6,13 @@
  */
 
 import React from 'react'
-import { ViewStyle } from 'react-native'
-import { createStackNavigator, NavigationComponent, NavigationRouteConfig } from "react-navigation"
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Foundation from 'react-native-vector-icons/Foundation'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { ViewStyle } from 'react-native'
+import { createStackNavigator, NavigationComponent, NavigationRouteConfig } from "react-navigation"
+import { EHomeRoutes, EGuestbookRoutes, EAboutRoutes } from '@app/routes'
+import { headerStyles } from '@app/components/layouts/header'
 import { Home } from '@app/pages/home'
 import { ArticleSearch } from '@app/pages/home/search'
 import { Guestbook } from '@app/pages/guestbook'
@@ -19,20 +21,19 @@ import { Github } from '@app/pages/about/github'
 import { Setting } from '@app/pages/about/setting'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
-import * as fonts from '@app/style/fonts'
 import * as LANGUAGE from '@app/constants/language'
 
-function getCommonHeaderStyles() {
-  return () => ({
-    headerTintColor: colors.background,
-    headerStyle: {
-      backgroundColor: colors.primary,
-    },
-    headerTitleStyle: {
-      color: colors.background,
-      fontFamily: fonts.fontFamily
+export function getCommonHeaderStyles() {
+  return () => {
+    const { title } = headerStyles.styles
+    return {
+      headerTitleStyle: title,
+      headerTintColor: title.color,
+      headerStyle: {
+        backgroundColor: colors.primary
+      }
     }
-  })
+  }
 }
 
 function getNavigationRouteConfig(component: NavigationComponent, titleName: string): NavigationRouteConfig {
@@ -54,22 +55,6 @@ function humanizeTabIconStyles(options: any, extendStyle?: ViewStyle) {
   return { size: 19, style, color }
 }
 
-export enum EHomeRoutes {
-  Home = 'Home',
-  ArticleSearch = 'ArticleSearch',
-  ArticleDetail = 'ArticleDetail'
-}
-
-export enum EGuestbookRoutes {
-  Guestbook = 'Guestbook',
-}
-
-export enum EAboutRoutes {
-  About = 'About',
-  Github = 'Github',
-  Setting = 'Setting',
-}
-
 export const HomeStack = createStackNavigator({
   [EHomeRoutes.Home]: getNavigationRouteConfig(Home, LANGUAGE.HOME),
   [EHomeRoutes.ArticleSearch]: {
@@ -80,7 +65,8 @@ export const HomeStack = createStackNavigator({
   defaultNavigationOptions: getCommonHeaderStyles(),
   navigationOptions({ navigation }) {
     return {
-      tabBarVisible: navigation.state.index === 0, // 非根 Home 屏都要隐藏 Tabbar（Search、Detail）
+      // 非根 Home 屏都要隐藏 Tabbar（Search、Detail）
+      tabBarVisible: navigation.state.index === 0,
       tabBarLabel: i18n.t(LANGUAGE.HOME),
       tabBarIcon(options) {
         return <MaterialIcons name="chrome-reader-mode" {...humanizeTabIconStyles(options)} />

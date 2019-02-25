@@ -1,9 +1,9 @@
 
 import React, { Component } from 'react'
-import { observable, action, reaction } from 'mobx'
 import { observer } from 'mobx-react/native'
-import { TouchableOpacity, Animated, StyleSheet, Text, View, Switch, Alert } from 'react-native'
+import { observable, action, reaction } from 'mobx'
 import { NavigationContainerProps } from "react-navigation"
+import { TouchableOpacity, Animated, StyleSheet, Text, View, Switch, Alert } from 'react-native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -119,6 +119,7 @@ interface ILanguageDetailIconProps extends IProps {
           return (
             <View key={lang}>
               <TouchableOpacity
+                activeOpacity={sizes.touchOpacity}
                 style={[styles.lineItem, styles.lineItemLanguage]}
                 onPress={() => this.handleUpdateLanguage(lang)}
               >
