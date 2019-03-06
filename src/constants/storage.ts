@@ -1,5 +1,9 @@
 
-export const ARTICLE_LIKES ='aricleLikes'
-export const COMMENT_LIKES ='commentLikes'
-export const LOCAL_LANGUAGE ='localLanguage'
-export const LOCAL_DARK_THEME ='localDarkTheme'
+export const enum STORAGE {
+  ARTICLE_LIKES ='aricleLikes',
+  COMMENT_LIKES ='commentLikes',
+  LOCAL_LANGUAGE ='localLanguage',
+  LOCAL_DARK_THEME ='localDarkTheme'
+}
+
+export default STORAGE

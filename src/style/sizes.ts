@@ -1,33 +1,42 @@
-/**
- * App Theme - Sizes
- *
- * React Native Starter App
- * https://github.com/mcnamee/react-native-starter-app
- */
+
+
 import { Dimensions, StyleSheet } from 'react-native'
 import { IS_IOS } from '@app/config'
+
+const goldenRatio = 0.618
+const safeAreaViewTop = 44
+const safeAreaViewBottom = 34
 
 const { width, height } = Dimensions.get('window')
 const screenHeight = width < height ? height : width
 const screenWidth = width < height ? width : height
 
-// Window Dimensions
 export const screen = {
   height: screenHeight,
   width: screenWidth,
-
   widthHalf: screenWidth * 0.5,
   widthThird: screenWidth * 0.333,
   widthTwoThirds: screenWidth * 0.666,
   widthQuarter: screenWidth * 0.25,
   widthThreeQuarters: screenWidth * 0.75,
+  heightTwoThirds: screenWidth * 0.666,
+  heightSafeArea: screenHeight - safeAreaViewTop - safeAreaViewBottom,
+  heightHoldenRatio: screenHeight * goldenRatio
 }
 
-// Navbar
-export const navbarHeight = IS_IOS ? 50 : 50
-export const statusBarHeight = IS_IOS ? 16 : 24
+export default {
+  // Window Dimensions
+  screen,
+  goldenRatio,
+  thumbHeightRatio: 1190 / 420,
 
-// base
-export const touchOpacity = 0.6
-export const borderWidth = StyleSheet.hairlineWidth
-export const gap = 20
+  // Navbar
+  navbarHeight: IS_IOS ? 50 : 50,
+  statusBarHeight: IS_IOS ? 16 : 24,
+
+  // base
+  gap: 20,
+  gapGoldenRatio: 20 * goldenRatio,
+  touchOpacity: 0.6,
+  borderWidth: StyleSheet.hairlineWidth
+}

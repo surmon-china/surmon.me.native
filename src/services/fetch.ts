@@ -1,10 +1,10 @@
 
 import { stringify } from 'query-string'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { TRequestUrlPath, TRequestData, IRequestParams, THttpSuccessResponse } from '@app/types/http'
 import { appApi } from '@app/config'
 import { showToast } from './toast'
 import i18n from '@app/services/i18n'
-import * as LANGUAGE from '@app/constants/language'
 
 // 构造参数
 export function formatURL(url: TRequestUrlPath, params?: IRequestParams): TRequestUrlPath {
@@ -29,7 +29,7 @@ export function httpService<T>(url: TRequestUrlPath, options: RequestInit = {}):
   return fetch(appApi + url, Object.assign(defaultOptions, options))
     .then(response => response.json())
     .catch(error => {
-      const text = i18n.t(LANGUAGE.NETWORK_ERROR)
+      const text = i18n.t(LANGUAGE_KEYS.NETWORK_ERROR)
       showToast(text)
       console.warn(`${text}：`, `url：${url}`, error)
     })
@@ -51,27 +51,14 @@ export function patch<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THt
   return httpService<T>(url, { method: 'PATCH', body: JSON.stringify(data) })
 }
 
-export function deleteData<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
+export function remove<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
   return httpService<T>(url, { method: 'DELETE', body: JSON.stringify(data) })
 }
 
-/*
-
-
-// 获取文章详情
-export const getArticleDetail = (article_id: TId) => {
-  return httpService(`${appApi}/article/${article_id}`)
+export default {
+  get,
+  post,
+  put,
+  patch,
+  remove
 }
-
-// 给文章点赞
-export const likeArticle = (likeId: TId) => {
-  return httpService(`${appApi}/like/article`, {
-    method: 'PATCH',
-    headers: {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({ post_id: likeId })
-  })
-}
-*/

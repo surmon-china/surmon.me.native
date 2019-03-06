@@ -6,8 +6,8 @@ import { observable, action, computed } from 'mobx'
 import { NavigationContainerProps } from 'react-navigation'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import colors from '@app/style/colors'
-import * as sizes from '@app/style/sizes'
-import * as fonts from '@app/style/fonts'
+import sizes from '@app/style/sizes'
+import fonts from '@app/style/fonts'
 
 interface IProps extends NavigationContainerProps {}
 
@@ -28,7 +28,7 @@ const obStyles = observable({
         alignItems: 'center',
         justifyContent: 'center',
         borderBottomWidth: sizes.borderWidth,
-        borderBottomColor: colors.textPrimary,
+        borderBottomColor: colors.border,
         backgroundColor: colors.cardBackground
       }
     })

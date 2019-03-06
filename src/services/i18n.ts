@@ -1,37 +1,32 @@
 
 import { observable, action } from 'mobx'
 import { NativeModules } from 'react-native'
+import { LANGUAGE_KEYS, LANGUAGES } from '@app/constants/language'
 import { IS_IOS } from '@app/config'
 import en from '@app/languages/en'
 import zh from '@app/languages/zh'
-import * as LANGUAGE from '@app/constants/language'
 
-export type TLanguageKey = keyof typeof LANGUAGE
-export type TLanguage = typeof LANGUAGE.ZH | typeof LANGUAGE.EN
+export type TLanguage = LANGUAGES
 
 // 语言包
-type TLanguages = {
-  [key in TLanguage]: {
-    [key: string]: string
-  }
-}
+export type TLanguages = Record<LANGUAGES, Record<LANGUAGE_KEYS, string>>
 
 // UI 层用的语言列表
-export type TLanguageList = {
-  [key in TLanguage]: {
+type TLanguageList = {
+  [key in LANGUAGES]: {
     name: string
     english: string
   }
 }
 
 export const languages: TLanguageList = {
-  [LANGUAGE.ZH]: {
-    name: zh[LANGUAGE.CHINESE],
-    english: en[LANGUAGE.CHINESE]
+  [LANGUAGES.ZH]: {
+    name: zh[LANGUAGE_KEYS.CHINESE],
+    english: en[LANGUAGE_KEYS.CHINESE]
   },
-  [LANGUAGE.EN]: {
-    name: en[LANGUAGE.ENGLISH],
-    english: en[LANGUAGE.ENGLISH]
+  [LANGUAGES.EN]: {
+    name: en[LANGUAGE_KEYS.ENGLISH],
+    english: en[LANGUAGE_KEYS.ENGLISH]
   }
 }
 
@@ -40,18 +35,18 @@ class I18nStore {
   private languages: TLanguages = { en, zh }
 
   @observable
-  private language: TLanguage = LANGUAGE.ZH
+  private language: TLanguage = LANGUAGES.ZH
 
   @action.bound
   public updateLanguage(language: TLanguage) {
     this.language = language
   }
 
-  public t(key: string): string {
+  public t(key: LANGUAGE_KEYS): string {
     return this.languages[this.language][key]
   }
 
-  public translate(key: string, language: TLanguage = this.language): string {
+  public translate(key: LANGUAGE_KEYS, language: TLanguage = this.language): string {
     return this.languages[language][key]
   }
 }

@@ -1,7 +1,8 @@
 
 import React, { Component } from 'react'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import { NavigationContainerProps, NavigationScreenConfigProps } from 'react-navigation'
+import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { NavigationScreenConfigProps } from 'react-navigation'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { boundMethod } from 'autobind-decorator'
 import { observer } from 'mobx-react/native'
@@ -10,11 +11,12 @@ import { archiveFilterStore, ArchiveFilter } from '@app/components/archive/filte
 import { ArticleList } from '@app/components/archive/list'
 import { CustomHeader } from '@app/components/layouts/header'
 import { Remind } from '@app/components/common/remind'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import { IPageProps } from '@app/types/props'
 import { EHomeRoutes } from '@app/routes'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
-import * as sizes from '@app/style/sizes'
-import * as LANGUAGE from '@app/constants/language'
+import sizes from '@app/style/sizes'
 
 class IndexStore {
 
@@ -31,7 +33,7 @@ class IndexStore {
 
 export const indexStore = new IndexStore()
 
-interface IProps extends NavigationContainerProps {}
+interface IProps extends IPageProps {}
 
 @observer export class Home extends Component<IProps> {
 
@@ -46,7 +48,7 @@ interface IProps extends NavigationContainerProps {}
       headerTitle: (
         <CustomHeader
           onDoubleClick={indexStore.scroolToArticleListTop}
-          title={i18n.t(LANGUAGE.HOME)}
+          title={i18n.t(LANGUAGE_KEYS.HOME)}
         />
       ),
       headerLeft: (
@@ -54,7 +56,7 @@ interface IProps extends NavigationContainerProps {}
           activeOpacity={sizes.touchOpacity}
           onPress={archiveFilterStore.toggleVisibleState}
         >
-          <Ionicon {...buttonStyle} name="ios-list" />
+          <FontAwesome {...buttonStyle} name="sliders" />
           {archiveFilterStore.activeFilter && (
             <Remind style={styles.headerCheckedIcon} />
           )}
@@ -84,7 +86,10 @@ interface IProps extends NavigationContainerProps {}
             <ArchiveFilter />
           </View>
         )}
-        <ArticleList getListRef={indexStore.updateArticleListRef} />
+        <ArticleList
+          navigation={this.props.navigation}
+          getListRef={indexStore.updateArticleListRef}
+        />
       </View>
     )
   }
@@ -105,7 +110,7 @@ const obStyles = observable({
       headerCheckedIcon: {
         position: 'absolute',
         right: sizes.gap - 4,
-        bottom: 2,
+        bottom: -1,
       },
       archiveFilterView: {
         position: 'absolute',

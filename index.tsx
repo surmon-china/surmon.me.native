@@ -7,12 +7,13 @@
 
 import React, { Component } from 'react'
 import { AppRegistry, Vibration } from 'react-native'
-import { Observer } from "mobx-react"
+import { Observer } from 'mobx-react'
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import { navigatorStacks, navigatorBaseOptions } from '@app/index'
+import { navigationPersistenceKey } from '@app/config'
 import globalStore from '@app/stores/global'
 import colors from '@app/style/colors'
-import * as fonts from '@app/style/fonts'
+import fonts from '@app/style/fonts'
 
 const { BottomTabBar } = require('react-navigation-tabs')
 const appJson = require('./app.json')
@@ -53,6 +54,7 @@ const AppTabNavigator = createBottomTabNavigator(
   }
 )
 
+// https://reactnavigation.org/docs/zh-Hans/app-containers.html
 const AppContainer = createAppContainer(AppTabNavigator)
 
 class App extends Component {
@@ -61,6 +63,7 @@ class App extends Component {
       <Observer
         render={() => (
           <AppContainer
+            persistenceKey={navigationPersistenceKey}
             screenProps={{
               language: globalStore.language,
               darkTheme: globalStore.darkTheme

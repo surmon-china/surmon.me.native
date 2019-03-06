@@ -50,6 +50,7 @@ export interface IArticle {
   create_at: string
   tag: ITag[]
   category: ICategory[]
+  related: IArticle[]
 }
 
 export interface IAuthor {

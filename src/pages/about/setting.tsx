@@ -2,22 +2,21 @@
 import React, { Component } from 'react'
 import { observer } from 'mobx-react/native'
 import { observable, action, reaction } from 'mobx'
-import { NavigationContainerProps } from "react-navigation"
-import { TouchableOpacity, Animated, StyleSheet, Text, View, Switch, Alert } from 'react-native'
+import { TouchableOpacity, Animated, StyleSheet, View, Switch, Alert } from 'react-native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import { Text } from '@app/components/common/text'
 import i18n, { TLanguage, languages } from '@app/services/i18n'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import { IPageProps } from '@app/types/props'
 import globalStore from '@app/stores/global'
+import storage from '@app/services/storage'
 import colors from '@app/style/colors'
-import * as fonts from '@app/style/fonts'
-import * as sizes from '@app/style/sizes'
-import * as storage from '@app/services/storage'
-import * as LANGUAGE from '@app/constants/language'
+import fonts from '@app/style/fonts'
+import sizes from '@app/style/sizes'
 
-interface IProps extends NavigationContainerProps {}
-
-interface ILanguageDetailIconProps extends IProps {
+interface ILanguageDetailIconProps {
   close: boolean
 }
 
@@ -59,6 +58,7 @@ interface ILanguageDetailIconProps extends IProps {
   }
 }
 
+interface IProps extends IPageProps {}
 @observer export class Setting extends Component<IProps> {
 
   constructor(props: IProps) {
@@ -73,21 +73,21 @@ interface ILanguageDetailIconProps extends IProps {
 
   private handleClearCache(): void {
     Alert.alert(
-      i18n.t(LANGUAGE.CLEAR_CACHE),
-      i18n.t(LANGUAGE.CLEAR_CACHE_TEXT),
+      i18n.t(LANGUAGE_KEYS.CLEAR_CACHE),
+      i18n.t(LANGUAGE_KEYS.CLEAR_CACHE_TEXT),
       [
         {
-          text: i18n.t(LANGUAGE.CLEAR_CACHE_CANCEL_BUTTON),
+          text: i18n.t(LANGUAGE_KEYS.CLEAR_CACHE_CANCEL_BUTTON),
           style: 'cancel',
         },
         {
-          text: i18n.t(LANGUAGE.CLEAR_CACHE_OK_BUTTON),
+          text: i18n.t(LANGUAGE_KEYS.CLEAR_CACHE_OK_BUTTON),
           onPress: () => storage.clear()
             .then(() => {
-              Alert.alert(i18n.t(LANGUAGE.SUCCESS))
+              Alert.alert(i18n.t(LANGUAGE_KEYS.SUCCESS))
             })
             .catch(error => {
-              Alert.alert(i18n.t(LANGUAGE.SUCCESS))
+              Alert.alert(i18n.t(LANGUAGE_KEYS.SUCCESS))
             })
         },
       ],
@@ -157,7 +157,7 @@ interface ILanguageDetailIconProps extends IProps {
         <View style={styles.lineItem}>
           <View style={styles.lineItemContent}>
             <Ionicon style={[styles.lineItemIcon, styles.lineItemTitle]} name="ios-moon" />
-            <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE.DARK_THEME)}</Text>
+            <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE_KEYS.DARK_THEME)}</Text>
           </View>
           <View style={styles.lineItemContent}>
             <Switch
@@ -173,7 +173,7 @@ interface ILanguageDetailIconProps extends IProps {
         >
           <View style={styles.lineItemContent}>
             <MaterialIcons style={[styles.lineItemIcon, styles.lineItemTitle]} name="language" />
-            <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE.SWITCH_LANGUAGE)}</Text>
+            <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE_KEYS.SWITCH_LANGUAGE)}</Text>
           </View>
           <View style={styles.lineItemContent}>
             <LanguageDetailIcon close={this.isLanguageBoxCollapsed} />
@@ -187,7 +187,7 @@ interface ILanguageDetailIconProps extends IProps {
           onPress={this.handleClearCache}
         >
           <MaterialIcons style={[styles.lineItemIcon, styles.lineItemTitle]} name="cached" />
-          <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE.CLEAR_CACHE)}</Text>
+          <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE_KEYS.CLEAR_CACHE)}</Text>
         </TouchableOpacity>
         <View style={styles.lineSeparator}></View>
       </View>
@@ -206,7 +206,7 @@ const obStyles = observable({
       lineSeparator: {
         width: '100%',
         height: sizes.borderWidth,
-        backgroundColor: colors.textMuted
+        backgroundColor: colors.border
       },
       lineItem: {
         height: sizes.gap * 2,
@@ -231,7 +231,6 @@ const obStyles = observable({
         justifyContent: 'center'
       },
       lineItemTitle: {
-        fontFamily: fonts.fontFamily,
         lineHeight: sizes.gap * 2
       },
       lineItemLanguageTitle: {
@@ -244,11 +243,11 @@ const obStyles = observable({
         ...fonts.h3,
         width: sizes.gap,
         marginRight: sizes.gap / 2,
-        color: colors.textTitle
+        color: colors.textDefault
       },
       lineDetailIcon: {
         ...fonts.h3,
-        color: colors.textDefault,
+        color: colors.textSecondary,
         marginLeft: sizes.gap / 2,
       }
     })

@@ -1,33 +1,34 @@
 
 import React, { PureComponent } from 'react'
 import { observable, computed } from 'mobx'
-import { Image, StyleSheet, TextStyle, Text, TouchableOpacity, View } from 'react-native'
+import { Image, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Text } from '@app/components/common/text'
 import { toYMD, buildThumb } from '@app/utils/filters'
 import { IArticle } from '@app/types/business'
 import { EOriginState } from '@app/types/state'
 import i18n, { TLanguage } from '@app/services/i18n'
 import colors from '@app/style/colors'
-import * as sizes from '@app/style/sizes'
-import * as fonts from '@app/style/fonts'
-import * as LANGUAGE from '@app/constants/language'
+import sizes from '@app/style/sizes'
+import fonts from '@app/style/fonts'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 
-export interface IArtileListItem {
+export interface IArtileListItemProps {
   article: IArticle
   liked: boolean
   darkTheme: boolean
   language: TLanguage
-  onPress(aricleId: number): void
+  onPress(article: IArticle): void
 }
 
-export class ArticleListItem extends PureComponent<IArtileListItem> {
+export class ArticleListItem extends PureComponent<IArtileListItemProps> {
 
   @computed get originTexts() {
     return {
-      [EOriginState.Hybrid]: i18n.t(LANGUAGE.ORIGIN_HYBRID),
-      [EOriginState.Original]: i18n.t(LANGUAGE.ORIGIN_ORIGINAL),
-      [EOriginState.Reprint]: i18n.t(LANGUAGE.ORIGIN_REPRINT)
+      [EOriginState.Hybrid]: i18n.t(LANGUAGE_KEYS.ORIGIN_HYBRID),
+      [EOriginState.Original]: i18n.t(LANGUAGE_KEYS.ORIGIN_ORIGINAL),
+      [EOriginState.Reprint]: i18n.t(LANGUAGE_KEYS.ORIGIN_REPRINT)
     }
   }
 
@@ -51,7 +52,7 @@ export class ArticleListItem extends PureComponent<IArtileListItem> {
       <TouchableOpacity
         activeOpacity={sizes.touchOpacity}
         style={styles.container}
-        onPress={() => onPress(article.id)}
+        onPress={() => onPress(article)}
       >
         <Image source={buildThumb(article.thumb)} style={styles.thumb} />
         <Text style={getOriginStyle(article.origin)} numberOfLines={1}>{originTexts[article.origin]}</Text>
@@ -71,9 +72,7 @@ export class ArticleListItem extends PureComponent<IArtileListItem> {
             <Text style={styles.metaText}>{ article.meta.comments }</Text>
           </View>
           <View style={styles.metaItem}>
-            <MaterialIcons name="favorite" style={[styles.metaIcon, {
-              color: liked ? colors.red : colors.textDefault
-            }]}/>
+            <MaterialIcons name="favorite" style={[styles.metaIcon, liked ? { color: colors.red } : null]}/>
             <Text style={styles.metaText}>{article.meta.likes}</Text>
           </View>
         </View>
@@ -82,13 +81,12 @@ export class ArticleListItem extends PureComponent<IArtileListItem> {
   }
 }
 
-const listItemGap = sizes.gap * 0.66
 const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       container: {
-        marginHorizontal: listItemGap,
-        marginTop: listItemGap,
+        marginHorizontal: sizes.gapGoldenRatio,
+        marginTop: sizes.gapGoldenRatio,
         backgroundColor: colors.cardBackground
       },
       thumb: {
@@ -106,28 +104,25 @@ const obStyles = observable({
         paddingHorizontal: 8,
         opacity: 0.5,
         textTransform: 'capitalize',
-        fontFamily: fonts.fontFamily
       },
       title: {
         ...fonts.h4,
-        fontWeight: '500',
-        margin: listItemGap,
-        color: colors.textTitle
+        fontWeight: '700',
+        margin: sizes.gapGoldenRatio
       },
       description: {
         ...fonts.base,
-        textAlign: 'left',
-        margin: listItemGap,
-        marginTop: - listItemGap / 4,
-        color: colors.textDefault
+        margin: sizes.gapGoldenRatio,
+        marginTop: - sizes.gapGoldenRatio / 4,
+        color: colors.textSecondary
       },
       meta: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderTopColor: colors.textPrimary,
+        borderTopColor: colors.textMuted,
         borderTopWidth: sizes.borderWidth * 2,
-        paddingHorizontal: listItemGap,
+        paddingHorizontal: sizes.gapGoldenRatio,
         paddingVertical: sizes.gap / 2 
       },
       metaItem: {
@@ -137,12 +132,12 @@ const obStyles = observable({
       },
       metaIcon: {
         ...fonts.base,
-        marginRight: listItemGap / 2,
-        color: colors.textDefault
+        marginRight: sizes.gapGoldenRatio / 2,
+        color: colors.textSecondary
       },
       metaText: {
         ...fonts.small,
-        color: colors.textDefault
+        color: colors.textSecondary
       }
     })
   }

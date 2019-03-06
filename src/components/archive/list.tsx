@@ -1,28 +1,30 @@
 
 import React, { Component } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
+import { boundMethod } from 'autobind-decorator'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed } from 'mobx'
-import { NavigationContainerProps } from 'react-navigation'
-import { FlatList, StyleSheet, View, Text, TouchableHighlight } from 'react-native'
-import { boundMethod } from 'autobind-decorator'
+import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
+import { Text } from '@app/components/common/text'
 import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
 import { IArticle } from '@app/types/business'
 import { ArticleListItem } from './item'
 import { ArticleListHeader } from './header'
+import { INavigationProps } from '@app/types/props'
+import { EHomeRoutes } from '@app/routes'
+import { STORAGE } from '@app/constants/storage'
 import globalStore from '@app/stores/global'
+import fetch from '@app/services/fetch'
+import storage from '@app/services/storage'
 import colors from '@app/style/colors'
-import * as sizes from '@app/style/sizes'
-import * as fonts from '@app/style/fonts'
-import * as fetch from '@app/services/fetch'
-import * as storage from '@app/services/storage'
-import * as STORAGE from '@app/constants/storage'
+import sizes from '@app/style/sizes'
+import fonts from '@app/style/fonts'
 
 type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
 
-interface IProps extends NavigationContainerProps {
+interface IProps extends INavigationProps {
   getListRef?(ref: any): void
 }
 
@@ -89,7 +91,7 @@ interface IProps extends NavigationContainerProps {
         return likes
       })
       .catch(error => {
-        console.log('Get local arrticle likes error:', error)
+        console.warn('Get local arrticle likes error:', error)
         return Promise.reject(error)
       })
   }
@@ -103,7 +105,7 @@ interface IProps extends NavigationContainerProps {
       })
       .catch(error => {
         this.updateLoadingState(false)
-        console.warn('文章列表请求失败啦', error)
+        console.warn('Fetch article list error:', error)
         return Promise.reject(error)
       })
   }
@@ -135,8 +137,12 @@ interface IProps extends NavigationContainerProps {
     }
   }
 
-  @boundMethod private handleToDetailPage(articleId: number) {
-    console.log('跳转到文章详情页', articleId)
+  @boundMethod private handleToDetailPage(article: IArticle) {
+    this.props.navigation.navigate({
+      key: String(article.id),
+      routeName: EHomeRoutes.ArticleDetail,
+      params: { article }
+    })
   }
 
   /**
@@ -153,10 +159,10 @@ interface IProps extends NavigationContainerProps {
       <View style={styles.centerContainer}>
         <Text style={styles.h4Title}>暂无数据，下拉刷新重试</Text>
         <TouchableHighlight
-          underlayColor={colors.textDefault}
+          underlayColor={colors.textSecondary}
           style={{ marginTop: sizes.gap }}
         >
-          <Feather name="chevrons-down" size={22} style={{color: colors.textDefault}} />
+          <Feather name="chevrons-down" size={22} style={{color: colors.textSecondary}} />
         </TouchableHighlight>
       </View>
     )
@@ -167,8 +173,11 @@ interface IProps extends NavigationContainerProps {
    * @function renderLoadmoreView
    * @description 渲染文章列表加载更多时的三种状态：加载中、无更多、上拉加载
    */
-  @boundMethod private renderLoadmoreView(): JSX.Element {
+  @boundMethod private renderLoadmoreView(): JSX.Element | null {
     const { styles } = obStyles
+    if (!this.articleListData || !this.articleListData.length) {
+      return null
+    }
     if (this.isLoading) {
       return (
         <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
@@ -187,7 +196,7 @@ interface IProps extends NavigationContainerProps {
     return (
       <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
         <Text style={[styles.smallTitle, { marginRight: sizes.gap / 4 }]}>上拉以加载更多</Text>
-        <Feather name="arrow-up-circle" style={{color: colors.textDefault}} />
+        <Feather name="arrow-up-circle" style={{color: colors.textSecondary}} />
       </View>
     )
   }
@@ -263,11 +272,11 @@ const obStyles = observable({
       },
       h4Title: {
         ...fonts.h4,
-        color: colors.textDefault,
+        color: colors.textSecondary,
       },
       smallTitle: {
         ...fonts.small,
-        color: colors.textDefault,
+        color: colors.textSecondary,
       }
     })
   }

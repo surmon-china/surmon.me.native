@@ -1,7 +1,13 @@
 
-import { NavigationContainerProps } from "react-navigation"
-import { IGlobalStore } from "@app/stores/global"
+import { NavigationScreenProp, NavigationNavigateActionPayload } from 'react-navigation'
+import { IGlobalStore } from '@app/stores/global'
 
-export interface IComponentProps extends NavigationContainerProps {
+export type TNavigation = NavigationScreenProp<NavigationNavigateActionPayload>
+
+export interface INavigationProps {
+  navigation: TNavigation
+}
+
+export interface IPageProps extends INavigationProps {
   screenProps: IGlobalStore
 }

@@ -1,7 +1,7 @@
 
 import { ImageSourcePropType } from 'react-native'
 import i18n from '@app/services/i18n'
-import * as LANGUAGE from '@app/constants/language'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 
 // 时间转换
 export function toYMD(dateString: string): string {
@@ -13,7 +13,7 @@ export function toYMD(dateString: string): string {
   const month = date.getMonth() + 1
   const day = date.getDate()
   const hour = date.getHours()
-  return `${year}/${month}/${day} ${hour > 11 ? i18n.t(LANGUAGE.PM) : i18n.t(LANGUAGE.AM)}`
+  return `${year}/${month}/${day} ${hour > 11 ? i18n.t(LANGUAGE_KEYS.PM) : i18n.t(LANGUAGE_KEYS.AM)}`
 }
 
 // 文本限制

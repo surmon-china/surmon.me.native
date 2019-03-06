@@ -4,13 +4,13 @@ import { observer } from 'mobx-react/native'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import colors from '@app/style/colors'
 
-interface IProps {
+interface IRemindProps {
   size?: number
   style?: any
   color?: string
 }
 
-export const Remind = observer((props: IProps): JSX.Element => {
+export const Remind = observer((props: IRemindProps): JSX.Element => {
   return (
     <FontAwesome
       style={props.style}

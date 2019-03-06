@@ -1,14 +1,14 @@
 
 import React, { Component } from 'react'
-import { observable, action } from 'mobx'
-import { observer } from 'mobx-react/native'
 import { StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { NavigationContainerProps } from "react-navigation"
+import { observer } from 'mobx-react/native'
+import { observable, action } from 'mobx'
+import { IPageProps } from '@app/types/props'
 import colors from '@app/style/colors'
-import * as sizes from '@app/style/sizes'
+import sizes from '@app/style/sizes'
 
-interface IProps extends NavigationContainerProps {}
+interface IProps extends IPageProps {}
 
 @observer export class Github extends Component<IProps> {
 

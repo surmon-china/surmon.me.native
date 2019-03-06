@@ -2,9 +2,9 @@
 import { observable, action } from 'mobx'
 import { getDeviceLanguage, updateLanguage, TLanguage } from '@app/services/i18n'
 import { updateTheme } from '@app/style/colors'
-import * as storage from '@app/services/storage'
-import * as STORAGE from '@app/constants/storage'
-import * as LANGUAGE from '@app/constants/language'
+import { LANGUAGES } from '@app/constants/language'
+import { STORAGE } from '@app/constants/storage'
+import storage from '@app/services/storage'
 
 export interface IGlobalStore {
   language: TLanguage
@@ -18,7 +18,7 @@ class GlobalStore {
     this.initDarkTheme()
   }
   
-  @observable.ref language: TLanguage = LANGUAGE.ZH
+  @observable.ref language: TLanguage = LANGUAGES.ZH
   @observable.ref darkTheme: boolean = false
 
   @action.bound updateLanguage(language: TLanguage) {
@@ -37,9 +37,9 @@ class GlobalStore {
     // 获取本机默认语言
     function getDeviceDefaultLanguage(): Promise<TLanguage> {
       return getDeviceLanguage().then(language => {
-        return language.includes(LANGUAGE.EN)
-          ? LANGUAGE.EN
-          : LANGUAGE.ZH
+        return language.includes(LANGUAGES.EN)
+          ? LANGUAGES.EN
+          : LANGUAGES.ZH
       })
     }
     // 获取本地存储的用户设置语言

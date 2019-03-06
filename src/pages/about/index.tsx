@@ -5,16 +5,17 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Foundation from 'react-native-vector-icons/Foundation'
 import { observer } from 'mobx-react/native'
 import { observable, computed, action } from 'mobx'
-import { NavigationContainerProps } from "react-navigation"
-import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, Text, View, Alert } from 'react-native'
+import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
 import { Remind } from '@app/components/common/remind'
+import { Text } from '@app/components/common/text'
+import { IPageProps } from '@app/types/props'
 import { EAboutRoutes } from '@app/routes'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
-import * as fonts from '@app/style/fonts'
-import * as sizes from '@app/style/sizes'
-import * as fetch from '@app/services/fetch'
-import * as LANGUAGE from '@app/constants/language'
+import fonts from '@app/style/fonts'
+import sizes from '@app/style/sizes'
+import fetch from '@app/services/fetch'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 
 enum ESection {
   Follow = 'follow',
@@ -37,7 +38,7 @@ interface ITodayStatistic {
   comments: TStatisticValue
 }
 
-interface IProps extends NavigationContainerProps {}
+interface IProps extends IPageProps {}
 
 @observer export class About extends Component<IProps> {
 
@@ -114,14 +115,14 @@ interface IProps extends NavigationContainerProps {}
         url: 'https://twitter.com/surmon_me'
       },
       {
-        name: i18n.t(LANGUAGE.WEIBO),
+        name: i18n.t(LANGUAGE_KEYS.WEIBO),
         key: 'weibo',
         remind: true,
         icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="weibo" />,
         url: 'https://weibo.com/surmon'
       },
       {
-        name: i18n.t(LANGUAGE.LINKEDIN),
+        name: i18n.t(LANGUAGE_KEYS.LINKEDIN),
         key: 'linkedin',
         icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="linkedin-square" />,
         url: 'http://www.linkedin.com/in/surmon-ma-713bb6a2/'
@@ -144,26 +145,26 @@ interface IProps extends NavigationContainerProps {}
   @computed get follows() {
     return [
       {
-        name: i18n.t(LANGUAGE.GITHUB),
+        name: i18n.t(LANGUAGE_KEYS.GITHUB),
         key: 'github',
         icon: 'logo-github',
         onPress: () => {
-          this.props.navigation && this.props.navigation.push(EAboutRoutes.Github)
+          this.props.navigation.push(EAboutRoutes.Github)
         }
       },
       {
-        name: i18n.t(LANGUAGE.VLOG),
+        name: i18n.t(LANGUAGE_KEYS.VLOG),
         key: 'vlog',
         icon: <Foundation style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="play-video" />,
         onPress: () => this.openUrl('https://surmon.me/vlog')
       },
       {
-        name: i18n.t(LANGUAGE.EMAIL_ME),
+        name: i18n.t(LANGUAGE_KEYS.EMAIL_ME),
         key: 'email',
         icon: 'md-mail',
         onPress: () => this
           .openUrl('mailto:surmon@foxmail.com')
-          .catch(() => Alert.alert(i18n.t(LANGUAGE.CALL_EMAIL_ERROR)))
+          .catch(() => Alert.alert(i18n.t(LANGUAGE_KEYS.CALL_EMAIL_ERROR)))
       }
     ]
   }
@@ -171,11 +172,11 @@ interface IProps extends NavigationContainerProps {}
   @computed get settings() {
     return [
       {
-        name: i18n.t(LANGUAGE.SETTING),
+        name: i18n.t(LANGUAGE_KEYS.SETTING),
         key: 'setting',
         icon: 'md-settings',
         onPress: () => {
-          this.props.navigation && this.props.navigation.push(EAboutRoutes.Setting)
+          this.props.navigation.push(EAboutRoutes.Setting)
         }
       }
     ]
@@ -210,22 +211,22 @@ interface IProps extends NavigationContainerProps {}
         <View style={styles.statistic}>
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.articles}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE.ARTICLE)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.ARTICLE)}</Text>
           </View>
           <View style={styles.statisticSeparator}></View>
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.tags}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE.TAG)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TAG)}</Text>
           </View>
           <View style={styles.statisticSeparator}></View>
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.comments}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE.COMMENT)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.COMMENT)}</Text>
           </View>
           <View style={styles.statisticSeparator}></View>
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.views}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE.TODAY_VIEWS)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TODAY_VIEWS)}</Text>
           </View>
         </View>
         <View style={styles.section}>
@@ -285,7 +286,7 @@ const obStyles = observable({
         alignItems: 'center',
         justifyContent: 'flex-start',
         backgroundColor: colors.cardBackground,
-        borderBottomColor: colors.textPrimary,
+        borderBottomColor: colors.border,
         borderBottomWidth: sizes.borderWidth,
       },
       userGravatar: {
@@ -294,7 +295,7 @@ const obStyles = observable({
         marginRight: sizes.gap,
         borderRadius: 35,
         borderWidth: 2,
-        borderColor: colors.textPrimary
+        borderColor: colors.border
       },
       userName: {
         ...fonts.h2,
@@ -313,7 +314,7 @@ const obStyles = observable({
         flexDirection: 'row',
         justifyContent: 'space-evenly',
         borderBottomWidth: sizes.borderWidth,
-        borderBottomColor: colors.textMuted,
+        borderBottomColor: colors.border,
         backgroundColor: colors.cardBackground,
       },
       statisticItem: {
@@ -325,14 +326,13 @@ const obStyles = observable({
         ...fonts.h3,
       },
       statisticTitle: {
-        ...fonts.small,
-        textTransform: 'uppercase'
+        ...fonts.small
       },
       statisticSeparator: {
         width: sizes.borderWidth,
         height: sizes.gap * 2,
         marginTop: sizes.gap / 2,
-        backgroundColor: colors.textPrimary
+        backgroundColor: colors.border
       },
       section: {
         flex: 1,
@@ -355,35 +355,34 @@ const obStyles = observable({
       },
       firstLineSeparator: {
         borderTopWidth: sizes.borderWidth,
-        borderTopColor: colors.textMuted,
+        borderTopColor: colors.border,
       },
       lastLineSeparator: {
         borderBottomWidth: sizes.borderWidth,
-        borderBottomColor: colors.textMuted,
+        borderBottomColor: colors.border,
       },
       lineContent: {
         flexDirection: 'row',
       },
       lineTitle: {
-        fontFamily: fonts.fontFamily,
         lineHeight: sizes.gap * 2,
       },
       lineIcon: {
         ...fonts.h3,
         width: sizes.gap,
         marginRight: sizes.gap / 2,
-        color: colors.textTitle
+        color: colors.textDefault
       },
       lineDetailIcon: {
         ...fonts.h3,
-        color: colors.textDefault
+        color: colors.textSecondary
       },
       lineRemindIcon: {
         marginLeft: sizes.gap / 2
       },
       lineItemSeparator: {
         height: sizes.borderWidth,
-        backgroundColor: colors.textMuted,
+        backgroundColor: colors.border,
       }
     })
   }

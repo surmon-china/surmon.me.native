@@ -1,35 +1,19 @@
 
 import React, { Component } from 'react';
-import { NavigationContainerProps, NavigationScreenConfigProps } from "react-navigation"
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { observable, action } from 'mobx'
 import { observer } from 'mobx-react/native'
-import { Alert, BackHandler, Button, ListView, Platform, StyleSheet, Text, View } from 'react-native';
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Alert, Button, ListView, StyleSheet, Text, View } from 'react-native'
+import { IPageProps } from '@app/types/props'
+import colors from '@app/style/colors'
+import sizes from '@app/style/sizes'
 
-import colors from '@app/style/colors';
-import * as sizes from '@app/style/sizes';
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    // alignItems: 'center',
-    // justifyContent: 'center',
-    backgroundColor: colors.background,
-    paddingTop: sizes.navbarHeight + sizes.statusBarHeight,
-    marginBottom: Platform.OS == 'ios' ? sizes.navbarHeight : 0
-  }
-})
-
-interface IProps extends NavigationContainerProps {}
+interface IProps extends IPageProps {}
 
 @observer export class ArticleSearch extends Component<IProps> {
 
   static navigationOptions = {
-    title: 'Search',
-    header: null,
-    // headerMode: 'screen',
-    tabBarVisible: false
-    // tabBar: () => ({ visible: false, label: "test" })
+    header: null
   }
 
   constructor(props: IProps) {
@@ -37,6 +21,7 @@ interface IProps extends NavigationContainerProps {}
   }
 
   render() {
+    const { styles } = obStyles
     return (
       <View style={styles.container}>
         <Text>关键词推荐及搜索历史，顶部是一个搜索框</Text>
@@ -44,3 +29,16 @@ interface IProps extends NavigationContainerProps {}
     )
   }
 }
+
+const obStyles = observable({
+  get styles() {
+    return StyleSheet.create({
+      container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: colors.background
+      }
+    })
+  }
+})

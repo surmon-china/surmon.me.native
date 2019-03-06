@@ -1,10 +1,5 @@
-/**
- * App Theme - Fonts
- *
- * React Native Starter App
- * https://github.com/mcnamee/react-native-starter-app
- */
-import { Platform } from 'react-native';
+
+import { Platform } from 'react-native'
 
 function lineHeight(fontSize: number): number {
   const multiplier = (fontSize > 20) ? 0.1 : 0.33;
@@ -32,3 +27,7 @@ export const h2 = { ...base, fontSize: base.fontSize * 1.5, lineHeight: lineHeig
 export const h3 = { ...base, fontSize: base.fontSize * 1.25, lineHeight: lineHeight(base.fontSize * 1.5) }
 export const h4 = { ...base, fontSize: base.fontSize * 1.1, lineHeight: lineHeight(base.fontSize * 1.25) }
 export const h5 = base
+
+export default {
+  fontFamily, base, small, h1, h2, h3, h4, h5
+}

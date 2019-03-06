@@ -9,19 +9,20 @@ import React from 'react'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Foundation from 'react-native-vector-icons/Foundation'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { ViewStyle } from 'react-native'
-import { createStackNavigator, NavigationComponent, NavigationRouteConfig } from "react-navigation"
+import { ViewStyle, View, Text } from 'react-native'
+import { createStackNavigator, NavigationComponent, NavigationRouteConfig } from 'react-navigation'
 import { EHomeRoutes, EGuestbookRoutes, EAboutRoutes } from '@app/routes'
 import { headerStyles } from '@app/components/layouts/header'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { Home } from '@app/pages/home'
 import { ArticleSearch } from '@app/pages/home/search'
+import { ArticleDetail } from '@app/pages/home/detail'
 import { Guestbook } from '@app/pages/guestbook'
 import { About } from '@app/pages/about'
 import { Github } from '@app/pages/about/github'
 import { Setting } from '@app/pages/about/setting'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
-import * as LANGUAGE from '@app/constants/language'
 
 export function getCommonHeaderStyles() {
   return () => {
@@ -36,7 +37,7 @@ export function getCommonHeaderStyles() {
   }
 }
 
-function getNavigationRouteConfig(component: NavigationComponent, titleName: string): NavigationRouteConfig {
+function getNavigationRouteConfig(component: NavigationComponent, titleName: LANGUAGE_KEYS): NavigationRouteConfig {
   return {
     screen: component,
     navigationOptions: () => ({ title: i18n.t(titleName) })
@@ -56,18 +57,16 @@ function humanizeTabIconStyles(options: any, extendStyle?: ViewStyle) {
 }
 
 export const HomeStack = createStackNavigator({
-  [EHomeRoutes.Home]: getNavigationRouteConfig(Home, LANGUAGE.HOME),
-  [EHomeRoutes.ArticleSearch]: {
-    screen: ArticleSearch
-  }
-  // [EHomeRoutes.ArticleDetail]: ArticleDetail
+  [EHomeRoutes.Home]: getNavigationRouteConfig(Home, LANGUAGE_KEYS.HOME),
+  [EHomeRoutes.ArticleSearch]: ArticleSearch,
+  [EHomeRoutes.ArticleDetail]: ArticleDetail
 }, {
   defaultNavigationOptions: getCommonHeaderStyles(),
   navigationOptions({ navigation }) {
     return {
       // 非根 Home 屏都要隐藏 Tabbar（Search、Detail）
       tabBarVisible: navigation.state.index === 0,
-      tabBarLabel: i18n.t(LANGUAGE.HOME),
+      tabBarLabel: i18n.t(LANGUAGE_KEYS.HOME),
       tabBarIcon(options) {
         return <MaterialIcons name="chrome-reader-mode" {...humanizeTabIconStyles(options)} />
       }
@@ -76,11 +75,11 @@ export const HomeStack = createStackNavigator({
 })
 
 export const GuestbookStack = createStackNavigator({
-  Guestbook: getNavigationRouteConfig(Guestbook, LANGUAGE.GUESTBOOK)
+  Guestbook: getNavigationRouteConfig(Guestbook, LANGUAGE_KEYS.GUESTBOOK)
 }, {
   defaultNavigationOptions: getCommonHeaderStyles(),
   navigationOptions: () => ({
-    tabBarLabel: i18n.t(LANGUAGE.GUESTBOOK),
+    tabBarLabel: i18n.t(LANGUAGE_KEYS.GUESTBOOK),
     tabBarIcon(options) {
       return (
         <Foundation
@@ -94,13 +93,40 @@ export const GuestbookStack = createStackNavigator({
 })
 
 export const AboutStack = createStackNavigator({
-  [EAboutRoutes.About]: getNavigationRouteConfig(About, LANGUAGE.ABOUT),
-  [EAboutRoutes.Github]: getNavigationRouteConfig(Github, LANGUAGE.GITHUB),
-  [EAboutRoutes.Setting]: getNavigationRouteConfig(Setting, LANGUAGE.SETTING)
+  [EAboutRoutes.About]: getNavigationRouteConfig(About, LANGUAGE_KEYS.ABOUT),
+  [EAboutRoutes.Github]: getNavigationRouteConfig(Github, LANGUAGE_KEYS.GITHUB),
+  [EAboutRoutes.Setting]: getNavigationRouteConfig(Setting, LANGUAGE_KEYS.SETTING)
 }, {
   defaultNavigationOptions: getCommonHeaderStyles(),
   navigationOptions: () => ({
-    tabBarLabel: i18n.t(LANGUAGE.ABOUT),
+    tabBarLabel: i18n.t(LANGUAGE_KEYS.ABOUT),
+    tabBarIcon(options) {
+      return (
+        <FontAwesome
+          name="heartbeat"
+          {...humanizeTabIconStyles(options, { marginBottom: -2 })}
+        />
+      )
+    }
+  })
+})
+
+class TestScreen extends React.Component {
+  render() {
+    return (
+      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+        <Text>Test Screen</Text>
+      </View>
+    );
+  }
+}
+
+export const TestStack = createStackNavigator({
+  Test: TestScreen
+}, {
+  defaultNavigationOptions: getCommonHeaderStyles(),
+  navigationOptions: () => ({
+    tabBarLabel: i18n.t(LANGUAGE_KEYS.ABOUT),
     tabBarIcon(options) {
       return (
         <FontAwesome
@@ -116,6 +142,7 @@ export const navigatorStacks = {
   [EHomeRoutes.Home]: HomeStack,
   [EGuestbookRoutes.Guestbook]: GuestbookStack,
   [EAboutRoutes.About]: AboutStack,
+  Test: TestStack,
 }
 
 export const navigatorBaseOptions = {

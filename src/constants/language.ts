@@ -1,42 +1,48 @@
 
-export const EN = 'en'
-export const ZH = 'zh'
-export const ENGLISH = 'english'
-export const CHINESE = 'chinese'
+export enum LANGUAGES {
+  EN = 'en',
+  ZH = 'zh'
+}
 
-export const HOME = 'home'
-export const GUESTBOOK = 'guestbook'
-export const ABOUT = 'about'
+export enum LANGUAGE_KEYS {
+  ENGLISH = 'english',
+  CHINESE = 'chinese',
 
-export const ORIGIN_HYBRID = 'originHybrid'
-export const ORIGIN_ORIGINAL = 'originOriginal'
-export const ORIGIN_REPRINT = 'originReprint'
-export const AM = 'am'
-export const PM = 'pm'
+  HOME = 'home',
+  ARTICLE_DETAIL = 'articleDetail',
+  GUESTBOOK = 'guestbook',
+  ABOUT = 'about',
 
-export const ARTICLE = 'article'
-export const TAG = 'tag'
-export const COMMENT = 'comment'
-export const TODAY_VIEWS = 'todayViews'
+  ORIGIN_HYBRID = 'originHybrid',
+  ORIGIN_ORIGINAL = 'originOriginal',
+  ORIGIN_REPRINT = 'originReprint',
+  AM = 'am',
+  PM = 'pm',
 
-export const GITHUB = 'github'
-export const VLOG = 'vlog'
-export const EMAIL_ME = 'emailMe'
+  ARTICLE = 'article',
+  TAG = 'tag',
+  COMMENT = 'comment',
+  TODAY_VIEWS = 'todayViews',
 
-export const TWITTER = 'twitter'
-export const LINKEDIN = 'linkedin'
-export const WEIBO = 'weibo'
+  GITHUB = 'github',
+  VLOG = 'vlog',
+  EMAIL_ME = 'emailMe',
 
-export const SETTING = 'setting'
-export const DARK_THEME = 'darkTheme'
-export const SWITCH_LANGUAGE = 'switchLanguage'
+  TWITTER = 'twitter',
+  LINKEDIN = 'linkedin',
+  WEIBO = 'weibo',
 
-export const CLEAR_CACHE = 'clearCache'
-export const CLEAR_CACHE_TEXT = 'clearCacheText'
-export const CLEAR_CACHE_OK_BUTTON = 'clearCacheOkButton'
-export const CLEAR_CACHE_CANCEL_BUTTON = 'clearCacheCancelButton'
+  SETTING = 'setting',
+  DARK_THEME = 'darkTheme',
+  SWITCH_LANGUAGE = 'switchLanguage',
 
-export const SUCCESS = 'success'
-export const NETWORK_ERROR = 'networkError'
-export const UNKNOW_ERROR = 'unknowError'
-export const CALL_EMAIL_ERROR = 'callEmailError'
+  CLEAR_CACHE = 'clearCache',
+  CLEAR_CACHE_TEXT = 'clearCacheText',
+  CLEAR_CACHE_OK_BUTTON = 'clearCacheOkButton',
+  CLEAR_CACHE_CANCEL_BUTTON = 'clearCacheCancelButton',
+
+  SUCCESS = 'success',
+  NETWORK_ERROR = 'networkError',
+  UNKNOW_ERROR = 'unknowError',
+  CALL_EMAIL_ERROR = 'callEmailError'
+}

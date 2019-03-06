@@ -1,18 +1,18 @@
 
 import React, { Component } from 'react'
 import { NavigationContainerProps, NavigationScreenConfigProps } from "react-navigation"
-import { Alert, BackHandler, Button, ListView, Platform, StyleSheet, Text, View } from 'react-native'
+import { Alert, BackHandler, Button, ListView, Platform, StyleSheet, View } from 'react-native'
 import { observable, action, computed } from 'mobx'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
 import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Text } from '@app/components/common/text'
 import { ArticleList } from '@app/components/archive/list'
 import { ICategory, ITag } from '@app/types/business'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
-import * as sizes from '@app/style/sizes'
-import * as ACTION from '@app/constants/action'
-import * as LANGUAGE from '@app/constants/language'
+import sizes from '@app/style/sizes'
 
 type TActiveFilter = ITag | ICategory | string | null
 

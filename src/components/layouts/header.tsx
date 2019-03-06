@@ -5,7 +5,7 @@ import { observer } from 'mobx-react/native'
 import { StyleSheet, Text } from 'react-native'
 import { DoubleClick } from '@app/components/common/double-click'
 import colors from '@app/style/colors'
-import * as fonts from '@app/style/fonts'
+import fonts from '@app/style/fonts'
 
 interface IProps {
   onDoubleClick?(): void

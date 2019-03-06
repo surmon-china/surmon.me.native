@@ -10,19 +10,23 @@ export enum EThemes {
 export interface ITheme {
   primary: string // 主题色
   secondary: string // 次要主题色
+
   accent: string // 强调色
   red: string // 红色，错误色
   yellow: string // 黄色，警告色
   grey: string // 银灰色
-  black: string // 黑色
+  inverse: string // 反色
+
+  border: string // 边框色
   background: string // 全局背景色
   cardBackground: string // 模块背景色
-  textTitle: string // 标题文本
+
   textDefault: string // 默认文本
-  textPrimary: string // 主要文本
   textSecondary: string // 次要文本
-  textLink: string // 链接文本
   textMuted: string // 禁用文本
+
+  textTitle: string // 标题文本
+  textLink: string // 链接文本
 }
 
 export const Default: ITheme = {
@@ -32,15 +36,17 @@ export const Default: ITheme = {
   red: '#ff5722',
   yellow: '#ffeb3b',
   grey: '#efefef',
-  black: '#000',
+  inverse: '#333333',
+  border: '#c8c7cc',
   background: '#EEEEEE',
   cardBackground: '#FFFFFF',
-  textTitle: '#555',
-  textDefault: '#AAA',
-  textPrimary: '#EEE',
-  textSecondary: '#333333',
-  textLink: '#009688',
-  textMuted: '#c8c7cc'
+  
+  textDefault: '#555',
+  textSecondary: '#bbb',
+  textMuted: '#eee',
+
+  textTitle: '#222',
+  textLink: '#000'
 }
 
 export const Dark: ITheme = {
@@ -50,15 +56,16 @@ export const Dark: ITheme = {
   red: '#ff5722',
   yellow: '#ffeb3b',
   grey: '#efefef',
-  black: '#000',
+  inverse: '#000',
+  border: '#c8c7cc',
   background: '#000',
   cardBackground: 'blue',
-  textTitle: '#555',
+
   textDefault: '#AAA',
-  textPrimary: '#EEE',
-  textSecondary: '#333333',
-  textLink: '#009688',
-  textMuted: '#c8c7cc'
+  textSecondary: '#333',
+  textMuted: '#c8c7cc',
+  textTitle: '#555',
+  textLink: '#009688'
 }
 
 const colors = observable<ITheme>(Default)

@@ -1,21 +1,21 @@
 
 import React, { Component } from 'react';
-import { NavigationContainerProps } from "react-navigation"
 import { observable, action } from 'mobx'
 import { observer } from 'mobx-react/native'
-import { StyleSheet, View, Text } from 'react-native';
-import { IComment } from '@app/types/business';
-import colors from '@app/style/colors';
+import { StyleSheet, View, Text } from 'react-native'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import { IComment } from '@app/types/business'
+import { IPageProps } from '@app/types/props'
+import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
-import * as sizes from '@app/style/sizes';
-import * as LANGUAGE from '@app/constants/language'
+import sizes from '@app/style/sizes'
 
-interface IProps extends NavigationContainerProps {}
+interface IProps extends IPageProps {}
 
 @observer export class Guestbook extends Component<IProps> {
 
   static navigationOptions = {
-    title: i18n.t(LANGUAGE.GUESTBOOK),
+    title: i18n.t(LANGUAGE_KEYS.GUESTBOOK),
   };
 
   @observable private loading: boolean = false
