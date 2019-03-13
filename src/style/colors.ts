@@ -37,7 +37,7 @@ export const Default: ITheme = {
   yellow: '#ffeb3b',
   grey: '#efefef',
   inverse: '#333333',
-  border: '#c8c7cc',
+  border: '#BBBBBB',
   background: '#EEEEEE',
   cardBackground: '#FFFFFF',
   

@@ -150,11 +150,19 @@ export const content = observable({
       ol > li > p {
         text-indent: 0;
       }
+      ul > li > p + ul,
+      ul > li > p + ol,
+      ul > li > ul,
+      ul > li > ol {
+        margin-top: 1rem;
+      }
       ul > li:last-child,
       ol > li:last-child,
       ul > li:last-child > p,
       ol > li:last-child > p,
       ul > li > ul:last-child,
+      ul > li > ol:last-child,
+      ol > li > ol:last-child,
       ol > li > ul:last-child {
         margin-bottom: 0;
       }

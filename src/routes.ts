@@ -2,7 +2,8 @@
 export enum EHomeRoutes {
   Home = 'Home',
   ArticleSearch = 'ArticleSearch',
-  ArticleDetail = 'ArticleDetail'
+  ArticleDetail = 'ArticleDetail',
+  ArticleWebview = 'ArticleWebview'
 }
 
 export enum EGuestbookRoutes {

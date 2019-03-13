@@ -5,19 +5,17 @@
  */
 
 import React, { Component } from 'react'
-import { StyleSheet, View, ViewStyle, Animated } from 'react-native'
+import marked from 'marked'
+import Hljs from 'highlight.js'
 import { observer } from 'mobx-react/native'
+import { StyleSheet, View, ViewStyle } from 'react-native'
 import { observable, computed, action, reaction } from 'mobx'
 import { boundMethod } from 'autobind-decorator'
-import Hljs from 'highlight.js'
-import marked from 'marked'
 import { ImageViewerModal } from '@app/components/common/image-viewer'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
+import { INavigationProps } from '@app/types/props'
+import { EHomeRoutes } from '@app/routes'
 import { IS_IOS } from '@app/config'
-import colors from '@app/style/colors'
-import sizes from '@app/style/sizes'
-import fonts from '@app/style/fonts'
-import fetch from '@app/services/fetch'
 import * as markdownStyles from './styles'
 const AutoHeightWebView = require('react-native-autoheight-webview').default
 
@@ -42,28 +40,28 @@ enum WebViewEventAction {
   Url = 'url'
 }
 
-interface IMarkdownProps {
-  markdown: string | null
-  padding?: number
-  sanitize?: boolean
-  indicator?: boolean
-  style?: ViewStyle
+interface IMarkdownProps extends INavigationProps {
+  markdown: string | null // 内容
+  padding?: number // 边距
+  sanitize?: boolean // 是否清洗 HTML
+  indicator?: boolean // 是否使用渲染动画
+  style?: ViewStyle // 内容区样式
 }
 
 @observer export class Markdown extends Component<IMarkdownProps> {
 
-  private renderer: marked.Renderer = new marked.Renderer()
   private images: string[] = []
+  private renderer: marked.Renderer = new marked.Renderer()
 
   constructor(props: IMarkdownProps) {
     super(props)
     this.initMarked()
     this.initRenderer()
-    reaction(
-      () => [this.htmlContent, this.htmlStyle],
-      ([htmlContent, htmlStyle]) => console.log('htmlContent', htmlContent, 'htmlStyle', htmlStyle),
-      { fireImmediately: true }
-    )
+    // reaction(
+    //   () => [this.htmlContent, this.htmlStyle],
+    //   ([htmlContent, htmlStyle]) => console.log('htmlContent', htmlContent, 'htmlStyle', htmlStyle),
+    //   { fireImmediately: true }
+    // )
   }
 
   @observable private htmlReadied: boolean = false
@@ -90,10 +88,9 @@ interface IMarkdownProps {
   @computed get htmlContent(): string {
     const { renderer, props } = this
     const { markdown } = props
-    if (!markdown) {
-      return ''
-    }
-    return `<div id="content">${marked(markdown, { renderer })}</div>`
+    return markdown
+      ? `<div id="content">${marked(markdown, { renderer })}</div>`
+      : ''
   }
 
   @computed get htmlStyle(): string {
@@ -108,13 +105,29 @@ interface IMarkdownProps {
     const json = event.nativeEvent.data
     const eventData = json ? JSON.parse(json) : null
     if (eventData) {
-      console.log('this.handleWebViewEvent', eventData)
+      // 图片弹窗
       if (eventData.action === WebViewEventAction.Image) {
         this.updateImageModalIndex(this.images.indexOf(eventData.data))
         this.updateImageModalVisible(true)
       }
+      // 打开链接
       if (eventData.action === WebViewEventAction.Url) {
-        console.log('现在要跳转去 webview 页面啦', this.props)
+        const url: string = eventData.data
+        const articleUrlPrefix = 'https://surmon.me/article/'
+        const isArticleUrl = url.startsWith(articleUrlPrefix)
+        if (isArticleUrl) {
+          const articleId = url.replace(articleUrlPrefix, '')
+          this.props.navigation.navigate({
+            key: articleId,
+            routeName: EHomeRoutes.ArticleDetail,
+            params: { articleId }
+          })
+        } else {
+          this.props.navigation.navigate(
+            EHomeRoutes.ArticleWebview,
+            { url }
+          )
+        }
       }
     }
   }
@@ -158,7 +171,6 @@ interface IMarkdownProps {
     return `<h${level} id=${id}>${text}</h${level}>`
   }
 
-  @boundMethod
   private linkRender(href: string, title: string, text: string): string {
     return `
       <a

@@ -1,6 +1,6 @@
 
 import React, { Component } from 'react'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import Feather from 'react-native-vector-icons/Feather'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { observer } from 'mobx-react/native'
@@ -28,7 +28,8 @@ interface IProps extends IPageProps {}
 
   static navigationOptions = () => ({
     title: i18n.t(LANGUAGE_KEYS.ARTICLE_DETAIL),
-    header: null,
+    headerBackTitle: null,
+    header: null
   })
 
   constructor(props: IProps) {
@@ -52,7 +53,7 @@ interface IProps extends IPageProps {}
     this.isLoading = loading
   }
 
-  @action private updateArticleDetail(article: IArticle | null) {
+  @action private updateArticle(article: IArticle | null) {
     if (article && article.content) {
       const { content } = article
       const thumbContent = `![](${article.thumb})`
@@ -74,13 +75,12 @@ interface IProps extends IPageProps {}
 
   @action private updateResultData(article: IArticle) {
     this.updateLoadingState(false)
-    this.updateArticleDetail(article)
+    this.updateArticle(article)
   }
 
   private fetchArticleDatail(): Promise<any> {
-    this.updateArticleDetail(null)
     this.updateLoadingState(true)
-    return fetch.get<IArticle>(`/article/${this.getParamArticle().id}`)
+    return fetch.get<IArticle>(`/article/${this.getArticleId()}`)
       .then(article => {
         this.updateResultData(article.result)
         return article
@@ -95,6 +95,13 @@ interface IProps extends IPageProps {}
   @boundMethod private getParamArticle(): IArticle {
     const { params } = this.props.navigation.state
     return params && params.article
+  }
+
+  @boundMethod private getArticleId(): string {
+    const { params } = this.props.navigation.state
+    const article = this.getParamArticle()
+    const articleId = params && params.articleId
+    return article ? article.id : articleId
   }
 
   @boundMethod private handleGoBack() {
@@ -117,7 +124,7 @@ interface IProps extends IPageProps {}
       .then(_ => {
         // Object.assign({}, this.article, )
         // globalStore.updateArticleLikes(130)
-        // this.updateArticleDetail()
+        // this.updateArticle()
       })
       .catch(error => console.warn('Fetch like article error:', error))
   }
@@ -129,31 +136,41 @@ interface IProps extends IPageProps {}
 
   render() {
     const { styles } = obStyles
-    const { getParamArticle, article, isLoading } = this
-    const automaticArticle = article || getParamArticle()
+    const { article, isLoading } = this
+    const automaticArticle = this.article || this.getParamArticle()
     return (
       <SafeAreaView style={[styles.container, styles.cardBackground]}>
         <ScrollView style={styles.container}>
           <View style={[styles.header, mixins.rowCenter, styles.cardBackground]}>
             <TouchableOpacity style={styles.backButton} onPress={this.handleGoBack}>
-              <Feather name="chevron-left" size={26} />
+              <Ionicon name="ios-arrow-back" size={26} />
             </TouchableOpacity>
             <View style={styles.name}>
-              <Text style={styles.title} numberOfLines={1}>{automaticArticle.title}</Text>
-              <Text style={styles.description} numberOfLines={1}>{automaticArticle.description}</Text>
+              <Text style={styles.title} numberOfLines={1}>
+                {automaticArticle ? automaticArticle.title : '...'}
+              </Text>
+              <Text style={styles.description} numberOfLines={1}>
+                {automaticArticle ? automaticArticle.description : '...'}
+              </Text>
             </View>
           </View>
-          <ImageBackground style={styles.thumb} source={{ uri: automaticArticle.thumb }} />
-          <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
-            <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
-            <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
-            <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
-            <Text style={styles.metaText}>最后编辑于 {toYMD(automaticArticle.update_at)}</Text>
-          </View>
+          <ImageBackground
+            style={styles.thumb}
+            source={automaticArticle ? { uri: automaticArticle.thumb } : {}}
+          />
+          {automaticArticle && (
+            <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
+              <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
+              <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
+              <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
+              <Text style={styles.metaText}>最后编辑于 {toYMD(automaticArticle.update_at)}</Text>
+            </View>
+          )}
           <View style={[styles.content, styles.cardBackground]}>
             { isLoading
               ? <AutoActivityIndicator style={styles.indicator} text="加载中..." />
               : <Markdown
+                  navigation={this.props.navigation}
                   sanitize={false}
                   style={styles.markdown}
                   padding={sizes.gapGoldenRatio}
@@ -161,15 +178,21 @@ interface IProps extends IPageProps {}
                 />
             }
             {article && (
-              <View style={[styles.meta, styles.cardBackground, styles.footerMeta]}>
-                <View style={styles.footerMetaItem}>
-                  {article.category.length && (
-                    <Text style={styles.metaText}>{String(article.category.map(c => c.name).join('、'))}  ∙  </Text>
-                  )}
-                  {article.tag.length && (
-                    <Text style={styles.metaText}>{String(article.tag.map(t => t.name).join('、'))}  ∙  </Text>
-                  )}
-                  <Text style={styles.metaText}>发布于 {toYMD(automaticArticle.create_at)}</Text>
+              <View style={[styles.cardBackground, styles.footerMeta]}>
+                <Text style={styles.metaText}>发布于 {toYMD(automaticArticle.create_at)}</Text>
+                <View style={styles.footerMetaItems}>
+                  <Text style={styles.metaText}>
+                    { article.category.length
+                      ? `${String(article.category.map(c => c.name).join('、'))}  ∙  `
+                      : '无分类'
+                    }
+                  </Text>
+                  <Text style={styles.metaText}>
+                    { article.tag.length
+                      ? `${String(article.tag.map(t => t.name).join('、'))}`
+                      : '无标签'
+                    }
+                  </Text>
                 </View>
               </View>
             )}
@@ -240,7 +263,7 @@ const obStyles = observable({
         borderTopWidth: sizes.borderWidth
       },
       backButton: {
-        marginHorizontal: sizes.gapGoldenRatio
+        paddingHorizontal: sizes.gap
       },
       name: {
         justifyContent: 'center',
@@ -275,11 +298,12 @@ const obStyles = observable({
         paddingTop: sizes.gapGoldenRatio
       },
       footerMeta: {
+        paddingHorizontal: sizes.gapGoldenRatio,
         paddingBottom: sizes.gapGoldenRatio
       },
-      footerMetaItem: {
+      footerMetaItems: {
         ...mixins.rowCenter,
-        marginRight: sizes.gap
+        marginTop: sizes.gapGoldenRatio
       },
       content: {
         minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - sizes.gap * 4 - sizes.gapGoldenRatio
