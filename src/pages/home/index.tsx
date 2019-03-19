@@ -14,6 +14,7 @@ import { Remind } from '@app/components/common/remind'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IPageProps } from '@app/types/props'
 import { EHomeRoutes } from '@app/routes'
+import { getHeaderButtonStyle } from '@app/style/mixins'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
 import sizes from '@app/style/sizes'
@@ -26,7 +27,7 @@ class IndexStore {
     this.articleListRef = ref
   }
 
-  @boundMethod scroolToArticleListTop() {
+  @boundMethod scrollToArticleListTop() {
     this.articleListRef.scrollToIndex({ index: 0, viewOffset: 0 })
   }
 }
@@ -40,14 +41,13 @@ interface IProps extends IPageProps {}
   static navigationOptions = (config: NavigationScreenConfigProps) => {
     const { styles } = obStyles
     const buttonStyle = {
-      size: 20,
-      color: colors.cardBackground,
-      style: styles.headerButton
+      ...getHeaderButtonStyle(21),
+      color: colors.cardBackground
     }
     return {
       headerTitle: (
         <CustomHeader
-          onDoubleClick={indexStore.scroolToArticleListTop}
+          onDoubleClick={indexStore.scrollToArticleListTop}
           title={i18n.t(LANGUAGE_KEYS.HOME)}
         />
       ),
@@ -56,7 +56,7 @@ interface IProps extends IPageProps {}
           activeOpacity={sizes.touchOpacity}
           onPress={archiveFilterStore.toggleVisibleState}
         >
-          <FontAwesome {...buttonStyle} name="sliders" />
+          <FontAwesome name="sliders" {...buttonStyle} />
           {archiveFilterStore.activeFilter && (
             <Remind style={styles.headerCheckedIcon} />
           )}
@@ -67,7 +67,7 @@ interface IProps extends IPageProps {}
           activeOpacity={sizes.touchOpacity}
           onPress={() => config.navigation.push(EHomeRoutes.ArticleSearch)}
         >
-          <Ionicon {...buttonStyle} name="ios-search" />
+          <Ionicon name="ios-search" {...buttonStyle} />
         </TouchableOpacity>
       )
     }
@@ -103,9 +103,6 @@ const obStyles = observable({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: colors.background
-      },
-      headerButton: {
-        paddingHorizontal: sizes.gap
       },
       headerCheckedIcon: {
         position: 'absolute',

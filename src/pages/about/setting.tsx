@@ -1,11 +1,9 @@
 
 import React, { Component } from 'react'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { observer } from 'mobx-react/native'
 import { observable, action, reaction } from 'mobx'
 import { TouchableOpacity, Animated, StyleSheet, View, Switch, Alert } from 'react-native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import { Text } from '@app/components/common/text'
 import i18n, { TLanguage, languages } from '@app/services/i18n'
 import { LANGUAGE_KEYS } from '@app/constants/language'
@@ -26,13 +24,13 @@ interface ILanguageDetailIconProps {
     super(props)
     reaction(
       () => this.props.close,
-      close => this.opacityAnimate(close ? 1 : 0)
+      close => this.updateOpacityAnimate(close ? 1 : 0)
     )
   }
 
   @observable private opacity = new Animated.Value(1)
 
-  private opacityAnimate(value: number) {
+  private updateOpacityAnimate(value: number) {
     Animated.timing(
       this.opacity,
       {
@@ -49,9 +47,9 @@ interface ILanguageDetailIconProps {
         <Animated.View style={{ opacity: this.opacity }}>
           <Text style={styles.lineItemTitle}>{languages[globalStore.language].name}</Text>
         </Animated.View>
-        <FontAwesome
+        <Ionicon
           style={[styles.lineDetailIcon, styles.lineItemTitle]}
-          name={this.props.close ? 'angle-right' : 'angle-down'}
+          name={this.props.close ? 'ios-arrow-forward' : 'ios-arrow-down'}
         />
       </>
     )
@@ -131,12 +129,9 @@ interface IProps extends IPageProps {}
                   <Ionicon
                     name="ios-checkmark"
                     style={[
-                      styles.lineDetailIcon,
                       styles.lineItemTitle,
                       fonts.h1,
-                      lang === globalStore.language
-                        ? { color: colors.primary }
-                        : null
+                      { color: lang === globalStore.language ? colors.primary : colors.textSecondary }
                     ]}
                   />
                 </View>
@@ -169,10 +164,11 @@ interface IProps extends IPageProps {}
         <View style={styles.lineSeparator}></View>
         <TouchableOpacity
           style={styles.lineItem}
+          activeOpacity={sizes.touchOpacity}
           onPress={this.handleToggleLanguages}
         >
           <View style={styles.lineItemContent}>
-            <MaterialIcons style={[styles.lineItemIcon, styles.lineItemTitle]} name="language" />
+            <Ionicon style={[styles.lineItemIcon, styles.lineItemTitle]} name="ios-globe" />
             <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE_KEYS.SWITCH_LANGUAGE)}</Text>
           </View>
           <View style={styles.lineItemContent}>
@@ -183,10 +179,11 @@ interface IProps extends IPageProps {}
         {this.renderLanguagesView()}
         <View style={[styles.lineSeparator, { marginTop: sizes.gap / 2 }]}></View>
         <TouchableOpacity
+          activeOpacity={sizes.touchOpacity}
           style={[styles.lineItem, styles.lineClearCache]}
           onPress={this.handleClearCache}
         >
-          <MaterialIcons style={[styles.lineItemIcon, styles.lineItemTitle]} name="cached" />
+          <Ionicon style={[styles.lineItemIcon, styles.lineItemTitle]} name="ios-refresh" />
           <Text style={styles.lineItemTitle}>{i18n.t(LANGUAGE_KEYS.CLEAR_CACHE)}</Text>
         </TouchableOpacity>
         <View style={styles.lineSeparator}></View>
@@ -246,7 +243,7 @@ const obStyles = observable({
         color: colors.textDefault
       },
       lineDetailIcon: {
-        ...fonts.h3,
+        ...fonts.h4,
         color: colors.textSecondary,
         marginLeft: sizes.gap / 2,
       }

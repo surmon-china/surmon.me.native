@@ -1,7 +1,8 @@
 
-import { StyleSheet } from 'react-native'
+import { StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import sizes from '@app/style/sizes'
 
-export default StyleSheet.create({
+const mixins = StyleSheet.create({
   // 垂直分布，全部居中
   colCenter: {
     // flexDirection: 'row',
@@ -12,5 +13,17 @@ export default StyleSheet.create({
   rowCenter: {
     flexDirection: 'row',
     alignItems: 'center'
+  },
+  // 头部按钮
+  headerButton: {
+    paddingHorizontal: sizes.gap
   }
 })
+
+export function getHeaderButtonStyle(size?: number | void | null): { size: number, style: ViewStyle } {
+  size = size != null ? size : 26
+  return { size, style: mixins.headerButton }
+}
+
+export default mixins
+

@@ -7,6 +7,7 @@ import { WebView } from 'react-native-webview'
 import { TouchableOpacity, Clipboard, Linking, StyleSheet, View } from 'react-native'
 import { boundMethod } from 'autobind-decorator'
 import { IPageProps, INavigationProps } from '@app/types/props'
+import { getHeaderButtonStyle } from '@app/style/mixins'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 const ActionSheet = require('react-native-actionsheet').default
@@ -41,9 +42,7 @@ interface IProps extends IPageProps {}
   static navigationOptions = ({ navigation }: INavigationProps) => {
     const { params } = navigation.state
     const title = (params && params.title) || '...'
-    const buttonStyle = {
-      paddingHorizontal: sizes.gap
-    }
+    const buttonStyle = getHeaderButtonStyle()
     return {
       title,
       headerLeft: (
@@ -51,7 +50,7 @@ interface IProps extends IPageProps {}
           activeOpacity={sizes.touchOpacity}
           onPress={() => navigation.goBack()}
         >
-          <Ionicon name="ios-arrow-back" size={26} style={buttonStyle} />
+          <Ionicon name="ios-arrow-back" {...buttonStyle} />
         </TouchableOpacity>
       ),
       headerRight: (
@@ -63,7 +62,7 @@ interface IProps extends IPageProps {}
             actionSheet && actionSheet.show()
           }}
         >
-          <Ionicon name="ios-more" size={26} style={buttonStyle} />
+          <Ionicon name="ios-more" {...buttonStyle} />
         </TouchableOpacity>
       )
     }

@@ -2,7 +2,6 @@
 import React, { Component } from 'react'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import Foundation from 'react-native-vector-icons/Foundation'
 import { observer } from 'mobx-react/native'
 import { observable, computed, action } from 'mobx'
 import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
@@ -105,7 +104,12 @@ interface IProps extends IPageProps {}
       {
         name: 'Stack Overflow',
         key: 'stack-overflow',
-        icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="stack-overflow" />,
+        icon: (
+          <FontAwesome
+            name="stack-overflow"
+            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
+          />
+        ),
         url: 'https://stackoverflow.com/users/6222535/surmon?tab=profile'
       },
       {
@@ -118,25 +122,35 @@ interface IProps extends IPageProps {}
         name: i18n.t(LANGUAGE_KEYS.WEIBO),
         key: 'weibo',
         remind: true,
-        icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="weibo" />,
+        icon: (
+          <FontAwesome
+            name="weibo"
+            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
+          />
+        ),
         url: 'https://weibo.com/surmon'
       },
       {
         name: i18n.t(LANGUAGE_KEYS.LINKEDIN),
         key: 'linkedin',
-        icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="linkedin-square" />,
+        icon: 'logo-linkedin',
         url: 'http://www.linkedin.com/in/surmon-ma-713bb6a2/'
       },
       {
         name: 'Telegram',
         key: 'telegram',
-        icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="telegram" />,
+        icon: (
+          <FontAwesome
+            name="telegram"
+            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
+          />
+        ),
         url: 'https://t.me/surmon'
       },
       {
         name: 'Instagram',
         key: 'instagram',
-        icon: <FontAwesome style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="instagram" />,
+        icon: 'logo-instagram',
         url: 'https://www.instagram.com/surmon666/'
       }
     ]
@@ -155,13 +169,13 @@ interface IProps extends IPageProps {}
       {
         name: i18n.t(LANGUAGE_KEYS.VLOG),
         key: 'vlog',
-        icon: <Foundation style={[obStyles.styles.lineIcon, obStyles.styles.lineTitle]} name="play-video" />,
+        icon: 'ios-film',
         onPress: () => this.openUrl('https://surmon.me/vlog')
       },
       {
         name: i18n.t(LANGUAGE_KEYS.EMAIL_ME),
         key: 'email',
-        icon: 'md-mail',
+        icon: 'ios-mail',
         onPress: () => this
           .openUrl('mailto:surmon@foxmail.com')
           .catch(() => Alert.alert(i18n.t(LANGUAGE_KEYS.CALL_EMAIL_ERROR)))
@@ -174,7 +188,7 @@ interface IProps extends IPageProps {}
       {
         name: i18n.t(LANGUAGE_KEYS.SETTING),
         key: 'setting',
-        icon: 'md-settings',
+        icon: 'ios-settings',
         onPress: () => {
           this.props.navigation.push(EAboutRoutes.Setting)
         }
@@ -262,7 +276,7 @@ interface IProps extends IPageProps {}
                     <Remind style={[styles.lineTitle, styles.lineRemindIcon]} />
                   )}
                 </View>
-                <FontAwesome style={[styles.lineDetailIcon, styles.lineTitle]} name="angle-right" />
+                <Ionicon style={[styles.lineDetailIcon, styles.lineTitle]} name="ios-arrow-forward" />
               </TouchableOpacity>
             )}
           />
@@ -374,7 +388,7 @@ const obStyles = observable({
         color: colors.textDefault
       },
       lineDetailIcon: {
-        ...fonts.h3,
+        ...fonts.h4,
         color: colors.textSecondary
       },
       lineRemindIcon: {

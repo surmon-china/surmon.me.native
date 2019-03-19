@@ -1,15 +1,14 @@
 
 import React, { Component } from 'react'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import Feather from 'react-native-vector-icons/Feather'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, reaction } from 'mobx'
 import { boundMethod } from 'autobind-decorator'
-import { TouchableOpacity, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native'
+import { TouchableOpacity, Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Markdown } from '@app/components/common/markdown'
 import { Text } from '@app/components/common/text'
+import { DoubleClick } from '@app/components/common/double-click'
 import { toYMD } from '@app/utils/filters'
 import { IArticle } from '@app/types/business'
 import { IPageProps } from '@app/types/props'
@@ -19,8 +18,13 @@ import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
-import mixins from '@app/style/mixins'
+import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import fetch from '@app/services/fetch'
+
+const headerHeight = sizes.gap * 3
+const headerHeightCollapsed = sizes.gap * 2.5
+const headerDescriptionHeight = 20
+const thumbHeight = sizes.screen.width / sizes.thumbHeightRatio
 
 interface IProps extends IPageProps {}
 
@@ -35,10 +39,42 @@ interface IProps extends IPageProps {}
   constructor(props: IProps) {
     super(props)
     this.fetchArticleDatail()
+    reaction(
+      () => this.isHeaderCollapsed,
+      collapse => this.startHeaderAnimate(collapse),
+      { fireImmediately: true }
+    )
+  }
+
+  private articleDetailRef: any = null
+  
+  @boundMethod updateArticleDetailRef(ref: any) {
+    this.articleDetailRef = ref
   }
 
   @observable isLoading: boolean = false
   @observable article: IArticle | null = null
+  @observable isHeaderCollapsed: boolean = false
+  @observable headerHeight = new Animated.Value(headerHeight)
+  @observable headerDescriptionOpacity = new Animated.Value(1)
+  @observable headerDescriptionHeight = new Animated.Value(headerDescriptionHeight)
+
+  private startHeaderAnimate(collapse: boolean) {
+    Animated.parallel([
+      Animated.timing(this.headerHeight, {
+        toValue: collapse ? headerHeightCollapsed : headerHeight,
+        duration: 288
+      }),
+      Animated.timing(this.headerDescriptionOpacity, {
+        toValue: collapse ? 0 : 1,
+        duration: 188
+      }),
+      Animated.timing(this.headerDescriptionHeight, {
+        toValue: collapse ? 0 : headerDescriptionHeight,
+        duration: 288
+      })
+    ]).start()
+  }
 
   @computed get articleContent(): string | null {
     return this.article && this.article.content
@@ -47,6 +83,10 @@ interface IProps extends IPageProps {}
   @computed get isLikedArticle(): boolean {
     // return globalStore.articleLikes.includes(this.article.id)
     return true
+  }
+
+  @action private updateHeaderCollapsedState(collapse: boolean) {
+    this.isHeaderCollapsed = collapse
   }
 
   @action private updateLoadingState(loading: boolean) {
@@ -108,6 +148,10 @@ interface IProps extends IPageProps {}
     this.props.navigation.goBack(null)
   }
 
+  @boundMethod private handleScrollToTop() {
+    this.articleDetailRef.scrollTo({ y: 0 })
+  }
+
   @boundMethod private handleToNewArticle(article: IArticle) {
     this.props.navigation.navigate({
       key: String(article.id),
@@ -129,6 +173,11 @@ interface IProps extends IPageProps {}
       .catch(error => console.warn('Fetch like article error:', error))
   }
 
+  @boundMethod private handlePageScroll(event: any) {
+    const pageOffsetY = event.nativeEvent.contentOffset.y
+    this.updateHeaderCollapsedState(pageOffsetY > headerHeight)
+  }
+
   // 去留言板
   toComment() {
     Alert.alert('功能还没做')
@@ -140,135 +189,164 @@ interface IProps extends IPageProps {}
     const automaticArticle = this.article || this.getParamArticle()
     return (
       <SafeAreaView style={[styles.container, styles.cardBackground]}>
-        <ScrollView style={styles.container}>
-          <View style={[styles.header, mixins.rowCenter, styles.cardBackground]}>
-            <TouchableOpacity style={styles.backButton} onPress={this.handleGoBack}>
-              <Ionicon name="ios-arrow-back" size={26} />
+        <View style={styles.container}>
+          <Animated.View
+            style={[
+              styles.header,
+              mixins.rowCenter,
+              styles.cardBackground,
+              { height: this.headerHeight }
+            ]}
+          >
+            <TouchableOpacity onPress={this.handleGoBack}>
+              <Ionicon name="ios-arrow-back" {...getHeaderButtonStyle()} />
             </TouchableOpacity>
             <View style={styles.name}>
-              <Text style={styles.title} numberOfLines={1}>
-                {automaticArticle ? automaticArticle.title : '...'}
-              </Text>
-              <Text style={styles.description} numberOfLines={1}>
-                {automaticArticle ? automaticArticle.description : '...'}
-              </Text>
+              <DoubleClick onDoubleClick={this.handleScrollToTop}>
+                <Text style={styles.title} numberOfLines={1}>
+                  {automaticArticle ? automaticArticle.title : '...'}
+                </Text>
+              </DoubleClick>
+              <Animated.View
+                style={{
+                  height: this.headerDescriptionHeight,
+                  opacity: this.headerDescriptionOpacity
+                }}
+              >
+                <Text style={styles.description} numberOfLines={1}>
+                  {automaticArticle ? automaticArticle.description : '...'}
+                </Text>
+              </Animated.View>
             </View>
-          </View>
-          <ImageBackground
-            style={styles.thumb}
-            source={automaticArticle ? { uri: automaticArticle.thumb } : {}}
-          />
-          {automaticArticle && (
-            <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
-              <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
-              <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
-              <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
-              <Text style={styles.metaText}>最后编辑于 {toYMD(automaticArticle.update_at)}</Text>
-            </View>
-          )}
-          <View style={[styles.content, styles.cardBackground]}>
-            { isLoading
-              ? <AutoActivityIndicator style={styles.indicator} text="加载中..." />
-              : <Markdown
-                  navigation={this.props.navigation}
-                  sanitize={false}
-                  style={styles.markdown}
-                  padding={sizes.gapGoldenRatio}
-                  markdown={this.articleContent}
-                />
-            }
-            {article && (
-              <View style={[styles.cardBackground, styles.footerMeta]}>
-                <Text style={styles.metaText}>发布于 {toYMD(automaticArticle.create_at)}</Text>
-                <View style={styles.footerMetaItems}>
-                  <Text style={styles.metaText}>
-                    { article.category.length
-                      ? `${String(article.category.map(c => c.name).join('、'))}  ∙  `
-                      : '无分类'
-                    }
-                  </Text>
-                  <Text style={styles.metaText}>
-                    { article.tag.length
-                      ? `${String(article.tag.map(t => t.name).join('、'))}`
-                      : '无标签'
-                    }
-                  </Text>
-                </View>
-              </View>
-            )}
-          </View>
-          {article && article.related.length && (
-            <View style={[styles.related, styles.cardBackground]}>
-              <Text style={styles.relatedTitle}>相关文章</Text>
-              {article.related.slice(0, 3).map((item, index) => (
-                <TouchableOpacity
-                  key={`${item.id}-${index}`}
-                  style={styles.relatedItem}
-                  onPress={(() => this.handleToNewArticle(item))}
-                >
-                  <Text style={styles.relatedItemTitle}numberOfLines={1}>{item.title}</Text>
-                  <View style={[mixins.rowCenter, styles.cardBackground]}>
-                    <Text style={styles.metaText}>阅读 {item.meta.views}  ∙  </Text>
-                    <Text style={styles.metaText}>喜欢 {item.meta.likes}  ∙  </Text>
-                    <Text style={styles.metaText}>评论 {item.meta.comments}  ∙  </Text>
-                    <Text style={styles.metaText}>发布于 {toYMD(item.create_at)}</Text>
-                  </View>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </ScrollView>
-        {/* {this.article && (
-          <View style={styles.footer}>
-            <TouchableOpacity style={styles.footerItem} onPress={this.toComment}>
-              <Icon name="comment" size={17} style={styles.footerItemIcon}/>
-              <Text style={styles.footerItemIconText}>{ `评论 (${this.article.meta.comments})` }</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.footerItem} onPress={this.handleLikeArticle}>
-              <Icon
-                size={17}
-                name={this.isLikedArticle ? 'favorite' : 'favorite-border'} 
-                style={[styles.footerItemIcon, {
-                  color: this.isLikedArticle ? 'red' : colors.textTitle
-                }]}
+          </Animated.View>
+          <Animated.View
+            style={[styles.container, { transform: [{ translateY: this.headerHeight }] }]}
+          >
+            <ScrollView
+              ref={this.updateArticleDetailRef}
+              style={styles.container}
+              scrollEventThrottle={16}
+              onScroll={this.handlePageScroll}
+            >
+              <ImageBackground
+                style={styles.thumb}
+                source={automaticArticle ? { uri: automaticArticle.thumb } : {}}
               />
-              <Text
-                style={[
-                  styles.footerItemIconText, {
+              {automaticArticle && (
+                <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
+                  <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
+                  <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
+                  <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
+                  <Text style={styles.metaText}>最后编辑于 {toYMD(automaticArticle.update_at)}</Text>
+                </View>
+              )}
+              <View style={[styles.content, styles.cardBackground]}>
+                { isLoading
+                  ? <AutoActivityIndicator style={styles.indicator} text="加载中..." />
+                  : <Markdown
+                      navigation={this.props.navigation}
+                      sanitize={false}
+                      style={styles.markdown}
+                      padding={sizes.gapGoldenRatio}
+                      markdown={this.articleContent}
+                    />
+                }
+                {article && (
+                  <View style={[styles.cardBackground, styles.footerMeta]}>
+                    <Text style={styles.metaText}>发布于 {toYMD(automaticArticle.create_at)}</Text>
+                    <View style={styles.footerMetaItems}>
+                      <Text style={styles.metaText}>
+                        { article.category.length
+                          ? `${String(article.category.map(c => c.name).join('、'))}  ∙  `
+                          : '无分类'
+                        }
+                      </Text>
+                      <Text style={styles.metaText}>
+                        { article.tag.length
+                          ? `${String(article.tag.map(t => t.name).join('、'))}`
+                          : '无标签'
+                        }
+                      </Text>
+                    </View>
+                  </View>
+                )}
+              </View>
+              {article && article.related.length && (
+                <View style={[styles.related, styles.cardBackground]}>
+                  <Text style={styles.relatedTitle}>相关文章</Text>
+                  {article.related.slice(0, 3).map((item, index) => (
+                    <TouchableOpacity
+                      key={`${item.id}-${index}`}
+                      style={styles.relatedItem}
+                      onPress={(() => this.handleToNewArticle(item))}
+                    >
+                      <Text style={styles.relatedItemTitle}numberOfLines={1}>{item.title}</Text>
+                      <View style={[mixins.rowCenter, styles.cardBackground]}>
+                        <Text style={styles.metaText}>阅读 {item.meta.views}  ∙  </Text>
+                        <Text style={styles.metaText}>喜欢 {item.meta.likes}  ∙  </Text>
+                        <Text style={styles.metaText}>评论 {item.meta.comments}  ∙  </Text>
+                        <Text style={styles.metaText}>发布于 {toYMD(item.create_at)}</Text>
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              )}
+            </ScrollView>
+          </Animated.View>
+          
+          {/* {this.article && (
+            <View style={styles.footer}>
+              <TouchableOpacity style={styles.footerItem} onPress={this.toComment}>
+                <Icon name="comment" size={17} style={styles.footerItemIcon}/>
+                <Text style={styles.footerItemIconText}>{ `评论 (${this.article.meta.comments})` }</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={styles.footerItem} onPress={this.handleLikeArticle}>
+                <Icon
+                  size={17}
+                  name={this.isLikedArticle ? 'favorite' : 'favorite-border'} 
+                  style={[styles.footerItemIcon, {
                     color: this.isLikedArticle ? 'red' : colors.textTitle
-                  }
-                ]}
-              >{ `${this.isLikedArticle ? '已' : ''}喜欢 (${this.article.meta.likes})` }</Text>
-            </TouchableOpacity>
-          </View>
-        )} */}
+                  }]}
+                />
+                <Text
+                  style={[
+                    styles.footerItemIconText, {
+                      color: this.isLikedArticle ? 'red' : colors.textTitle
+                    }
+                  ]}
+                >{ `${this.isLikedArticle ? '已' : ''}喜欢 (${this.article.meta.likes})` }</Text>
+              </TouchableOpacity>
+            </View>
+          )} */}
+        </View>
       </SafeAreaView>
     )
   }
 }
 
-const thumbHeight = sizes.screen.width / sizes.thumbHeightRatio
 const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       container: {
         flex: 1,
+        position: 'relative',
         backgroundColor: colors.background
       },
       cardBackground: {
         backgroundColor: colors.cardBackground
       },
       header: {
-        borderTopColor: colors.border,
-        borderTopWidth: sizes.borderWidth
-      },
-      backButton: {
-        paddingHorizontal: sizes.gap
+        borderColor: colors.border,
+        borderBottomWidth: sizes.borderWidth,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 1
       },
       name: {
         justifyContent: 'center',
-        width: sizes.screen.width - sizes.gap * 3,
-        height: sizes.gap * 3
+        width: sizes.screen.width - sizes.gap * 3.5
       },
       title: {
         ...fonts.h3,
@@ -306,7 +384,7 @@ const obStyles = observable({
         marginTop: sizes.gapGoldenRatio
       },
       content: {
-        minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - sizes.gap * 4 - sizes.gapGoldenRatio
+        minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - headerHeight - sizes.gap - sizes.gapGoldenRatio
       },
       indicator: {
         flex: 1

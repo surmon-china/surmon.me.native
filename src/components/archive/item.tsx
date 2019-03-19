@@ -1,18 +1,17 @@
 
 import React, { PureComponent } from 'react'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { observable, computed } from 'mobx'
 import { Image, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Text } from '@app/components/common/text'
 import { toYMD, buildThumb } from '@app/utils/filters'
 import { IArticle } from '@app/types/business'
 import { EOriginState } from '@app/types/state'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n, { TLanguage } from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
-import { LANGUAGE_KEYS } from '@app/constants/language'
 
 export interface IArtileListItemProps {
   article: IArticle
@@ -60,19 +59,19 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
         <Text style={styles.description} numberOfLines={1}>{article.description}</Text>
         <View style={styles.meta}>
           <View style={styles.metaItem}>
-            <MaterialCommunityIcons name="clock" style={styles.metaIcon} />
+            <Ionicons name="ios-time" style={styles.metaIcon} />
             <Text style={styles.metaText}>{ toYMD(article.create_at) }</Text>
           </View>
           <View style={styles.metaItem}>
-            <MaterialCommunityIcons name="eye" style={styles.metaIcon} />
+            <Ionicons name="ios-eye" style={styles.metaIcon} />
             <Text style={styles.metaText}>{ article.meta.views }</Text>
           </View>
           <View style={styles.metaItem}>
-            <MaterialCommunityIcons name="comment-processing" style={styles.metaIcon} />
+            <Ionicons name="ios-chatboxes" style={styles.metaIcon} />
             <Text style={styles.metaText}>{ article.meta.comments }</Text>
           </View>
           <View style={styles.metaItem}>
-            <MaterialIcons name="favorite" style={[styles.metaIcon, liked ? { color: colors.red } : null]}/>
+            <Ionicons name="ios-heart" style={[styles.metaIcon, liked ? { color: colors.red } : null]}/>
             <Text style={styles.metaText}>{article.meta.likes}</Text>
           </View>
         </View>
