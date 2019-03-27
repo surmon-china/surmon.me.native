@@ -4,14 +4,15 @@ import Feather from 'react-native-vector-icons/Feather'
 import { boundMethod } from 'autobind-decorator'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed } from 'mobx'
+import { observable, action, computed, reaction } from 'mobx'
 import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Text } from '@app/components/common/text'
-import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
+import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { IArticle } from '@app/types/business'
 import { ArticleListItem } from './item'
 import { ArticleListHeader } from './header'
+import { archiveFilterStore, EFilterType } from './filter'
 import { INavigationProps } from '@app/types/props'
 import { EHomeRoutes } from '@app/routes'
 import { STORAGE } from '@app/constants/storage'
@@ -35,15 +36,33 @@ interface IProps extends INavigationProps {
     this.getLocalArticleLikes().then(() => {
       this.fetchArticles()
     })
+    // 监听过滤条件的变化
+    reaction(
+      () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
+      ([type, value]: any) => this.handleFilterChanged(type, value)
+    )
+  }
+
+  private listRef: any = null
+
+  @boundMethod private updateListRef(ref: any) {
+    this.listRef = ref
+    this.props.getListRef && this.props.getListRef(ref)
   }
 
   @observable.ref private isLoading: boolean = false
   @observable.ref private articleLikes: number[] = []
+
+  @observable.ref private params: IRequestParams = {}
   @observable.ref private pagination: IHttpPaginate | null = null
   @observable.shallow private articles: IArticle[] = []
 
   @action private updateLoadingState(loading: boolean) {
     this.isLoading = loading
+  }
+
+  @action private updateParams(params: IRequestParams) {
+    this.params = params
   }
 
   @action private updatePagination(pagination: IHttpPaginate) {
@@ -98,7 +117,8 @@ interface IProps extends INavigationProps {
 
   private fetchArticles(page: number = 1): Promise<any> {
     this.updateLoadingState(true)
-    return fetch.get<THttpResultPaginateArticles>('/article', { page })
+    console.log('发起请求', { ...this.params, page })
+    return fetch.get<THttpResultPaginateArticles>('/article', { ...this.params, page })
       .then(article => {
         this.updateResultData(article.result)
         return article
@@ -125,6 +145,21 @@ interface IProps extends INavigationProps {
       length: height,
       offset: height * index
     }
+  }
+
+  @boundMethod private handleFilterChanged(type: EFilterType | null, value: string) {
+    const params: IRequestParams = {}
+    if (type && value) {
+      const paramsKeys = {
+        [EFilterType.Search]: 'keyword',
+        [EFilterType.Tag]: 'tag_slug',
+        [EFilterType.Category]: 'category_slug'
+      }
+      params[paramsKeys[type]] = value
+    }
+    this.updateParams(params)
+    this.listRef.scrollToIndex({ index: 0, viewOffset: 0 })
+    setTimeout(() => this.fetchArticles(), 266)
   }
 
   @boundMethod private handleRefreshArticle() {
@@ -209,7 +244,7 @@ interface IProps extends INavigationProps {
         <FlatList
           style={styles.articleListView}
           data={this.articleListData}
-          ref={this.props.getListRef}
+          ref={this.updateListRef}
           // 首屏渲染多少个数据
           initialNumToRender={3}
           // 手动维护每一行的高度以优化性能
@@ -233,16 +268,18 @@ interface IProps extends INavigationProps {
           // 单个主体
           renderItem={({ item: article, index }) => {
             return (
-              <Observer render={() => (
-                <ArticleListItem
-                  article={article}
-                  darkTheme={globalStore.darkTheme}
-                  language={globalStore.language}
-                  liked={this.getAricleLikedState(article.id)}
-                  key={this.getArticleIdKey(article, index)}
-                  onPress={this.handleToDetailPage}
-                />
-              )}/>
+              <Observer
+                render={() => (
+                  <ArticleListItem
+                    article={article}
+                    darkTheme={globalStore.darkTheme}
+                    language={globalStore.language}
+                    liked={this.getAricleLikedState(article.id)}
+                    key={this.getArticleIdKey(article, index)}
+                    onPress={this.handleToDetailPage}
+                  />
+                )}
+              />
             )
           }}
         />

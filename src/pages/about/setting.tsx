@@ -109,6 +109,7 @@ interface IProps extends IPageProps {}
     if (this.isLanguageBoxCollapsed) {
       return null
     }
+
     const { styles } = obStyles
     return (
       <>

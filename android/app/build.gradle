@@ -103,6 +103,8 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        renderscriptTargetApi 23
+        renderscriptSupportModeEnabled true
     }
     splits {
         abi {
@@ -134,6 +136,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-blur')
     implementation project(':react-native-webview')
     implementation project(':react-native-vector-icons')
     implementation project(':react-native-gesture-handler')

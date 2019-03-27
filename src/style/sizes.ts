@@ -3,9 +3,10 @@
 import { Dimensions, StyleSheet } from 'react-native'
 import { IS_IOS } from '@app/config'
 
-const goldenRatio = 0.618
-const safeAreaViewTop = 44
-const safeAreaViewBottom = 34
+export const goldenRatio = 0.618
+export const safeAreaViewTop = 44
+export const safeAreaViewBottom = 34
+export const defaultHeaderHeight = 44
 
 const { width, height } = Dimensions.get('window')
 const screenHeight = width < height ? height : width

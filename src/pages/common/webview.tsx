@@ -119,9 +119,11 @@ interface IProps extends IPageProps {}
   render() {
     const store = webViewPageStore
     const { styles } = obStyles
+
     if (!store.url) {
       return null
     }
+
     return (
       <View style={styles.container}>
         <WebView

@@ -1,10 +1,10 @@
 
 import React, { Component } from 'react'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { NavigationScreenConfigProps } from 'react-navigation'
 import { StyleSheet, TouchableOpacity, View } from 'react-native'
 import { boundMethod } from 'autobind-decorator'
+import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { observable } from 'mobx'
 import { archiveFilterStore, ArchiveFilter } from '@app/components/archive/filter'
@@ -22,7 +22,7 @@ import sizes from '@app/style/sizes'
 class IndexStore {
 
   articleListRef: any = null
-  
+
   @boundMethod updateArticleListRef(ref: any) {
     this.articleListRef = ref
   }
@@ -54,12 +54,14 @@ interface IProps extends IPageProps {}
       headerLeft: (
         <TouchableOpacity
           activeOpacity={sizes.touchOpacity}
-          onPress={archiveFilterStore.toggleVisibleState}
+          onPress={() => archiveFilterStore.updateVisibleState(true)}
         >
-          <FontAwesome name="sliders" {...buttonStyle} />
-          {archiveFilterStore.activeFilter && (
-            <Remind style={styles.headerCheckedIcon} />
-          )}
+          <Ionicon name="ios-options" {...buttonStyle} />
+          <Observer
+            render={() => archiveFilterStore.hasFilter && (
+              <Remind style={styles.headerCheckedIcon} />
+            )}
+          />
         </TouchableOpacity>
       ),
       headerRight: (
@@ -81,11 +83,7 @@ interface IProps extends IPageProps {}
     const { styles } = obStyles
     return (
       <View style={styles.container}>
-        {archiveFilterStore.isVisible && (
-          <View style={styles.archiveFilterView}>
-            <ArchiveFilter />
-          </View>
-        )}
+        <ArchiveFilter />
         <ArticleList
           navigation={this.props.navigation}
           getListRef={indexStore.updateArticleListRef}
@@ -108,14 +106,6 @@ const obStyles = observable({
         position: 'absolute',
         right: sizes.gap - 4,
         bottom: -1,
-      },
-      archiveFilterView: {
-        position: 'absolute',
-        top: 0,
-        left: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 1
       }
     })
   }

@@ -14,11 +14,11 @@ import { IArticle } from '@app/types/business'
 import { IPageProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { EHomeRoutes } from '@app/routes'
+import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
-import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import fetch from '@app/services/fetch'
 
 const headerHeight = sizes.gap * 3
