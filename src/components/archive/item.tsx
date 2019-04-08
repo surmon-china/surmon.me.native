@@ -84,8 +84,8 @@ const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       container: {
-        marginHorizontal: sizes.gapGoldenRatio,
-        marginTop: sizes.gapGoldenRatio,
+        marginHorizontal: sizes.goldenRatioGap,
+        marginTop: sizes.goldenRatioGap,
         backgroundColor: colors.cardBackground
       },
       thumb: {
@@ -107,12 +107,12 @@ const obStyles = observable({
       title: {
         ...fonts.h4,
         fontWeight: '700',
-        margin: sizes.gapGoldenRatio
+        margin: sizes.goldenRatioGap
       },
       description: {
         ...fonts.base,
-        margin: sizes.gapGoldenRatio,
-        marginTop: - sizes.gapGoldenRatio / 4,
+        margin: sizes.goldenRatioGap,
+        marginTop: - sizes.goldenRatioGap / 4,
         color: colors.textSecondary
       },
       meta: {
@@ -121,7 +121,7 @@ const obStyles = observable({
         alignItems: 'center',
         borderTopColor: colors.textMuted,
         borderTopWidth: sizes.borderWidth * 2,
-        paddingHorizontal: sizes.gapGoldenRatio,
+        paddingHorizontal: sizes.goldenRatioGap,
         paddingVertical: sizes.gap / 2 
       },
       metaItem: {
@@ -132,7 +132,7 @@ const obStyles = observable({
       metaIcon: {
         ...fonts.base,
         marginTop: 1,
-        marginRight: sizes.gapGoldenRatio / 2,
+        marginRight: sizes.goldenRatioGap / 2,
         color: colors.textSecondary
       },
       metaText: {

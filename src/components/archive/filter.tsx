@@ -248,11 +248,11 @@ const obStyles = observable({
       },
       item: {
         ...mixins.rowCenter,
-        paddingHorizontal: sizes.gapGoldenRatio,
-        paddingVertical: sizes.gapGoldenRatio / 2,
+        paddingHorizontal: sizes.goldenRatioGap,
+        paddingVertical: sizes.goldenRatioGap / 2,
         backgroundColor: colors.background,
-        marginRight: sizes.gapGoldenRatio,
-        marginBottom: sizes.gapGoldenRatio
+        marginRight: sizes.goldenRatioGap,
+        marginBottom: sizes.goldenRatioGap
       },
       itemActive: {
         backgroundColor: colors.primary

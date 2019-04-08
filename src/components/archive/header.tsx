@@ -45,7 +45,7 @@ const obStyles = observable({
       container: {
         ...mixins.rowCenter,
         justifyContent: 'center',
-        height: sizes.gapGoldenRatio * 4,
+        height: sizes.goldenRatioGap * 4,
         borderBottomWidth: sizes.borderWidth,
         borderBottomColor: colors.border,
         backgroundColor: colors.cardBackground

@@ -37,7 +37,7 @@ export default {
 
   // base
   gap: 20,
-  gapGoldenRatio: 20 * goldenRatio,
+  goldenRatioGap: 20 * goldenRatio,
   touchOpacity: 0.6,
   borderWidth: StyleSheet.hairlineWidth
 }

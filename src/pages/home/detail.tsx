@@ -247,7 +247,7 @@ interface IProps extends IPageProps {}
                       navigation={this.props.navigation}
                       sanitize={false}
                       style={styles.markdown}
-                      padding={sizes.gapGoldenRatio}
+                      padding={sizes.goldenRatioGap}
                       markdown={this.articleContent}
                     />
                 }
@@ -365,7 +365,7 @@ const obStyles = observable({
       },
       meta: {
         ...mixins.rowCenter,
-        paddingHorizontal: sizes.gapGoldenRatio
+        paddingHorizontal: sizes.goldenRatioGap
       },
       metaText: {
         ...fonts.small,
@@ -373,36 +373,36 @@ const obStyles = observable({
       },
       headerMeta: {
         paddingBottom: 0,
-        paddingTop: sizes.gapGoldenRatio
+        paddingTop: sizes.goldenRatioGap
       },
       footerMeta: {
-        paddingHorizontal: sizes.gapGoldenRatio,
-        paddingBottom: sizes.gapGoldenRatio
+        paddingHorizontal: sizes.goldenRatioGap,
+        paddingBottom: sizes.goldenRatioGap
       },
       footerMetaItems: {
         ...mixins.rowCenter,
-        marginTop: sizes.gapGoldenRatio
+        marginTop: sizes.goldenRatioGap
       },
       content: {
-        minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - headerHeight - sizes.gap - sizes.gapGoldenRatio
+        minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - headerHeight - sizes.gap - sizes.goldenRatioGap
       },
       indicator: {
         flex: 1
       },
       markdown: {
-        marginVertical: sizes.gapGoldenRatio,
+        marginVertical: sizes.goldenRatioGap,
       },
       related: {
         marginTop: sizes.gap
       },
       relatedTitle: {
-        padding: sizes.gapGoldenRatio,
+        padding: sizes.goldenRatioGap,
         borderBottomColor: colors.border,
         borderBottomWidth: sizes.borderWidth,
         color: colors.textSecondary
       },
       relatedItem: {
-        padding: sizes.gapGoldenRatio,
+        padding: sizes.goldenRatioGap,
         borderTopColor: colors.border,
         borderTopWidth: sizes.borderWidth
       },

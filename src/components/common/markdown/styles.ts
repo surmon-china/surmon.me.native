@@ -9,7 +9,7 @@ export const content = observable({
 
     const $borderColor = colors.border
     const $borderWidth = sizes.borderWidth
-    const $gapGoldenRatio = sizes.gapGoldenRatio
+    const $gapGoldenRatio = sizes.goldenRatioGap
     const $fontDINRegular = fonts.fontFamily
 
     const $primaryColor = colors.primary
