@@ -1,11 +1,29 @@
 {
-  "name": "surmon_me",
-  "version": "0.1.0",
+  "name": "surmon.me.native",
+  "description": "App for Surmon.me blog",
+  "version": "1.0.0",
   "private": false,
+  "author": {
+    "name": "Surmon",
+    "email": "surmon@foxmail.com",
+    "url": "https://surmon.me"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/surmon-china/surmon.me.native/issues"
+  },
+  "homepage": "https://github.com/surmon-china/surmon.me.native#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surmon-china/surmon.me.native.git"
+  },
   "rnpm": {
     "assets": [
       "./src/assets/fonts/"
     ]
+  },
+  "resolutions": {
+    "terser": "3.17.0"
   },
   "scripts": {
     "dev": "npm start --reset-cache",
@@ -30,7 +48,7 @@
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "query-string": "^6.2.0",
-    "react": "^16.7.0",
+    "react": "^16.8.6",
     "react-native": "^0.59.5",
     "react-native-actionsheet": "^2.4.2",
     "react-native-autoheight-webview": "^1.0.1",
