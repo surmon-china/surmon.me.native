@@ -4,7 +4,7 @@ import { boundMethod } from 'autobind-decorator'
 import { observer } from 'mobx-react/native'
 import { observable } from 'mobx'
 import { Text } from '@app/components/common/text'
-import { Comment } from '@app/components/comment'
+// import { Comment } from '@app/components/comment'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IPageProps } from '@app/types/props'
 import colors from '@app/style/colors'
@@ -55,10 +55,10 @@ interface IProps extends IPageProps {}
           </ImageBackground>
         </Animated.View>
         <View style={styles.comment}>
-          <Comment
+          {/* <Comment
             postId={0}
             onScroll={this.handleCommentListScroll}
-          />
+          /> */}
         </View>
       </View>
     )
