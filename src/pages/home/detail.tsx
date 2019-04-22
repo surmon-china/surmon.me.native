@@ -4,7 +4,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed, reaction } from 'mobx'
 import { boundMethod } from 'autobind-decorator'
-import { TouchableOpacity, Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native'
+import { TouchableOpacity, Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Markdown } from '@app/components/common/markdown'
 import { Text } from '@app/components/common/text'
@@ -173,7 +173,7 @@ interface IProps extends IPageProps {}
       .catch(error => console.warn('Fetch like article error:', error))
   }
 
-  @boundMethod private handlePageScroll(event: any) {
+  @boundMethod private handlePageScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const pageOffsetY = event.nativeEvent.contentOffset.y
     this.updateHeaderCollapsedState(pageOffsetY > headerHeight)
   }

@@ -5,7 +5,6 @@ import sizes from '@app/style/sizes'
 const mixins = StyleSheet.create({
   // 垂直分布，全部居中
   colCenter: {
-    // flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center'
   },

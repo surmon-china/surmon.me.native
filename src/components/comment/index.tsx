@@ -1,20 +1,16 @@
 
 import React, { Component } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { boundMethod } from 'autobind-decorator'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed, reaction } from 'mobx'
-import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
-import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
+import { FlatList, StyleSheet, View, TouchableOpacity, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { Text } from '@app/components/common/text'
+import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
-import { IArticle } from '@app/types/business'
-import { ArticleListItem } from './item'
-import { ArticleListHeader } from './header'
-import { archiveFilterStore, EFilterType } from './filter'
-import { INavigationProps } from '@app/types/props'
-import { EHomeRoutes } from '@app/routes'
+import { IComment } from '@app/types/business'
 import { STORAGE } from '@app/constants/storage'
 import globalStore from '@app/stores/global'
 import fetch from '@app/services/fetch'
@@ -22,25 +18,29 @@ import storage from '@app/services/storage'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
+import mixins from '@app/style/mixins'
+import { CommentItem } from './item'
 
-type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
+type THttpResultPaginateComments = IHttpResultPaginate<IComment[]>
 
-interface IProps extends INavigationProps {
+interface IProps {
+  postId: number
   getListRef?(ref: any): void
+  onScroll?(event: NativeSyntheticEvent<NativeScrollEvent>): void
 }
 
-@observer export class ArticleList extends Component<IProps> {
+@observer export class Comment extends Component<IProps> {
  
   constructor(props: IProps) {
     super(props)
-    this.getLocalArticleLikes().then(() => {
-      this.fetchArticles()
+    this.getLocalCommentLikes().then(() => {
+      this.fetchComments()
     })
-    // 监听过滤条件的变化
-    reaction(
-      () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
-      ([type, value]: any) => this.handleFilterChanged(type, value)
-    )
+    // 监听 Sort 模式的变化
+    // reaction(
+    //   () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
+    //   ([type, value]: any) => this.handleFilterChanged(type, value)
+    // )
   }
 
   private listRef: any = null
@@ -51,51 +51,52 @@ interface IProps extends INavigationProps {
   }
 
   @observable.ref private isLoading: boolean = false
-  @observable.ref private articleLikes: number[] = []
+  @observable.ref private isSortByHot: boolean = false
+  @observable.ref private commentLikes: number[] = []
 
-  @observable.ref private params: IRequestParams = {}
   @observable.ref private pagination: IHttpPaginate | null = null
-  @observable.shallow private articles: IArticle[] = []
+  @observable.shallow private comments: IComment[] = []
 
   @action private updateLoadingState(loading: boolean) {
     this.isLoading = loading
   }
 
-  @action private updateParams(params: IRequestParams) {
-    this.params = params
+  @action private updateHotSortState(isHot: boolean) {
+    this.isSortByHot = isHot
   }
 
   @action private updatePagination(pagination: IHttpPaginate) {
     this.pagination = pagination
   }
 
-  @action private updateArticleLikes(articleLikes: number[]) {
-    this.articleLikes = articleLikes || []
+  @action private updateCommentLikes(commentLikes: number[]) {
+    this.commentLikes = commentLikes || []
   }
 
-  @action private updateArticles(articles: IArticle[], isAdd: boolean) {
+  @action private updateComments(comments: IComment[], isAdd: boolean) {
     if (isAdd) {
-      this.articles.push(...articles)
+      this.comments.push(...comments)
     } else {
-      this.articles = articles
+      this.comments = comments
     }
   }
 
-  @action private updateResultData(resultData: THttpResultPaginateArticles) {
+  @action private updateResultData(resultData: THttpResultPaginateComments) {
+    console.log('resultData', resultData)
     const { data, pagination } = resultData
     this.updateLoadingState(false)
-    this.updateArticles(data, pagination.current_page > 1)
+    this.updateComments(data, pagination.current_page > 1)
     this.updatePagination(pagination)
   }
 
   @computed get listExtraData(): any {
-    return [this.articleLikes, globalStore.language, globalStore.darkTheme]
+    return [this.commentLikes, globalStore.language, globalStore.darkTheme]
   }
 
-  @computed get articleListData(): IArticle[] | null {
-    const { articles } = this
-    return articles && articles.length
-      ? articles.slice()
+  @computed get commentListData(): IComment[] | null {
+    const { comments: comments } = this
+    return comments && comments.length
+      ? comments.slice()
       : null
   }
 
@@ -103,10 +104,10 @@ interface IProps extends INavigationProps {
     return !!this.pagination && this.pagination.current_page === this.pagination.total_page
   }
 
-  private getLocalArticleLikes(): Promise<any> {
-    return storage.get<number[]>(STORAGE.ARTICLE_LIKES)
+  private getLocalCommentLikes(): Promise<any> {
+    return storage.get<number[]>(STORAGE.COMMENT_LIKES)
       .then(likes => {
-        this.updateArticleLikes(likes)
+        this.updateCommentLikes(likes)
         return likes
       })
       .catch(error => {
@@ -115,27 +116,33 @@ interface IProps extends INavigationProps {
       })
   }
 
-  private fetchArticles(page: number = 1): Promise<any> {
+  private fetchComments(page: number = 1): Promise<any> {
     this.updateLoadingState(true)
-    console.log('发起请求', { ...this.params, page })
-    return fetch.get<THttpResultPaginateArticles>('/article', { ...this.params, page })
-      .then(article => {
-        this.updateResultData(article.result)
-        return article
+    const params = {
+      sort: this.isSortByHot ? 2 : -1,
+      post_id: this.props.postId,
+      per_page: 66,
+      page
+    }
+    console.log('发起评论请求', params)
+    return fetch.get<THttpResultPaginateComments>('/comment', params)
+      .then(comment => {
+        this.updateResultData(comment.result)
+        return comment
       })
       .catch(error => {
         this.updateLoadingState(false)
-        console.warn('Fetch article list error:', error)
+        console.warn('Fetch comment list error:', error)
         return Promise.reject(error)
       })
   }
 
-  private getArticleIdKey(article: IArticle, index?: number): string {
-    return `index:${index}:sep:${article._id}:${article.id}`
+  private getArticleIdKey(comment: IComment, index?: number): string {
+    return `index:${index}:sep:${comment._id}:${comment.id}`
   }
 
-  private getAricleLikedState(articleId: number): boolean {
-    return this.articleLikes.indexOf(articleId) > -1
+  private getAricleLikedState(commentId: number): boolean {
+    return this.commentLikes.indexOf(commentId) > -1
   }
 
   private getAricleItemLayout(_: any, index: number) {
@@ -147,42 +154,35 @@ interface IProps extends INavigationProps {
     }
   }
 
-  @boundMethod private handleFilterChanged(type: EFilterType | null, value: string) {
+  // 重新排序时
+  @boundMethod private handleSortChanged() {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
       this.listRef.scrollToIndex({ index: 0, viewOffset: 0 })
     }
     // 修正参数
-    const params: IRequestParams = {}
-    if (type && value) {
-      const paramsKeys = {
-        [EFilterType.Search]: 'keyword',
-        [EFilterType.Tag]: 'tag_slug',
-        [EFilterType.Category]: 'category_slug'
-      }
-      params[paramsKeys[type]] = value
-    }
-    this.updateParams(params)
-    // 更新数据
-    setTimeout(() => this.fetchArticles(), 266)
+    this.updateHotSortState(!this.isSortByHot)
+    // 重新请求数据
+    setTimeout(() => this.fetchComments(), 266)
   }
 
   @boundMethod private handleRefreshArticle() {
-    this.fetchArticles()
+    this.fetchComments()
   }
 
   @boundMethod private handleLoadmoreArticle() {
     if (!this.isNoMoreData && !this.isLoading && this.pagination) {
-      this.fetchArticles(this.pagination.current_page + 1)
+      this.fetchComments(this.pagination.current_page + 1)
     }
   }
 
-  @boundMethod private handleToDetailPage(article: IArticle) {
-    this.props.navigation.navigate({
-      key: String(article.id),
-      routeName: EHomeRoutes.ArticleDetail,
-      params: { article }
-    })
+  @boundMethod private handleReplyComment(comment: IComment) {
+    console.log('回复某个评论', comment)
+    // this.props.navigation.navigate({
+    //   key: String(comment.id),
+    //   routeName: EHomeRoutes.ArticleDetail,
+    //   params: { comment }
+    // })
   }
 
   /**
@@ -215,7 +215,7 @@ interface IProps extends INavigationProps {
    */
   @boundMethod private renderLoadmoreView(): JSX.Element | null {
     const { styles } = obStyles
-    if (!this.articleListData || !this.articleListData.length) {
+    if (!this.commentListData || !this.commentListData.length) {
       return null
     }
     if (this.isLoading) {
@@ -241,14 +241,45 @@ interface IProps extends INavigationProps {
     )
   }
 
+  private renderToolBoxView(): JSX.Element {
+    const { pagination } = this
+    const { styles } = obStyles
+
+    return (
+      <View style={styles.toolBox}>
+        {pagination && pagination.total ? (
+          <Text>共 {pagination.total} 条评论</Text>
+        ) : (
+          <Text>暂无评论</Text>
+        )}
+        <TouchableOpacity
+          activeOpacity={sizes.touchOpacity}
+          onPress={this.handleSortChanged}
+        >
+          <Ionicon
+            style={styles.toolSort}
+            size={19}
+            name="ios-funnel"
+          />
+          <Ionicon
+            style={styles.toolSortType}
+            size={14}
+            color={this.isSortByHot ? colors.primary : colors.textDefault}
+            name={this.isSortByHot ? 'ios-happy' : 'ios-time'}
+          />
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     const { styles } = obStyles
     return (
-      <View style={styles.listViewContainer}>
-        <ArticleListHeader />
+      <View style={styles.container}>
+        {this.renderToolBoxView()}
         <FlatList
-          style={styles.articleListView}
-          data={this.articleListData}
+          style={styles.commentListView}
+          data={this.commentListData}
           ref={this.updateListRef}
           // 首屏渲染多少个数据
           initialNumToRender={3}
@@ -268,20 +299,22 @@ interface IProps extends INavigationProps {
           onEndReachedThreshold={0}
           // 加载更多
           onEndReached={this.handleLoadmoreArticle}
+          // 手势滚动
+          onScroll={this.props.onScroll}
           // 唯一 ID
           keyExtractor={this.getArticleIdKey}
           // 单个主体
-          renderItem={({ item: article, index }) => {
+          renderItem={({ item: comment, index }) => {
             return (
               <Observer
                 render={() => (
-                  <ArticleListItem
-                    article={article}
+                  <CommentItem
+                    comment={comment}
                     darkTheme={globalStore.darkTheme}
                     language={globalStore.language}
-                    liked={this.getAricleLikedState(article.id)}
-                    key={this.getArticleIdKey(article, index)}
-                    onPress={this.handleToDetailPage}
+                    liked={this.getAricleLikedState(comment.id)}
+                    key={this.getArticleIdKey(comment, index)}
+                    onPress={this.handleReplyComment}
                   />
                 )}
               />
@@ -296,12 +329,31 @@ interface IProps extends INavigationProps {
 const obStyles = observable({
   get styles() {
     return StyleSheet.create({
-      listViewContainer: {
+      container: {
         position: 'relative',
         flex: 1,
       },
-      articleListView: {
-        width: sizes.screen.width,
+      toolBox: {
+        ...mixins.rowCenter,
+        justifyContent: 'space-between',
+        height: sizes.gap * 2,
+        backgroundColor: colors.cardBackground,
+        paddingHorizontal: sizes.gap,
+        borderColor: colors.border,
+        borderBottomWidth: sizes.borderWidth
+      },
+      toolSort: {
+        marginRight: 8,
+        color: colors.textDefault
+      },
+      toolSortType: {
+        position: 'absolute',
+        right: 0,
+        bottom: 0,
+      },
+      commentListView: {
+        // marginTop: sizes.goldenRatioGap,
+        backgroundColor: colors.cardBackground
       },
       centerContainer: {
         justifyContent: 'center',

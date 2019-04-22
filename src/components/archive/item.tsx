@@ -85,12 +85,12 @@ const obStyles = observable({
     return StyleSheet.create({
       container: {
         marginHorizontal: sizes.goldenRatioGap,
-        marginTop: sizes.goldenRatioGap,
+        marginTop: sizes.gap,
         backgroundColor: colors.cardBackground
       },
       thumb: {
         flex: 1,
-        height: 130,
+        height: 110,
         maxWidth: '100%',
         resizeMode: 'cover'
       },
