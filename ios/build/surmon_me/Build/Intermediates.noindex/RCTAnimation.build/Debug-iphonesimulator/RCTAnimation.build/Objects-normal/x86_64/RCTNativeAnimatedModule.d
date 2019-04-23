@@ -1,0 +1,34 @@
+dependencies: \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedModule.m \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedModule.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeModule.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTDefines.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTEventDispatcher.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTBridge.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTBridgeDelegate.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTJavaScriptLoader.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTFrameUpdate.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTInvalidating.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTEventEmitter.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTUIManager.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTRootView.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTViewManager.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTConvert.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTAnimationType.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTBorderStyle.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTLog.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTAssert.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTUtils.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTPointerEvents.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTTextDecorationLineType.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGValue.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/UIView+React.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTComponent.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTUIManagerObserverCoordinator.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/React/RCTUIManagerUtils.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTValueAnimatedNode.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/Libraries/NativeAnimation/Nodes/RCTAnimatedNode.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/Libraries/NativeAnimation/RCTNativeAnimatedNodesManager.h

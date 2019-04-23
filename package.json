@@ -1,5 +1,5 @@
 {
-  "name": "surmon_me",
+  "name": "surmon.me.native",
   "description": "App for Surmon.me blog",
   "version": "1.0.0",
   "private": false,
@@ -40,6 +40,7 @@
     "postinstall": "rndebugger-open"
   },
   "dependencies": {
+    "@react-native-community/async-storage": "^1.3.3",
     "autobind-decorator": "^2.4.0",
     "gravatar": "^1.8.0",
     "highlight.js": "^9.15.6",
@@ -47,7 +48,7 @@
     "mobx": "^5.9.0",
     "mobx-react": "^5.4.3",
     "query-string": "^6.2.0",
-    "react": "^16.8.6",
+    "react": "^16.8.3",
     "react-native": "^0.59.5",
     "react-native-actionsheet": "^2.4.2",
     "react-native-autoheight-webview": "^1.0.1",
@@ -59,25 +60,25 @@
     "react-navigation": "^3.3.0"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-decorators": "^7.3.0",
+    "@babel/core": "^7.4.3",
+    "@babel/plugin-proposal-decorators": "^7.4.0",
+    "@babel/runtime": "^7.4.3",
     "@types/gravatar": "^1.8.0",
     "@types/highlight.js": "^9.12.3",
     "@types/jest": "^24.0.11",
     "@types/marked": "^0.6.1",
-    "@types/react": "^16.7.21",
-    "@types/react-native": "^0.57.32",
+    "@types/react": "^16.8.14",
+    "@types/react-native": "^0.57.46",
     "@types/react-native-vector-icons": "^6.4.0",
     "@types/react-navigation": "^3.0.1",
-    "@types/react-test-renderer": "^16.0.3",
-    "babel-core": "^7.0.0-bridge.0",
-    "babel-jest": "24.7.1",
-    "babel-preset-react-native": "4.0.1",
-    "jest": "24.7.1",
-    "metro-react-native-babel-preset": "0.53.1",
+    "@types/react-test-renderer": "^16.8.1",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.1",
     "react-native-debugger-open": "^0.3.3",
     "react-native-typescript-transformer": "^1.2.12",
-    "react-test-renderer": "16.8.6",
-    "typescript": "^3.3.3333"
+    "react-test-renderer": "16.8.3",
+    "typescript": "^3.4.4"
   },
   "jest": {
     "preset": "react-native"

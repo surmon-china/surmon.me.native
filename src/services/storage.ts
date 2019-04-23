@@ -1,5 +1,5 @@
 
-import { AsyncStorage } from 'react-native'
+import AsyncStorage from '@react-native-community/async-storage'
 import { STORAGE } from '@app/constants/storage'
 
 export function get<T>(key: STORAGE): Promise<T> {

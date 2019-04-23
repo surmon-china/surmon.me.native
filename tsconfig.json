@@ -6,12 +6,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "isolatedModules": true,
-    "jsx": "react-native",
+    "jsx": "react",
     "lib": ["es6"],
     "moduleResolution": "node",
     "noEmit": true,
     "strict": true,
-    "target": "es2015",
+    "target": "esnext",
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
@@ -19,7 +19,5 @@
       "@app/*": ["./src/*"]
     }
   },
-  "exclude": [
-    "node_modules"
-  ]
+  "exclude": ["node_modules", "babel.config.js", "metro.config.js", "jest.config.js"]
 }

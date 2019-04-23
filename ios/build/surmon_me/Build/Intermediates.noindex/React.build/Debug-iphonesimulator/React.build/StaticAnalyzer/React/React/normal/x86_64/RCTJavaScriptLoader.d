@@ -1,0 +1,30 @@
+dependencies: \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTJavaScriptLoader.mm \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTJavaScriptLoader.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTDefines.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/DevSupport/RCTInspectorDevServerHelper.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/DevSupport/RCTPackagerConnection.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/cxxreact/JSBundleType.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/third-party/folly-2018.10.22.00/folly/Portability.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/third-party/folly-2018.10.22.00/folly/portability/Config.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/third-party/folly-2018.10.22.00/folly/CPortability.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTBridge.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTBridgeDelegate.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTBridgeModule.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTFrameUpdate.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTInvalidating.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTConvert.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Views/RCTAnimationType.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Views/RCTBorderStyle.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTLog.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTAssert.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTUtils.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Views/RCTPointerEvents.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Views/RCTTextDecorationLineType.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/Yoga.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGEnums.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGMacros.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/ios/build/surmon_me/Build/Products/Debug-iphonesimulator/include/yoga/YGValue.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTMultipartDataTask.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTMultipartStreamReader.h \
+  /Users/surmon/Projects/Javascript/surmon.me.native/node_modules/react-native/React/Base/RCTPerformanceLogger.h
