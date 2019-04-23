@@ -340,7 +340,9 @@ const obStyles = observable({
         backgroundColor: colors.cardBackground,
         paddingHorizontal: sizes.gap,
         borderColor: colors.border,
-        borderBottomWidth: sizes.borderWidth
+        borderTopWidth: sizes.borderWidth,
+        borderBottomWidth: sizes.borderWidth,
+        marginTop: sizes.gap
       },
       toolSort: {
         marginRight: 8,

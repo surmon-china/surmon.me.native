@@ -91,13 +91,6 @@ react-native link
 ### Links
 
 ##### IOS
-- react-native-vector-icons - Issues：
-   * [安装说明](https://github.com/oblador/react-native-vector-icons)
-   * 报 `Unrecognized font family 'Ionicons'`，运行 `npm link react-native-vector-icons`
-   * Podfile的更新需要使用`gem`安装`cocoapods`
-      + http://code4app.com/article/cocoapods-install-usage
-      + https://github.com/CocoaPods/CocoaPods/issues/3692
-      + https://github.com/oblador/react-native-vector-icons/issues/394
 - AppName和启动页修改 http://www.cnblogs.com/allenxieyusheng/p/5802179.html
 - App图标尺寸 
    + http://blog.csdn.net/leiyu231/article/details/52830151

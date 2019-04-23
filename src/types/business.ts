@@ -61,13 +61,17 @@ export interface IAuthor {
 
 export interface IComment {
   post_id: number
+  id: number
   pid: number
   content: string
   agent?: string
   author: IAuthor
   likes: number
   ip?: string
-  ip_location?: any
-  create_at: Date
-  update_at: Date
+  ip_location?: {
+    city: string
+    country: string
+  }
+  create_at: string
+  update_at: string
 }
