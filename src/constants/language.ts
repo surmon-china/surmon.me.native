@@ -44,5 +44,7 @@ export enum LANGUAGE_KEYS {
   SUCCESS = 'success',
   NETWORK_ERROR = 'networkError',
   UNKNOW_ERROR = 'unknowError',
-  CALL_EMAIL_ERROR = 'callEmailError'
+  CALL_EMAIL_ERROR = 'callEmailError',
+
+  COMMENT_REPLY = 'commentReply',
 }

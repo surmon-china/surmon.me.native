@@ -41,5 +41,7 @@ export default {
   [LANGUAGE_KEYS.SUCCESS]: '操作成功',
   [LANGUAGE_KEYS.NETWORK_ERROR]: '网络请求错误',
   [LANGUAGE_KEYS.UNKNOW_ERROR]: '未知错误',
-  [LANGUAGE_KEYS.CALL_EMAIL_ERROR]: '不知道啥原因，反正调不起邮件客户端'
+  [LANGUAGE_KEYS.CALL_EMAIL_ERROR]: '不知道啥原因，反正调不起邮件客户端',
+
+  [LANGUAGE_KEYS.COMMENT_REPLY]: '回复'
 }

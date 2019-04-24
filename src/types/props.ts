@@ -11,3 +11,7 @@ export interface INavigationProps {
 export interface IPageProps extends INavigationProps {
   screenProps: IGlobalStore
 }
+
+export interface IChildrenProps {
+  children: React.ReactNode | React.ReactNode[]
+}

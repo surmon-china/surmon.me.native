@@ -41,5 +41,7 @@ export default {
   [LANGUAGE_KEYS.SUCCESS]: 'Success',
   [LANGUAGE_KEYS.NETWORK_ERROR]: 'Network Error',
   [LANGUAGE_KEYS.UNKNOW_ERROR]: 'Unknow Error',
-  [LANGUAGE_KEYS.CALL_EMAIL_ERROR]: 'Call email client failed'
+  [LANGUAGE_KEYS.CALL_EMAIL_ERROR]: 'Call email client failed',
+
+  [LANGUAGE_KEYS.COMMENT_REPLY]: 'Reply'
 }

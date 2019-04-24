@@ -5,12 +5,13 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 import { boundMethod } from 'autobind-decorator'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed, reaction } from 'mobx'
-import { FlatList, StyleSheet, View, TouchableOpacity, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { observable, action, computed } from 'mobx'
+import { FlatList, StyleSheet, View, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { Text } from '@app/components/common/text'
+import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
-import { IComment } from '@app/types/business'
+import { IComment, IAuthor } from '@app/types/business'
 import { STORAGE } from '@app/constants/storage'
 import globalStore from '@app/stores/global'
 import fetch from '@app/services/fetch'
@@ -36,11 +37,6 @@ interface IProps {
     this.getLocalCommentLikes().then(() => {
       this.fetchComments()
     })
-    // 监听 Sort 模式的变化
-    // reaction(
-    //   () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
-    //   ([type, value]: any) => this.handleFilterChanged(type, value)
-    // )
   }
 
   private listRef: any = null
@@ -59,10 +55,6 @@ interface IProps {
 
   @action private updateLoadingState(loading: boolean) {
     this.isLoading = loading
-  }
-
-  @action private updateHotSortState(isHot: boolean) {
-    this.isSortByHot = isHot
   }
 
   @action private updatePagination(pagination: IHttpPaginate) {
@@ -137,37 +129,26 @@ interface IProps {
       })
   }
 
-  private getArticleIdKey(comment: IComment, index?: number): string {
-    return `index:${index}:sep:${comment._id}:${comment.id}`
+  private getCommentKey(comment: IComment, index?: number): string {
+    return `index:${index}:sep:${comment.id}`
   }
 
-  private getAricleLikedState(commentId: number): boolean {
+  private getCommentLikedState(commentId: number): boolean {
     return this.commentLikes.indexOf(commentId) > -1
   }
 
-  private getAricleItemLayout(_: any, index: number) {
-    const height = 262
-    return {
-      index,
-      length: height,
-      offset: height * index
-    }
-  }
-
-  // 重新排序时
-  @boundMethod private handleSortChanged() {
+  // 切换排序模式
+  @boundMethod private handleToggleSortType() {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
       this.listRef.scrollToIndex({ index: 0, viewOffset: 0 })
     }
     // 修正参数
-    this.updateHotSortState(!this.isSortByHot)
+    action(() => {
+      this.isSortByHot = !this.isSortByHot
+    })
     // 重新请求数据
     setTimeout(() => this.fetchComments(), 266)
-  }
-
-  @boundMethod private handleRefreshArticle() {
-    this.fetchComments()
   }
 
   @boundMethod private handleLoadmoreArticle() {
@@ -178,11 +159,14 @@ interface IProps {
 
   @boundMethod private handleReplyComment(comment: IComment) {
     console.log('回复某个评论', comment)
-    // this.props.navigation.navigate({
-    //   key: String(comment.id),
-    //   routeName: EHomeRoutes.ArticleDetail,
-    //   params: { comment }
-    // })
+  }
+
+  @boundMethod private handleLikeComment(comment: IComment) {
+    console.log('喜欢某个评论', comment)
+  }
+
+  @boundMethod private handlePressAuthor(author: IAuthor) {
+    console.log('点击了某个评论作者', author)
   }
 
   /**
@@ -248,26 +232,23 @@ interface IProps {
     return (
       <View style={styles.toolBox}>
         {pagination && pagination.total ? (
-          <Text>共 {pagination.total} 条评论</Text>
+          <Text>{pagination.total} 条评论</Text>
         ) : (
           <Text>暂无评论</Text>
         )}
-        <TouchableOpacity
-          activeOpacity={sizes.touchOpacity}
-          onPress={this.handleSortChanged}
-        >
+        <TouchableView onPress={this.handleToggleSortType}>
           <Ionicon
-            style={styles.toolSort}
-            size={19}
             name="ios-funnel"
+            size={19}
+            style={styles.toolSort}
           />
           <Ionicon
-            style={styles.toolSortType}
-            size={14}
-            color={this.isSortByHot ? colors.primary : colors.textDefault}
             name={this.isSortByHot ? 'ios-happy' : 'ios-time'}
+            color={this.isSortByHot ? colors.primary : colors.textDefault}
+            size={14}
+            style={styles.toolSortType}
           />
-        </TouchableOpacity>
+        </TouchableView>
       </View>
     )
   }
@@ -282,9 +263,7 @@ interface IProps {
           data={this.commentListData}
           ref={this.updateListRef}
           // 首屏渲染多少个数据
-          initialNumToRender={3}
-          // 手动维护每一行的高度以优化性能
-          getItemLayout={this.getAricleItemLayout}
+          initialNumToRender={16}
           // 列表为空时渲染
           ListEmptyComponent={this.renderSkeletonOrEmptyView}
           // 加载更多时渲染
@@ -294,7 +273,7 @@ interface IProps {
           // 当前列表 loading 状态
           refreshing={this.isLoading}
           // 刷新
-          onRefresh={this.handleRefreshArticle}
+          onRefresh={this.fetchComments}
           // 加载更多安全距离（相对于屏幕高度的比例）
           onEndReachedThreshold={0}
           // 加载更多
@@ -302,19 +281,21 @@ interface IProps {
           // 手势滚动
           onScroll={this.props.onScroll}
           // 唯一 ID
-          keyExtractor={this.getArticleIdKey}
+          keyExtractor={this.getCommentKey}
           // 单个主体
           renderItem={({ item: comment, index }) => {
             return (
               <Observer
                 render={() => (
                   <CommentItem
+                    key={this.getCommentKey(comment, index)}
                     comment={comment}
                     darkTheme={globalStore.darkTheme}
                     language={globalStore.language}
-                    liked={this.getAricleLikedState(comment.id)}
-                    key={this.getArticleIdKey(comment, index)}
-                    onPress={this.handleReplyComment}
+                    isLiked={this.getCommentLikedState(comment.id)}
+                    onLike={this.handleLikeComment}
+                    onReply={this.handleReplyComment}
+                    onPressAuthor={this.handlePressAuthor}
                   />
                 )}
               />
