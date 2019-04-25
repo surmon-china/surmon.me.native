@@ -8,7 +8,7 @@ import { Text } from '@app/components/common/text'
 import i18n, { TLanguage, languages } from '@app/services/i18n'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IPageProps } from '@app/types/props'
-import globalStore from '@app/stores/global'
+import { optionStore } from '@app/stores/option'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
@@ -45,7 +45,7 @@ interface ILanguageDetailIconProps {
     return (
       <>
         <Animated.View style={{ opacity: this.opacity }}>
-          <Text style={styles.lineItemTitle}>{languages[globalStore.language].name}</Text>
+          <Text style={styles.lineItemTitle}>{languages[optionStore.language].name}</Text>
         </Animated.View>
         <Ionicon
           style={[styles.lineDetailIcon, styles.lineItemTitle]}
@@ -98,11 +98,11 @@ interface IProps extends IPageProps {}
   }
 
   private handleUpdateLanguage(language: TLanguage): void {
-    globalStore.updateLanguage(language)
+    optionStore.updateLanguage(language)
   }
 
   private handleSwitchDarkThemeState(value: boolean): void {
-    globalStore.updateDarkTheme(value)
+    optionStore.updateDarkTheme(value)
   }
 
   private renderLanguagesView(): JSX.Element | null {
@@ -132,7 +132,7 @@ interface IProps extends IPageProps {}
                     style={[
                       styles.lineItemTitle,
                       fonts.h1,
-                      { color: lang === globalStore.language ? colors.primary : colors.textSecondary }
+                      { color: lang === optionStore.language ? colors.primary : colors.textSecondary }
                     ]}
                   />
                 </View>
@@ -157,7 +157,7 @@ interface IProps extends IPageProps {}
           </View>
           <View style={styles.lineItemContent}>
             <Switch
-              value={globalStore.darkTheme}
+              value={optionStore.darkTheme}
               onValueChange={this.handleSwitchDarkThemeState}
             />
           </View>

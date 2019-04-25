@@ -1,22 +1,22 @@
 
-import React, { Component } from 'react'
+import React, { Component, RefObject } from 'react'
 import Feather from 'react-native-vector-icons/Feather'
 import { boundMethod } from 'autobind-decorator'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed, reaction } from 'mobx'
 import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
+import { STORAGE } from '@app/constants/storage'
+import { INavigationProps } from '@app/types/props'
+import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Text } from '@app/components/common/text'
-import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { IArticle } from '@app/types/business'
 import { ArticleListItem } from './item'
 import { ArticleListHeader } from './header'
 import { archiveFilterStore, EFilterType } from './filter'
-import { INavigationProps } from '@app/types/props'
 import { EHomeRoutes } from '@app/routes'
-import { STORAGE } from '@app/constants/storage'
-import globalStore from '@app/stores/global'
+import { optionStore } from '@app/stores/option'
 import fetch from '@app/services/fetch'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
@@ -25,55 +25,56 @@ import fonts from '@app/style/fonts'
 
 type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
 
-interface IProps extends INavigationProps {
-  getListRef?(ref: any): void
-}
+export type TArticleListElement = RefObject<FlatList<IArticle>>
+export interface IArticleListProps extends INavigationProps {}
 
-@observer export class ArticleList extends Component<IProps> {
+@observer
+export class ArticleList extends Component<IArticleListProps> {
  
-  constructor(props: IProps) {
+  constructor(props: IArticleListProps) {
     super(props)
+    // 初始化得到缓存 Likes 数据后再请求数据
     this.getLocalArticleLikes().then(() => {
       this.fetchArticles()
     })
-    // 监听过滤条件的变化
+    // 当过滤条件变化时进行重请求
     reaction(
       () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
       ([type, value]: any) => this.handleFilterChanged(type, value)
     )
   }
 
-  private listRef: any = null
+  private listElement: TArticleListElement = React.createRef()
 
-  @boundMethod private updateListRef(ref: any) {
-    this.listRef = ref
-    this.props.getListRef && this.props.getListRef(ref)
-  }
-
-  @observable.ref private isLoading: boolean = false
+  @observable private isLoading: boolean = false
   @observable.ref private articleLikes: number[] = []
-
   @observable.ref private params: IRequestParams = {}
   @observable.ref private pagination: IHttpPaginate | null = null
   @observable.shallow private articles: IArticle[] = []
 
-  @action private updateLoadingState(loading: boolean) {
+  @boundMethod
+  scrollToListTop() {
+    const listElement = this.listElement.current
+    listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
+  }
+
+  @action
+  private updateLoadingState(loading: boolean) {
     this.isLoading = loading
   }
 
-  @action private updateParams(params: IRequestParams) {
+  @action
+  private updateParams(params: IRequestParams) {
     this.params = params
   }
 
-  @action private updatePagination(pagination: IHttpPaginate) {
-    this.pagination = pagination
-  }
-
-  @action private updateArticleLikes(articleLikes: number[]) {
+  @action
+  private updateArticleLikes(articleLikes: number[]) {
     this.articleLikes = articleLikes || []
   }
 
-  @action private updateArticles(articles: IArticle[], isAdd: boolean) {
+  @action
+  private updateArticles(articles: IArticle[], isAdd: boolean) {
     if (isAdd) {
       this.articles.push(...articles)
     } else {
@@ -81,15 +82,16 @@ interface IProps extends INavigationProps {
     }
   }
 
-  @action private updateResultData(resultData: THttpResultPaginateArticles) {
+  @action
+  private updateResultData(resultData: THttpResultPaginateArticles) {
     const { data, pagination } = resultData
     this.updateLoadingState(false)
     this.updateArticles(data, pagination.current_page > 1)
-    this.updatePagination(pagination)
+    this.pagination = pagination
   }
 
   @computed get listExtraData(): any {
-    return [this.articleLikes, globalStore.language, globalStore.darkTheme]
+    return [this.articleLikes, optionStore.language, optionStore.darkTheme]
   }
 
   @computed get articleListData(): IArticle[] | null {
@@ -150,7 +152,7 @@ interface IProps extends INavigationProps {
   @boundMethod private handleFilterChanged(type: EFilterType | null, value: string) {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
-      this.listRef.scrollToIndex({ index: 0, viewOffset: 0 })
+      this.scrollToListTop()
     }
     // 修正参数
     const params: IRequestParams = {}
@@ -249,7 +251,7 @@ interface IProps extends INavigationProps {
         <FlatList
           style={styles.articleListView}
           data={this.articleListData}
-          ref={this.updateListRef}
+          ref={this.listElement}
           // 首屏渲染多少个数据
           initialNumToRender={3}
           // 手动维护每一行的高度以优化性能
@@ -277,8 +279,8 @@ interface IProps extends INavigationProps {
                 render={() => (
                   <ArticleListItem
                     article={article}
-                    darkTheme={globalStore.darkTheme}
-                    language={globalStore.language}
+                    darkTheme={optionStore.darkTheme}
+                    language={optionStore.language}
                     liked={this.getAricleLikedState(article.id)}
                     key={this.getArticleIdKey(article, index)}
                     onPress={this.handleToDetailPage}

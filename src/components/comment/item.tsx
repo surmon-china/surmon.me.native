@@ -9,7 +9,7 @@ import { IComment, IAuthor } from '@app/types/business'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n, { TLanguage } from '@app/services/i18n'
 import { getUrlByEmail } from '@app/services/gravatar'
-import { toYMD } from '@app/utils/filters'
+import { dateToYMD } from '@app/utils/filters'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
@@ -61,7 +61,7 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
                   <Text style={styles.footerInfoItem}>  ∙  </Text>
                 </>
               )}
-              <Text style={styles.footerInfoItem} numberOfLines={1}>{toYMD(comment.create_at)}</Text>
+              <Text style={styles.footerInfoItem} numberOfLines={1}>{dateToYMD(comment.create_at)}</Text>
             </View>
             <View style={styles.footerActions}>
               <TouchableView

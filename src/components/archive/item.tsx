@@ -1,14 +1,22 @@
+/**
+ * App article item component.
+ * @file 文章列表子组件
+ * @module app/components/archive/item
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { PureComponent } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Image, StyleSheet, TextStyle, View, ImageSourcePropType } from 'react-native'
 import { observable, computed } from 'mobx'
-import { Image, StyleSheet, TextStyle, TouchableOpacity, View } from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { TouchableView } from '@app/components/common/touchable-view'
 import { Text } from '@app/components/common/text'
-import { toYMD, buildThumb } from '@app/utils/filters'
 import { IArticle } from '@app/types/business'
 import { EOriginState } from '@app/types/state'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n, { TLanguage } from '@app/services/i18n'
+import { dateToYMD } from '@app/utils/filters'
+import { staticApi } from '@app/config'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
@@ -42,40 +50,57 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
       backgroundColor: bgColors[origin]
     }
   }
+
+  private getThumbSource(thumb: string): ImageSourcePropType {
+    return { uri: thumb || `${staticApi}/images/thumb-carrousel.jpg` }
+  }
   
   render() {
-    const { props, originTexts, getOriginStyle } = this
-    const { article, liked, onPress } = props
+    const { article } = this.props
     const { styles } = obStyles
+
     return (
-      <TouchableOpacity
-        activeOpacity={sizes.touchOpacity}
+      <TouchableView
+        onPress={() => this.props.onPress(article)}
         style={styles.container}
-        onPress={() => onPress(article)}
       >
-        <Image source={buildThumb(article.thumb)} style={styles.thumb} />
-        <Text style={getOriginStyle(article.origin)} numberOfLines={1}>{originTexts[article.origin]}</Text>
+        <Image
+          source={this.getThumbSource(article.thumb)}
+          style={styles.thumb}
+        />
+        <Text
+          style={this.getOriginStyle(article.origin)}
+          numberOfLines={1}
+        >
+          {this.originTexts[article.origin]}
+        </Text>
         <Text style={styles.title} numberOfLines={1}>{article.title}</Text>
         <Text style={styles.description} numberOfLines={1}>{article.description}</Text>
         <View style={styles.meta}>
           <View style={styles.metaItem}>
             <Ionicon name="ios-time" style={styles.metaIcon} />
-            <Text style={styles.metaText}>{ toYMD(article.create_at) }</Text>
+            <Text style={styles.metaText}>{dateToYMD(article.create_at)}</Text>
           </View>
           <View style={styles.metaItem}>
             <Ionicon name="ios-eye" style={styles.metaIcon} />
-            <Text style={styles.metaText}>{ article.meta.views }</Text>
+            <Text style={styles.metaText}>{article.meta.views}</Text>
           </View>
           <View style={styles.metaItem}>
             <Ionicon name="ios-chatboxes" style={styles.metaIcon} />
-            <Text style={styles.metaText}>{ article.meta.comments }</Text>
+            <Text style={styles.metaText}>{article.meta.comments}</Text>
           </View>
           <View style={styles.metaItem}>
-            <Ionicon name="ios-heart" style={[styles.metaIcon, liked ? { color: colors.red } : null]}/>
+            <Ionicon
+              name="ios-heart"
+              style={[
+                styles.metaIcon,
+                this.props.liked ? { color: colors.red } : null
+              ]}
+            />
             <Text style={styles.metaText}>{article.meta.likes}</Text>
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableView>
     )
   }
 }
@@ -84,15 +109,16 @@ const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       container: {
-        marginHorizontal: sizes.goldenRatioGap,
         marginTop: sizes.gap,
+        marginHorizontal: sizes.goldenRatioGap,
         backgroundColor: colors.cardBackground
       },
       thumb: {
         flex: 1,
         height: 110,
         maxWidth: '100%',
-        resizeMode: 'cover'
+        resizeMode: 'cover',
+        backgroundColor: colors.textSecondary
       },
       origin: {
         position: 'absolute',

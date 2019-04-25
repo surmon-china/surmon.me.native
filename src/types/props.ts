@@ -1,6 +1,6 @@
 
 import { NavigationScreenProp, NavigationNavigateActionPayload } from 'react-navigation'
-import { IGlobalStore } from '@app/stores/global'
+import { IOptionStore } from '@app/stores/option'
 
 export type TNavigation = NavigationScreenProp<NavigationNavigateActionPayload>
 
@@ -9,7 +9,7 @@ export interface INavigationProps {
 }
 
 export interface IPageProps extends INavigationProps {
-  screenProps: IGlobalStore
+  screenProps: IOptionStore
 }
 
 export interface IChildrenProps {

@@ -6,12 +6,12 @@ import { LANGUAGES } from '@app/constants/language'
 import { STORAGE } from '@app/constants/storage'
 import storage from '@app/services/storage'
 
-export interface IGlobalStore {
+export interface IOptionStore {
   language: TLanguage
   darkTheme: boolean
 }
 
-class GlobalStore {
+class OptionStore {
 
   constructor() {
     this.initLanguage()
@@ -65,4 +65,4 @@ class GlobalStore {
   }
 }
 
-export default new GlobalStore()
+export const optionStore = new OptionStore()

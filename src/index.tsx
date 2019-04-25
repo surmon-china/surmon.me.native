@@ -6,25 +6,33 @@
  */
 
 import React from 'react'
+import { ViewStyle } from 'react-native'
+import {
+  createStackNavigator,
+  NavigationComponent,
+  TabBarIconProps,
+  NavigationRouteConfig,
+  NavigationScreenConfig,
+  NavigationScreenOptions
+} from 'react-navigation'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Foundation from 'react-native-vector-icons/Foundation'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { ViewStyle, View, Text } from 'react-native'
-import { createStackNavigator, NavigationComponent, NavigationRouteConfig, NavigationScreenConfig, NavigationScreenOptions } from 'react-navigation'
-import { EHomeRoutes, EGuestbookRoutes, EAboutRoutes } from '@app/routes'
 import { headerStyles } from '@app/components/layouts/header'
-import { LANGUAGE_KEYS } from '@app/constants/language'
-import { WebviewPage } from '@app/pages/common/webview'
 import { Home } from '@app/pages/home'
 import { ArticleSearch } from '@app/pages/home/search'
 import { ArticleDetail } from '@app/pages/home/detail'
-import { Guestbook } from '@app/pages/guestbook'
 import { About } from '@app/pages/about'
 import { Github } from '@app/pages/about/github'
 import { Setting } from '@app/pages/about/setting'
+import { Guestbook } from '@app/pages/guestbook'
+import { WebviewPage } from '@app/pages/common/webview'
+import { EHomeRoutes, EGuestbookRoutes, EAboutRoutes } from '@app/routes'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 
+// 公共头部样式
 export function getCommonHeaderStyles() {
   const { title } = headerStyles.styles
   return {
@@ -36,10 +44,12 @@ export function getCommonHeaderStyles() {
   }
 }
 
+// 默认导航器配置
 export function getDefaultNavigationOptions() {
   return () => ({ ...getCommonHeaderStyles() })
 }
 
+// 路由配置
 function getNavigationRouteConfig(
   component: NavigationComponent,
   titleName: LANGUAGE_KEYS,
@@ -53,11 +63,14 @@ function getNavigationRouteConfig(
   }
 }
 
-function humanizeTabIconStyles(options: any, extendStyle?: ViewStyle) {
+// 菜单图标样式
+function getTabIconStyles(options: TabBarIconProps, extendStyle?: ViewStyle) {
   const { focused, tintColor } = options
+  // 激活色
   const color = focused && tintColor
     ? tintColor
     : colors.textTitle
+  // 样式
   const style = {
     opacity: focused ? 1 : 0.8,
     ...extendStyle
@@ -76,9 +89,12 @@ export const HomeStack = createStackNavigator({
       // 非根 Home 屏都要隐藏 Tabbar（Search、Detail）
       tabBarVisible: navigation.state.index === 0,
       tabBarLabel: i18n.t(LANGUAGE_KEYS.HOME),
-      tabBarIcon(options) {
-        return <MaterialIcons name="chrome-reader-mode" {...humanizeTabIconStyles(options)} />
-      }
+      tabBarIcon: options => (
+        <MaterialIcons
+          name="chrome-reader-mode"
+          {...getTabIconStyles(options)}
+        />
+      )
     }
   }
 })
@@ -89,15 +105,13 @@ export const GuestbookStack = createStackNavigator({
   defaultNavigationOptions: getDefaultNavigationOptions(),
   navigationOptions: () => ({
     tabBarLabel: i18n.t(LANGUAGE_KEYS.GUESTBOOK),
-    tabBarIcon(options) {
-      return (
-        <Foundation
-          name="comment-minus"
-          {...humanizeTabIconStyles(options, { marginBottom: -4 })}
-          size={21}
-        />
-      )
-    }
+    tabBarIcon: options => (
+      <Foundation
+        name="comment-minus"
+        size={21}
+        {...getTabIconStyles(options, { marginBottom: -4 })}
+      />
+    )
   })
 })
 
@@ -109,14 +123,12 @@ export const AboutStack = createStackNavigator({
   defaultNavigationOptions: getDefaultNavigationOptions(),
   navigationOptions: () => ({
     tabBarLabel: i18n.t(LANGUAGE_KEYS.ABOUT),
-    tabBarIcon(options) {
-      return (
-        <FontAwesome
-          name="heartbeat"
-          {...humanizeTabIconStyles(options, { marginBottom: -2 })}
-        />
-      )
-    }
+    tabBarIcon: options => (
+      <FontAwesome
+        name="heartbeat"
+        {...getTabIconStyles(options, { marginBottom: -2 })}
+      />
+    )
   })
 })
 

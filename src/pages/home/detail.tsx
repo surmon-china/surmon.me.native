@@ -9,7 +9,7 @@ import { AutoActivityIndicator } from '@app/components/common/activity-indicator
 import { Markdown } from '@app/components/common/markdown'
 import { Text } from '@app/components/common/text'
 import { DoubleClick } from '@app/components/common/double-click'
-import { toYMD } from '@app/utils/filters'
+import { dateToYMD } from '@app/utils/filters'
 import { IArticle } from '@app/types/business'
 import { IPageProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
@@ -81,7 +81,7 @@ interface IProps extends IPageProps {}
   }
 
   @computed get isLikedArticle(): boolean {
-    // return globalStore.articleLikes.includes(this.article.id)
+    // return optionStore.articleLikes.includes(this.article.id)
     return true
   }
 
@@ -167,7 +167,7 @@ interface IProps extends IPageProps {}
     fetch.patch<any>('/like/article', { post_id: 130 })
       .then(_ => {
         // Object.assign({}, this.article, )
-        // globalStore.updateArticleLikes(130)
+        // optionStore.updateArticleLikes(130)
         // this.updateArticle()
       })
       .catch(error => console.warn('Fetch like article error:', error))
@@ -237,7 +237,7 @@ interface IProps extends IPageProps {}
                   <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
                   <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
                   <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
-                  <Text style={styles.metaText}>最后编辑于 {toYMD(automaticArticle.update_at)}</Text>
+                  <Text style={styles.metaText}>最后编辑于 {dateToYMD(automaticArticle.update_at)}</Text>
                 </View>
               )}
               <View style={[styles.content, styles.cardBackground]}>
@@ -253,7 +253,7 @@ interface IProps extends IPageProps {}
                 }
                 {article && (
                   <View style={[styles.cardBackground, styles.footerMeta]}>
-                    <Text style={styles.metaText}>发布于 {toYMD(automaticArticle.create_at)}</Text>
+                    <Text style={styles.metaText}>发布于 {dateToYMD(automaticArticle.create_at)}</Text>
                     <View style={styles.footerMetaItems}>
                       <Text style={styles.metaText}>
                         { article.category.length
@@ -285,7 +285,7 @@ interface IProps extends IPageProps {}
                         <Text style={styles.metaText}>阅读 {item.meta.views}  ∙  </Text>
                         <Text style={styles.metaText}>喜欢 {item.meta.likes}  ∙  </Text>
                         <Text style={styles.metaText}>评论 {item.meta.comments}  ∙  </Text>
-                        <Text style={styles.metaText}>发布于 {toYMD(item.create_at)}</Text>
+                        <Text style={styles.metaText}>发布于 {dateToYMD(item.create_at)}</Text>
                       </View>
                     </TouchableOpacity>
                   ))}

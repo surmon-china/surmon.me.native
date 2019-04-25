@@ -13,7 +13,7 @@ import { AutoActivityIndicator } from '@app/components/common/activity-indicator
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { IComment, IAuthor } from '@app/types/business'
 import { STORAGE } from '@app/constants/storage'
-import globalStore from '@app/stores/global'
+import { optionStore } from '@app/stores/option'
 import fetch from '@app/services/fetch'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
@@ -82,7 +82,7 @@ interface IProps {
   }
 
   @computed get listExtraData(): any {
-    return [this.commentLikes, globalStore.language, globalStore.darkTheme]
+    return [this.commentLikes, optionStore.language, optionStore.darkTheme]
   }
 
   @computed get commentListData(): IComment[] | null {
@@ -108,7 +108,7 @@ interface IProps {
       })
   }
 
-  private fetchComments(page: number = 1): Promise<any> {
+  @boundMethod private fetchComments(page: number = 1): Promise<any> {
     this.updateLoadingState(true)
     const params = {
       sort: this.isSortByHot ? 2 : -1,
@@ -174,10 +174,10 @@ interface IProps {
    * @function renderSkeletonOrEmptyView
    * @description 渲染文章列表为空时的两种状态：骨架屏、无数据
    */
-  @boundMethod private renderSkeletonOrEmptyView(): JSX.Element {
+  @boundMethod private renderSkeletonOrEmptyView(): JSX.Element | null {
     const { styles } = obStyles
     if (this.isLoading) {
-      return <Text style={styles.h4Title}>骨架屏</Text>
+      return null
     }
     return (
       <View style={styles.centerContainer}>
@@ -290,8 +290,8 @@ interface IProps {
                   <CommentItem
                     key={this.getCommentKey(comment, index)}
                     comment={comment}
-                    darkTheme={globalStore.darkTheme}
-                    language={globalStore.language}
+                    darkTheme={optionStore.darkTheme}
+                    language={optionStore.language}
                     isLiked={this.getCommentLikedState(comment.id)}
                     onLike={this.handleLikeComment}
                     onReply={this.handleReplyComment}
