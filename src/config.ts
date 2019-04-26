@@ -1,3 +1,9 @@
+/**
+ * App config.
+ * @file App 配置
+ * @module app/config
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { Platform } from 'react-native'
 

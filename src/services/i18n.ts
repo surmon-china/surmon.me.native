@@ -34,8 +34,7 @@ class I18nStore {
   
   private languages: TLanguages = { en, zh }
 
-  @observable
-  private language: TLanguage = LANGUAGES.ZH
+  @observable private language: TLanguage = LANGUAGES.ZH
 
   @action.bound
   public updateLanguage(language: TLanguage) {

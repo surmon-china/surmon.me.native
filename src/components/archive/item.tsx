@@ -31,7 +31,9 @@ export interface IArtileListItemProps {
 
 export class ArticleListItem extends PureComponent<IArtileListItemProps> {
 
-  @computed get originTexts() {
+  // 文章来源文案
+  @computed
+  private get originTexts() {
     return {
       [EOriginState.Hybrid]: i18n.t(LANGUAGE_KEYS.ORIGIN_HYBRID),
       [EOriginState.Original]: i18n.t(LANGUAGE_KEYS.ORIGIN_ORIGINAL),
@@ -39,6 +41,7 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
     }
   }
 
+  // 文章来源样式
   private getOriginStyle(origin: EOriginState): TextStyle {
     const bgColors = {
       [EOriginState.Hybrid]: colors.primary, 
@@ -51,6 +54,7 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
     }
   }
 
+  // 缩略图
   private getThumbSource(thumb: string): ImageSourcePropType {
     return { uri: thumb || `${staticApi}/images/thumb-carrousel.jpg` }
   }

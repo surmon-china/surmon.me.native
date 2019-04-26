@@ -1,10 +1,16 @@
+/**
+ * App global option store.
+ * @file App 全局公共存储
+ * @module app/ stores/option
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import { observable, action } from 'mobx'
-import { getDeviceLanguage, updateLanguage, TLanguage } from '@app/services/i18n'
-import { updateTheme } from '@app/style/colors'
+import { observable, action, computed } from 'mobx'
 import { LANGUAGES } from '@app/constants/language'
 import { STORAGE } from '@app/constants/storage'
+import { getDeviceLanguage, updateLanguage, TLanguage } from '@app/services/i18n'
 import storage from '@app/services/storage'
+import { updateTheme } from '@app/style/colors'
 
 export interface IOptionStore {
   language: TLanguage
@@ -21,13 +27,20 @@ class OptionStore {
   @observable.ref language: TLanguage = LANGUAGES.ZH
   @observable.ref darkTheme: boolean = false
 
-  @action.bound updateLanguage(language: TLanguage) {
+  @computed
+  get isEnLang() {
+    return this.language === LANGUAGES.EN
+  }
+
+  @action.bound
+  updateLanguage(language: TLanguage) {
     this.language = language
     storage.set(STORAGE.LOCAL_LANGUAGE, language)
     updateLanguage(language)
   }
 
-  @action.bound updateDarkTheme(darkTheme: boolean) {
+  @action.bound
+  updateDarkTheme(darkTheme: boolean) {
     this.darkTheme = darkTheme
     storage.set(STORAGE.LOCAL_DARK_THEME, darkTheme)
     updateTheme(darkTheme)

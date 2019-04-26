@@ -1,21 +1,29 @@
+/**
+ * App article filter component.
+ * @file 文章过滤器组件
+ * @module app/components/archive/filter
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { Component } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import { TouchableOpacity, ScrollView, StyleSheet, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import { observable, action, computed } from 'mobx'
 import { observer } from 'mobx-react/native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { optionStore } from '@app/stores/option'
 import { Text } from '@app/components/common/text'
 import { BetterModal } from '@app/components/common/modal'
+import { TouchableView } from '@app/components/common/touchable-view'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ICategory, ITag } from '@app/types/business'
 import { IHttpResultPaginate } from '@app/types/http'
-import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ValueOf } from '@app/utils/transform'
+import i18n from '@app/services/i18n'
+import fetch from '@app/services/fetch'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import sizes, { defaultHeaderHeight } from '@app/style/sizes'
 import colors from '@app/style/colors'
-import i18n from '@app/services/i18n'
 import fonts from '@app/style/fonts'
-import fetch from '@app/services/fetch'
 
 export enum EFilterType {
   Tag = 'Tag',
@@ -23,19 +31,13 @@ export enum EFilterType {
   Search = 'Search'
 }
 
-export const filterTypeTextMap: Record<ValueOf<typeof EFilterType>, string> = {
-  [EFilterType.Tag]: '标签',
-  [EFilterType.Category]: '分类',
-  [EFilterType.Search]: '关键词'
-}
-
-export interface IActiveFilter {
+export interface IFilterValues {
   [EFilterType.Tag]: ITag | null
   [EFilterType.Category]: ICategory | null
   [EFilterType.Search]: string | null
 }
 
-type TFilterValue = ITag | ICategory | string
+export type TFilterValue = ITag | ICategory | string
 
 class Store {
 
@@ -44,124 +46,111 @@ class Store {
     this.fetchCategories()
   }
 
-  @observable.ref tags: ITag[] = []
-  @observable.ref categories: ICategory[] = []
-
-  @observable activeType: EFilterType | null = null // 是否选中 & 选中的类型
-  @observable activeValues: IActiveFilter = { // 各种条件值
+  @observable filterActive: boolean = false // 是否激活
+  @observable filterType: EFilterType = EFilterType.Category // 激活的类型
+  @observable filterValues: IFilterValues = {
     [EFilterType.Tag]: null,
     [EFilterType.Category]: null,
     [EFilterType.Search]: null
   }
 
+  @observable.ref tags: ITag[] = []
+  @observable.ref categories: ICategory[] = []
   @observable modalVisible: boolean = false
-  @observable isLoadingTags: boolean = false
-  @observable isLoadingCategories: boolean = false
 
-  @computed get hasFilter(): boolean {
+  // 是否拥有文章或分类过滤条件
+  @computed
+  get isActiveTagOrCategoryFilter(): boolean {
     return (
-      this.activeType !== null &&
-      [EFilterType.Tag, EFilterType.Category].indexOf(this.activeType) > -1
+      this.filterActive &&
+      [EFilterType.Tag, EFilterType.Category].includes(this.filterType)
     )
   }
 
-  @computed get filterValue(): string | null {
-    if (!this.activeType) {
-      return null
+  // 过滤条件类型文案
+  @computed
+  get filterTypeText(): string {
+    const typeTextMap: Record<ValueOf<typeof EFilterType>, string> = {
+      [EFilterType.Tag]: i18n.t(LANGUAGE_KEYS.TAG),
+      [EFilterType.Category]: i18n.t(LANGUAGE_KEYS.CATEGORY),
+      [EFilterType.Search]: i18n.t(LANGUAGE_KEYS.SEARCH)
     }
-    return this.hasFilter
-      ? (this.activeValues[this.activeType] as ICategory | ITag).slug
-      : (this.activeValues[this.activeType] as string)
+    return typeTextMap[this.filterType]
   }
 
-  @computed get filterValueText(): string | null {
-    if (!this.activeType) {
-      return null
+  // 当前过滤条件的值
+  @computed
+  get filterValue(): TFilterValue | void {
+    if (this.filterType === EFilterType.Search) {
+      return this.filterValues[EFilterType.Search] as string
     }
-    return this.hasFilter
-      ? (this.activeValues[this.activeType] as ICategory | ITag).name
-      : (this.activeValues[this.activeType] as string)
+    if (this.filterType === EFilterType.Tag) {
+      return this.filterValues[EFilterType.Tag] as ITag
+    }
+    if (this.filterType === EFilterType.Category) {
+      return this.filterValues[EFilterType.Category] as ICategory
+    }
   }
   
-  @action updateActiveFilter(type: EFilterType, value: TFilterValue) {
-    this.activeType = type
-    this.activeValues[type] = value
+  @action.bound
+  updateActiveFilter(type: EFilterType, value: TFilterValue) {
+    this.filterType = type
+    this.filterValues[type] = value
+    this.filterActive = true
   }
 
-  @action.bound clearActiveFilter() {
-    this.activeType = null
+  @action.bound
+  clearActiveFilter() {
+    this.filterActive = false
   }
 
-  @action.bound updateVisibleState(visible: boolean) {
+  @action.bound
+  updateVisibleState(visible: boolean) {
     this.modalVisible = visible
   }
   
-  @action private updateTags(tags: ITag[]) {
-    this.tags = tags
-  }
-  
-  @action private updateCategories(categories: ICategory[]) {
-    this.categories = categories
-  }
-  
-  @action private updateTagsLoadingState(loading: boolean) {
-    this.isLoadingTags = loading
-  }
-  
-  @action private updateCategoriesLoadingState(loading: boolean) {
-    this.isLoadingCategories = loading
-  }
-
-  fetchTags() {
-    this.updateTagsLoadingState(true)
+  private fetchTags() {
     return fetch.get<IHttpResultPaginate<ITag[]>>('/tag', { per_page: 666 })
-      .then(({ result }) => {
-        this.updateTagsLoadingState(false)
-        this.updateTags(result.data)
-      })
-      .catch(error => {
-        this.updateTagsLoadingState(false)
-        console.warn('Fetch tags error:', error)
-        return Promise.reject(error)
-      })
+      .then(
+        action((result: any) => {
+          this.tags = result.result.data
+        })
+      )
   }
 
-  fetchCategories() {
-    this.updateCategoriesLoadingState(true)
+  private fetchCategories() {
     return fetch.get<IHttpResultPaginate<ICategory[]>>('/category')
-      .then(({ result }) => {
-        this.updateCategoriesLoadingState(false)
-        this.updateCategories(result.data)
-      })
-      .catch(error => {
-        this.updateCategoriesLoadingState(false)
-        console.warn('Fetch categories error:', error)
-        return Promise.reject(error)
-      })
+      .then(
+        action((result: any) => {
+          this.categories = result.result.data
+        })
+      )
   }
 }
 
-const store = new Store()
-export const archiveFilterStore = store
+export const archiveFilterStore = new Store()
 
-interface IProps {}
-@observer export class ArchiveFilter extends Component<IProps> {
+interface IArchiveFilterProps {}
 
-  constructor(props: IProps) {
+@observer
+export class ArchiveFilter extends Component<IArchiveFilterProps> {
+
+  constructor(props: IArchiveFilterProps) {
     super(props)
   }
 
-  @computed get filterList() {
+  @computed
+  private get filterList() {
     return [
       {
-        name: '分类',
+        name: i18n.t(LANGUAGE_KEYS.CATEGORY),
         type: EFilterType.Category,
-        data: store.categories
+        data: archiveFilterStore.categories
       },
       {
-        name: '标签',
+        name: i18n.t(LANGUAGE_KEYS.TAG),
         type: EFilterType.Tag,
-        data: store.tags
+        data: archiveFilterStore.tags
       }
     ]
   }
@@ -171,19 +160,18 @@ interface IProps {}
     return (
       <BetterModal
         top={defaultHeaderHeight}
-        title="使用标签、分类进行过滤"
-        visible={store.modalVisible}
-        onClose={() => store.updateVisibleState(false)}
+        title={i18n.t(LANGUAGE_KEYS.FILTER_BY_TAG_CATEGORY)}
+        visible={archiveFilterStore.modalVisible}
+        onClose={() => archiveFilterStore.updateVisibleState(false)}
         extra={
-          <TouchableOpacity
-            activeOpacity={sizes.touchOpacity}
+          <TouchableView
             onPress={() => {
-              store.clearActiveFilter()
-              store.updateVisibleState(false)
+              archiveFilterStore.clearActiveFilter()
+              archiveFilterStore.updateVisibleState(false)
             }}
           >
             <Ionicon name="ios-remove" {...getHeaderButtonStyle()} />
-          </TouchableOpacity>
+          </TouchableView>
         }
       >
         <ScrollView style={styles.container}>
@@ -192,28 +180,45 @@ interface IProps {}
               <Text style={fonts.h4}>{filter.name}</Text>
               <View style={styles.list}>
                 {filter.data.map(item => {
-                  const isActiveType = store.activeType === filter.type
-                  const isActiveValue = store.filterValue === item.slug
-                  const isActiveFilter = isActiveType && isActiveValue
+                  const { filterActive: isFilterActive, filterType, filterValues } = archiveFilterStore
+                  const activeValue = filterValues[filterType] as ICategory
+                  const isActive = (
+                    isFilterActive &&
+                    filterType === filter.type && 
+                    activeValue &&
+                    activeValue.slug === item.slug
+                  )
                   return (
-                    <TouchableOpacity
+                    <TouchableView
                       key={item._id}
-                      activeOpacity={sizes.touchOpacity}
-                      style={[styles.item, isActiveFilter ? styles.itemActive : null]}
+                      style={[
+                        styles.item,
+                        isActive ? styles.itemActive : null
+                      ]}
                       onPress={() => {
-                        store.updateActiveFilter(filter.type, item)
-                        store.updateVisibleState(false)
+                        archiveFilterStore.updateActiveFilter(filter.type, item)
+                        archiveFilterStore.updateVisibleState(false)
                       }}
                     >
-                      <Text style={[fonts.small, isActiveFilter ? styles.itemActiveText : null]}>{item.name}</Text>
-                      {isActiveFilter && (
+                      <Text
+                        style={[
+                          fonts.small,
+                          isActive ? styles.itemActiveText : null
+                        ]}
+                      >
+                        {optionStore.isEnLang ? item.slug : item.name}
+                      </Text>
+                      {isActive && (
                         <Ionicon
                           name="ios-checkmark"
                           size={fonts.h4.fontSize}
-                          style={[styles.itemIcon, isActiveFilter ? styles.itemActiveText : null]}
+                          style={[
+                            styles.itemIcon,
+                            isActive ? styles.itemActiveText : null
+                          ]}
                         />
                       )}
-                    </TouchableOpacity>
+                    </TouchableView>
                   )
                 })}
               </View>

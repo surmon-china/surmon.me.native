@@ -64,7 +64,7 @@ interface IIndexProps extends IPageProps {}
         <TouchableView onPress={() => archiveFilterStore.updateVisibleState(true)}>
           <Ionicon name="ios-options" {...buttonStyle} />
           <Observer
-            render={() => archiveFilterStore.hasFilter && (
+            render={() => archiveFilterStore.isActiveTagOrCategoryFilter && (
               <Remind style={styles.headerCheckedIcon} />
             )}
           />

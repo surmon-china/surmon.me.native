@@ -1,15 +1,15 @@
 
 import React, { Component } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { SafeAreaView, TextInput, TouchableOpacity, ScrollView, StyleSheet, View } from 'react-native'
 import { boundMethod } from 'autobind-decorator'
 import { observable, computed, action } from 'mobx'
 import { observer } from 'mobx-react/native'
-import { SafeAreaView, TextInput, TouchableOpacity, ScrollView, StyleSheet, View } from 'react-native'
-import { Text } from '@app/components/common/text'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { archiveFilterStore, EFilterType } from '@app/components/archive/filter'
+import { Text } from '@app/components/common/text'
 import { IPageProps } from '@app/types/props'
-import storage from '@app/services/storage'
 import { STORAGE } from '@app/constants/storage'
+import storage from '@app/services/storage'
 import mixins from '@app/style/mixins'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
@@ -33,8 +33,8 @@ interface IProps extends IPageProps {}
   @observable.ref private historys: string[] = []
 
   initAndResetKeyword() {
-    if (archiveFilterStore.activeType === EFilterType.Search) {
-      this.updateKeyword(archiveFilterStore.filterValue || '')
+    if (archiveFilterStore.filterActive && archiveFilterStore.filterType === EFilterType.Search) {
+      this.updateKeyword(archiveFilterStore.filterValues[EFilterType.Search] || '')
     }
   }
 

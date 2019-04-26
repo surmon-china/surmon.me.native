@@ -6,17 +6,17 @@ import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed, reaction } from 'mobx'
 import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
-import { STORAGE } from '@app/constants/storage'
-import { INavigationProps } from '@app/types/props'
+import { optionStore } from '@app/stores/option'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Text } from '@app/components/common/text'
-import { IArticle } from '@app/types/business'
+import { IArticle, ITag, ICategory } from '@app/types/business'
 import { ArticleListItem } from './item'
-import { ArticleListHeader } from './header'
-import { archiveFilterStore, EFilterType } from './filter'
+import { ArticleArchiveHeader } from './header'
+import { archiveFilterStore, EFilterType, TFilterValue } from './filter'
+import { INavigationProps } from '@app/types/props'
+import { STORAGE } from '@app/constants/storage'
 import { EHomeRoutes } from '@app/routes'
-import { optionStore } from '@app/stores/option'
 import fetch from '@app/services/fetch'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
@@ -39,8 +39,12 @@ export class ArticleList extends Component<IArticleListProps> {
     })
     // 当过滤条件变化时进行重请求
     reaction(
-      () => [archiveFilterStore.activeType, archiveFilterStore.filterValue],
-      ([type, value]: any) => this.handleFilterChanged(type, value)
+      () => [
+        archiveFilterStore.filterActive,
+        archiveFilterStore.filterType,
+        archiveFilterStore.filterValue
+      ],
+      ([isActive, type, value]: any) => this.handleFilterChanged(isActive, type, value)
     )
   }
 
@@ -141,7 +145,7 @@ export class ArticleList extends Component<IArticleListProps> {
   }
 
   private getAricleItemLayout(_: any, index: number) {
-    const height = 262
+    const height = 250
     return {
       index,
       length: height,
@@ -149,24 +153,31 @@ export class ArticleList extends Component<IArticleListProps> {
     }
   }
 
-  @boundMethod private handleFilterChanged(type: EFilterType | null, value: string) {
+  @boundMethod private handleFilterChanged(isActive: boolean, type: EFilterType, value: TFilterValue) {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
       this.scrollToListTop()
     }
-    // 修正参数
-    const params: IRequestParams = {}
-    if (type && value) {
-      const paramsKeys = {
-        [EFilterType.Search]: 'keyword',
-        [EFilterType.Tag]: 'tag_slug',
-        [EFilterType.Category]: 'category_slug'
+    // 修正参数，更新数据
+    setTimeout(() => {
+      const params: IRequestParams = {}
+      if (isActive && value) {
+        Object.assign(
+          params,
+          type === EFilterType.Search && {
+            keyword: value as string
+          },
+          type === EFilterType.Tag && {
+            tag_slug: (value as ITag).slug 
+          },
+          type === EFilterType.Category && {
+            category_slug: (value as ICategory).slug
+          }
+        )
       }
-      params[paramsKeys[type]] = value
-    }
-    this.updateParams(params)
-    // 更新数据
-    setTimeout(() => this.fetchArticles(), 266)
+      this.updateParams(params)
+      this.fetchArticles()
+    }, 266)
   }
 
   @boundMethod private handleRefreshArticle() {
@@ -247,7 +258,7 @@ export class ArticleList extends Component<IArticleListProps> {
     const { styles } = obStyles
     return (
       <View style={styles.listViewContainer}>
-        <ArticleListHeader />
+        <ArticleArchiveHeader />
         <FlatList
           style={styles.articleListView}
           data={this.articleListData}
@@ -300,27 +311,27 @@ const obStyles = observable({
     return StyleSheet.create({
       listViewContainer: {
         position: 'relative',
-        flex: 1,
+        flex: 1
       },
       articleListView: {
-        width: sizes.screen.width,
+        width: sizes.screen.width
       },
       centerContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: sizes.gap,
+        padding: sizes.gap
       },
       loadmoreViewContainer: {
-        padding: sizes.gap * 0.66,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        padding: sizes.gap * 0.66
       },
       h4Title: {
         ...fonts.h4,
-        color: colors.textSecondary,
+        color: colors.textSecondary
       },
       smallTitle: {
         ...fonts.small,
-        color: colors.textSecondary,
+        color: colors.textSecondary
       }
     })
   }

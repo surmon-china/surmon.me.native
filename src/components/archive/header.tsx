@@ -1,39 +1,56 @@
+/**
+ * App article archive header component.
+ * @file 文章列表头部过滤信息组件
+ * @module app/components/archive/header
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React from 'react'
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native'
+import { StyleSheet, View } from 'react-native'
+import { observable } from 'mobx'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed } from 'mobx'
-import { NavigationContainerProps } from 'react-navigation'
-import { archiveFilterStore, filterTypeTextMap, EFilterType } from '@app/components/archive/filter'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicon from 'react-native-vector-icons/Ionicons'
+import { optionStore } from '@app/stores/option'
+import { Text } from '@app/components/common/text'
+import { TouchableView } from '@app/components/common/touchable-view'
+import { archiveFilterStore, EFilterType } from '@app/components/archive/filter'
+import { ICategory, ITag } from '@app/types/business'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import i18n from '@app/services/i18n'
+import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
-import fonts from '@app/style/fonts'
-import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 
-interface IProps extends NavigationContainerProps {}
+interface IProps {}
 
-export const ArticleListHeader = observer((props: IProps): JSX.Element | null => {
+export const ArticleArchiveHeader = observer((props: IProps): JSX.Element | null => {
+
   const { styles } = obStyles
-  const { filterValueText, activeType } = archiveFilterStore
+  const { filterActive: isFilterActive, filterType, filterValue, filterTypeText } = archiveFilterStore
 
-  // 这里应该是一个 transform 动画
-  if (!filterValueText || !activeType) {
+  if (!isFilterActive) {
     return null
   }
+
+  const filterValueText = (
+    filterType === EFilterType.Search
+      ? filterValue as string
+      : optionStore.isEnLang
+        ? (filterValue as ICategory | ITag).slug
+        : (filterValue as ICategory | ITag).name
+  )
 
   return (
     <View style={styles.container}>
       <View style={mixins.rowCenter}>
-        <Text>{filterTypeTextMap[activeType]}</Text>
-        <Text> “{archiveFilterStore.filterValueText}” </Text>
-        <Text>的过滤结果</Text>
+        <Text>{filterTypeText}</Text>
+        <Text> "{filterValueText}" </Text>
+        <Text>{i18n.t(LANGUAGE_KEYS.FILTER_RESULT)}</Text>
       </View>
       <View style={styles.resetButton}>
-        <TouchableOpacity onPress={archiveFilterStore.clearActiveFilter}>
+        <TouchableView onPress={archiveFilterStore.clearActiveFilter}>
           <Ionicon name="ios-close" {...getHeaderButtonStyle()} />
-        </TouchableOpacity>
+        </TouchableView>
       </View>
     </View>
   )
@@ -52,7 +69,7 @@ const obStyles = observable({
       },
       resetButton: {
         position: 'absolute',
-        right: 10,
+        right: 10
       }
     })
   }
