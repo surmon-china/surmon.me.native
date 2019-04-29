@@ -17,13 +17,12 @@ import { archiveFilterStore, EFilterType } from '@app/components/archive/filter'
 import { ICategory, ITag } from '@app/types/business'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n from '@app/services/i18n'
-import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
+import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 
-interface IProps {}
-
-export const ArticleArchiveHeader = observer((props: IProps): JSX.Element | null => {
+export interface IArchiveProps {}
+export const ArticleArchiveHeader = observer((props: IArchiveProps): JSX.Element | null => {
 
   const { styles } = obStyles
   const { filterActive: isFilterActive, filterType, filterValue, filterTypeText } = archiveFilterStore

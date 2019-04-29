@@ -1,24 +1,29 @@
+/**
+ * App article list component.
+ * @file 文章列表组件 TODO: 文案还都是中文的，图标未调整至 ionicon
+ * @module app/components/archive/list
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { Component, RefObject } from 'react'
-import Feather from 'react-native-vector-icons/Feather'
-import { boundMethod } from 'autobind-decorator'
+import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
+import { observable, action, computed, reaction } from 'mobx'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed, reaction } from 'mobx'
-import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
+import { boundMethod } from 'autobind-decorator'
+import Feather from 'react-native-vector-icons/Feather'
+import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
-import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
+import { EHomeRoutes } from '@app/routes'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Text } from '@app/components/common/text'
+import { INavigationProps } from '@app/types/props'
 import { IArticle, ITag, ICategory } from '@app/types/business'
+import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { ArticleListItem } from './item'
 import { ArticleArchiveHeader } from './header'
 import { archiveFilterStore, EFilterType, TFilterValue } from './filter'
-import { INavigationProps } from '@app/types/props'
-import { STORAGE } from '@app/constants/storage'
-import { EHomeRoutes } from '@app/routes'
 import fetch from '@app/services/fetch'
-import storage from '@app/services/storage'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
@@ -33,10 +38,7 @@ export class ArticleList extends Component<IArticleListProps> {
  
   constructor(props: IArticleListProps) {
     super(props)
-    // 初始化得到缓存 Likes 数据后再请求数据
-    this.getLocalArticleLikes().then(() => {
-      this.fetchArticles()
-    })
+    this.fetchArticles()
     // 当过滤条件变化时进行重请求
     reaction(
       () => [
@@ -51,10 +53,19 @@ export class ArticleList extends Component<IArticleListProps> {
   private listElement: TArticleListElement = React.createRef()
 
   @observable private isLoading: boolean = false
-  @observable.ref private articleLikes: number[] = []
   @observable.ref private params: IRequestParams = {}
   @observable.ref private pagination: IHttpPaginate | null = null
   @observable.shallow private articles: IArticle[] = []
+
+  @computed
+  private get articleListData(): IArticle[] {
+    return this.articles.slice() || []
+  }
+
+  @computed
+  private get isNoMoreData(): boolean {
+    return !!this.pagination && this.pagination.current_page === this.pagination.total_page
+  }
 
   @boundMethod
   scrollToListTop() {
@@ -68,62 +79,20 @@ export class ArticleList extends Component<IArticleListProps> {
   }
 
   @action
-  private updateParams(params: IRequestParams) {
-    this.params = params
-  }
-
-  @action
-  private updateArticleLikes(articleLikes: number[]) {
-    this.articleLikes = articleLikes || []
-  }
-
-  @action
-  private updateArticles(articles: IArticle[], isAdd: boolean) {
-    if (isAdd) {
-      this.articles.push(...articles)
-    } else {
-      this.articles = articles
-    }
-  }
-
-  @action
   private updateResultData(resultData: THttpResultPaginateArticles) {
     const { data, pagination } = resultData
     this.updateLoadingState(false)
-    this.updateArticles(data, pagination.current_page > 1)
     this.pagination = pagination
+    if (pagination.current_page > 1) {
+      this.articles.push(...data)
+    } else {
+      this.articles = data
+    }
   }
 
-  @computed get listExtraData(): any {
-    return [this.articleLikes, optionStore.language, optionStore.darkTheme]
-  }
-
-  @computed get articleListData(): IArticle[] | null {
-    const { articles } = this
-    return articles && articles.length
-      ? articles.slice()
-      : null
-  }
-
-  @computed get isNoMoreData(): boolean {
-    return !!this.pagination && this.pagination.current_page === this.pagination.total_page
-  }
-
-  private getLocalArticleLikes(): Promise<any> {
-    return storage.get<number[]>(STORAGE.ARTICLE_LIKES)
-      .then(likes => {
-        this.updateArticleLikes(likes)
-        return likes
-      })
-      .catch(error => {
-        console.warn('Get local arrticle likes error:', error)
-        return Promise.reject(error)
-      })
-  }
-
+  @boundMethod
   private fetchArticles(page: number = 1): Promise<any> {
     this.updateLoadingState(true)
-    console.log('发起请求', { ...this.params, page })
     return fetch.get<THttpResultPaginateArticles>('/article', { ...this.params, page })
       .then(article => {
         this.updateResultData(article.result)
@@ -140,10 +109,6 @@ export class ArticleList extends Component<IArticleListProps> {
     return `index:${index}:sep:${article._id}:${article.id}`
   }
 
-  private getAricleLikedState(articleId: number): boolean {
-    return this.articleLikes.indexOf(articleId) > -1
-  }
-
   private getAricleItemLayout(_: any, index: number) {
     const height = 250
     return {
@@ -153,44 +118,40 @@ export class ArticleList extends Component<IArticleListProps> {
     }
   }
 
-  @boundMethod private handleFilterChanged(isActive: boolean, type: EFilterType, value: TFilterValue) {
+  @boundMethod
+  private handleFilterChanged(isActive: boolean, type: EFilterType, value: TFilterValue) {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
       this.scrollToListTop()
     }
     // 修正参数，更新数据
     setTimeout(() => {
-      const params: IRequestParams = {}
-      if (isActive && value) {
-        Object.assign(
-          params,
-          type === EFilterType.Search && {
-            keyword: value as string
-          },
-          type === EFilterType.Tag && {
-            tag_slug: (value as ITag).slug 
-          },
-          type === EFilterType.Category && {
-            category_slug: (value as ICategory).slug
+      action(() => {
+        const params: IRequestParams = {}
+        if (isActive && value) {
+          if (type === EFilterType.Search) {
+            params.keyword = value as string
+          } else if (type === EFilterType.Tag) {
+            params.tag_slug = (value as ITag).slug 
+          } else if (type === EFilterType.Category) {
+            params.category_slug = (value as ICategory).slug
           }
-        )
-      }
-      this.updateParams(params)
+        }
+        this.params = params
+      })()
       this.fetchArticles()
     }, 266)
   }
 
-  @boundMethod private handleRefreshArticle() {
-    this.fetchArticles()
-  }
-
-  @boundMethod private handleLoadmoreArticle() {
+  @boundMethod
+  private handleLoadmoreArticle() {
     if (!this.isNoMoreData && !this.isLoading && this.pagination) {
       this.fetchArticles(this.pagination.current_page + 1)
     }
   }
 
-  @boundMethod private handleToDetailPage(article: IArticle) {
+  @boundMethod
+  private handleToDetailPage(article: IArticle) {
     this.props.navigation.navigate({
       key: String(article.id),
       routeName: EHomeRoutes.ArticleDetail,
@@ -198,15 +159,12 @@ export class ArticleList extends Component<IArticleListProps> {
     })
   }
 
-  /**
-   * Empty or skeleton view
-   * @function renderSkeletonOrEmptyView
-   * @description 渲染文章列表为空时的两种状态：骨架屏、无数据
-   */
-  @boundMethod private renderSkeletonOrEmptyView(): JSX.Element {
+  // 渲染文章列表为空时的状态：无数据
+  @boundMethod
+  private renderListEmptyView(): JSX.Element | null {
     const { styles } = obStyles
     if (this.isLoading) {
-      return <Text style={styles.h4Title}>骨架屏</Text>
+      return null
     }
     return (
       <View style={styles.centerContainer}>
@@ -215,20 +173,21 @@ export class ArticleList extends Component<IArticleListProps> {
           underlayColor={colors.textSecondary}
           style={{ marginTop: sizes.gap }}
         >
-          <Feather name="chevrons-down" size={22} style={{color: colors.textSecondary}} />
+          <Feather
+            name="chevrons-down"
+            size={22}
+            style={{color: colors.textSecondary}}
+          />
         </TouchableHighlight>
       </View>
     )
   }
 
-  /**
-   * 渲染加载更多
-   * @function renderLoadmoreView
-   * @description 渲染文章列表加载更多时的三种状态：加载中、无更多、上拉加载
-   */
-  @boundMethod private renderLoadmoreView(): JSX.Element | null {
+  // 渲染文章列表脚部的三种状态：空、加载中、无更多、上拉加载
+  @boundMethod
+  private renderListFooterView(): JSX.Element | null {
     const { styles } = obStyles
-    if (!this.articleListData || !this.articleListData.length) {
+    if (!this.articleListData.length) {
       return null
     }
     if (this.isLoading) {
@@ -264,19 +223,17 @@ export class ArticleList extends Component<IArticleListProps> {
           data={this.articleListData}
           ref={this.listElement}
           // 首屏渲染多少个数据
-          initialNumToRender={3}
+          initialNumToRender={5}
           // 手动维护每一行的高度以优化性能
           getItemLayout={this.getAricleItemLayout}
           // 列表为空时渲染
-          ListEmptyComponent={this.renderSkeletonOrEmptyView}
+          ListEmptyComponent={this.renderListEmptyView}
           // 加载更多时渲染
-          ListFooterComponent={this.renderLoadmoreView}
-          // 额外数据
-          extraData={this.listExtraData}
+          ListFooterComponent={this.renderListFooterView}
           // 当前列表 loading 状态
           refreshing={this.isLoading}
           // 刷新
-          onRefresh={this.handleRefreshArticle}
+          onRefresh={this.fetchArticles}
           // 加载更多安全距离（相对于屏幕高度的比例）
           onEndReachedThreshold={0}
           // 加载更多
@@ -290,11 +247,11 @@ export class ArticleList extends Component<IArticleListProps> {
                 render={() => (
                   <ArticleListItem
                     article={article}
+                    liked={likeStore.articles.includes(article.id)}
+                    onPress={this.handleToDetailPage}
                     darkTheme={optionStore.darkTheme}
                     language={optionStore.language}
-                    liked={this.getAricleLikedState(article.id)}
                     key={this.getArticleIdKey(article, index)}
-                    onPress={this.handleToDetailPage}
                   />
                 )}
               />

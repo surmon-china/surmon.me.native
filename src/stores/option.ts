@@ -1,7 +1,7 @@
 /**
  * App global option store.
  * @file App 全局公共存储
- * @module app/ stores/option
+ * @module app/stores/option
  * @author Surmon <https://github.com/surmon-china>
  */
 

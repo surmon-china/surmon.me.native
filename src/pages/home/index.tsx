@@ -38,10 +38,10 @@ class IndexStore {
 }
 
 export const indexStore = new IndexStore()
+export interface IIndexProps extends IPageProps {}
 
-interface IIndexProps extends IPageProps {}
-
-@observer export class Home extends Component<IIndexProps> {
+@observer
+export class Home extends Component<IIndexProps> {
 
   constructor(props: IIndexProps) {
     super(props)

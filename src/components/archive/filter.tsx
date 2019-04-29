@@ -129,8 +129,7 @@ class Store {
 }
 
 export const archiveFilterStore = new Store()
-
-interface IArchiveFilterProps {}
+export interface IArchiveFilterProps {}
 
 @observer
 export class ArchiveFilter extends Component<IArchiveFilterProps> {
@@ -234,7 +233,7 @@ const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       modal: {
-        justifyContent: "flex-end",
+        justifyContent: 'flex-end',
         margin: 0
       },
       container: {

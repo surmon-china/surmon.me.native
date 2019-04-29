@@ -4,7 +4,9 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 import { observer } from 'mobx-react/native'
 import { observable, action, computed, reaction } from 'mobx'
 import { boundMethod } from 'autobind-decorator'
-import { TouchableOpacity, Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { likeStore } from '@app/stores/like'
+import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Markdown } from '@app/components/common/markdown'
 import { Text } from '@app/components/common/text'
@@ -30,21 +32,22 @@ interface IProps extends IPageProps {}
 
 @observer export class ArticleDetail extends Component<IProps> {
 
-  static navigationOptions = () => ({
-    title: i18n.t(LANGUAGE_KEYS.ARTICLE_DETAIL),
-    headerBackTitle: null,
-    header: null
-  })
-
   constructor(props: IProps) {
     super(props)
     this.fetchArticleDatail()
+    likeStore.likeArticle(this.getArticleId())
     reaction(
       () => this.isHeaderCollapsed,
       collapse => this.startHeaderAnimate(collapse),
       { fireImmediately: true }
     )
   }
+
+  static navigationOptions = () => ({
+    title: i18n.t(LANGUAGE_KEYS.ARTICLE_DETAIL),
+    headerBackTitle: null,
+    header: null
+  })
 
   private articleDetailRef: any = null
   
@@ -137,10 +140,10 @@ interface IProps extends IPageProps {}
     return params && params.article
   }
 
-  @boundMethod private getArticleId(): string {
+  @boundMethod private getArticleId(): number {
     const { params } = this.props.navigation.state
-    const article = this.getParamArticle()
     const articleId = params && params.articleId
+    const article = this.getParamArticle()
     return article ? article.id : articleId
   }
 
@@ -198,9 +201,9 @@ interface IProps extends IPageProps {}
               { height: this.headerHeight }
             ]}
           >
-            <TouchableOpacity onPress={this.handleGoBack}>
+            <TouchableView onPress={this.handleGoBack}>
               <Ionicon name="ios-arrow-back" {...getHeaderButtonStyle()} />
-            </TouchableOpacity>
+            </TouchableView>
             <View style={styles.name}>
               <DoubleClick onDoubleClick={this.handleScrollToTop}>
                 <Text style={styles.title} numberOfLines={1}>
@@ -275,7 +278,7 @@ interface IProps extends IPageProps {}
                 <View style={[styles.related, styles.cardBackground]}>
                   <Text style={styles.relatedTitle}>相关文章</Text>
                   {article.related.slice(0, 3).map((item, index) => (
-                    <TouchableOpacity
+                    <TouchableView
                       key={`${item.id}-${index}`}
                       style={styles.relatedItem}
                       onPress={(() => this.handleToNewArticle(item))}
@@ -287,7 +290,7 @@ interface IProps extends IPageProps {}
                         <Text style={styles.metaText}>评论 {item.meta.comments}  ∙  </Text>
                         <Text style={styles.metaText}>发布于 {dateToYMD(item.create_at)}</Text>
                       </View>
-                    </TouchableOpacity>
+                    </TouchableView>
                   ))}
                 </View>
               )}
@@ -296,11 +299,11 @@ interface IProps extends IPageProps {}
           
           {/* {this.article && (
             <View style={styles.footer}>
-              <TouchableOpacity style={styles.footerItem} onPress={this.toComment}>
+              <TouchableView style={styles.footerItem} onPress={this.toComment}>
                 <Icon name="comment" size={17} style={styles.footerItemIcon}/>
                 <Text style={styles.footerItemIconText}>{ `评论 (${this.article.meta.comments})` }</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.footerItem} onPress={this.handleLikeArticle}>
+              </TouchableView>
+              <TouchableView style={styles.footerItem} onPress={this.handleLikeArticle}>
                 <Icon
                   size={17}
                   name={this.isLikedArticle ? 'favorite' : 'favorite-border'} 
@@ -315,7 +318,7 @@ interface IProps extends IPageProps {}
                     }
                   ]}
                 >{ `${this.isLikedArticle ? '已' : ''}喜欢 (${this.article.meta.likes})` }</Text>
-              </TouchableOpacity>
+              </TouchableView>
             </View>
           )} */}
         </View>
