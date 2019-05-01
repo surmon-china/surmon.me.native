@@ -1,6 +1,12 @@
+/**
+ * I18n service.
+ * @file 多语言服务
+ * @module app/services/i18n
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import { observable, action } from 'mobx'
 import { NativeModules } from 'react-native'
+import { observable, action } from 'mobx'
 import { LANGUAGE_KEYS, LANGUAGES } from '@app/constants/language'
 import { IS_IOS } from '@app/config'
 import en from '@app/languages/en'

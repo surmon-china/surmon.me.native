@@ -1,7 +1,13 @@
+/**
+ * Gravatar service.
+ * @file 头像计算器
+ * @module app/services/gravatar
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import gravatar from 'gravatar'
-import { gravatarApi } from '@app/config'
 import { EMAIL } from '@app/constants/regexps'
+import { gravatarApi } from '@app/config'
 
 export function getUrlByEmail(email: string): string {
   if (!EMAIL.test(email)) {

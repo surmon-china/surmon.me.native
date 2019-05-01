@@ -18,11 +18,18 @@ export default {
   [LANGUAGE_KEYS.CATEGORIES]: 'Categories',
   [LANGUAGE_KEYS.COMMENT]: 'Comment',
   [LANGUAGE_KEYS.COMMENTS]: 'Comments',
+
+  [LANGUAGE_KEYS.TODAY_VIEWS]: 'Today Views',
+
   [LANGUAGE_KEYS.KEYWORD]: 'Keyword',
   [LANGUAGE_KEYS.SEARCH]: 'Search',
   [LANGUAGE_KEYS.FILTER_RESULT]: '\'s result',
-  [LANGUAGE_KEYS.TODAY_VIEWS]: 'Today Views',
   [LANGUAGE_KEYS.FILTER_BY_TAG_CATEGORY]: 'Filter article by tag or category',
+
+  [LANGUAGE_KEYS.NO_RESULT_RETRY]: 'No result. Pull down retry.',
+  [LANGUAGE_KEYS.LOADING]: 'Loading...',
+  [LANGUAGE_KEYS.LOADMORE]: 'Loadmore',
+  [LANGUAGE_KEYS.NO_MORE]: 'No more',
   
   [LANGUAGE_KEYS.ORIGIN_HYBRID]: 'Hybrid',
   [LANGUAGE_KEYS.ORIGIN_ORIGINAL]: 'Original',

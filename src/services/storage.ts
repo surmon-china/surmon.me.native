@@ -1,5 +1,12 @@
+/**
+ * Storage service.
+ * @file 本地存储服务 TODO: react-native-community 会造成存储刷新后自动清空的问题
+ * @module app/services/storage
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import AsyncStorage from '@react-native-community/async-storage'
+import { AsyncStorage } from 'react-native'
+// import AsyncStorage from '@react-native-community/async-storage'
 import { STORAGE } from '@app/constants/storage'
 
 export function get<T>(key: STORAGE): Promise<T> {

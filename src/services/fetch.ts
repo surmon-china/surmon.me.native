@@ -1,10 +1,16 @@
+/**
+ * Fetch service.
+ * @file 数据请求器
+ * @module app/services/fetch
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { stringify } from 'query-string'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { TRequestUrlPath, TRequestData, IRequestParams, THttpSuccessResponse } from '@app/types/http'
+import i18n from '@app/services/i18n'
 import { appApi } from '@app/config'
 import { showToast } from './toast'
-import i18n from '@app/services/i18n'
 
 // 构造参数
 export function formatURL(url: TRequestUrlPath, params?: IRequestParams): TRequestUrlPath {

@@ -1,6 +1,6 @@
 /**
- * HTTP interface.
- * @file HTTP 响应接口模型
+ * Global HTTP types.
+ * @file HTTP 响应模型
  * @module types/http
  * @author Surmon <https://github.com/surmon-china>
  */

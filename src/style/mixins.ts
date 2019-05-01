@@ -1,5 +1,11 @@
+/**
+ * Style mixins.
+ * @file Mixins 预置样式
+ * @module app/mixins
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import { StyleSheet, ViewStyle, TextStyle } from 'react-native'
+import { StyleSheet, ViewStyle } from 'react-native'
 import sizes from '@app/style/sizes'
 
 const mixins = StyleSheet.create({

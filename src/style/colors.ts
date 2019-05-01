@@ -1,4 +1,9 @@
-
+/**
+ * Style colors.
+ * @file Theme 主题/颜色配置
+ * @module app/colors
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { observable } from 'mobx'
 
@@ -7,29 +12,33 @@ export enum EThemes {
   Dark = 'Dark'
 }
 
-export interface ITheme {
-  primary: string // 主题色
-  secondary: string // 次要主题色
+type TThemeKey =
+  | 'primary'// 主题色
+  | 'secondary' // 次要主题色
 
-  accent: string // 强调色
-  red: string // 红色，错误色
-  yellow: string // 黄色，警告色
-  grey: string // 银灰色
-  inverse: string // 反色
+  | 'primary' // 主题色
+  | 'secondary' // 次要主题色
 
-  border: string // 边框色
-  background: string // 全局背景色
-  cardBackground: string // 模块背景色
+  | 'accent' // 强调色
+  | 'red' // 红色，错误色
+  | 'yellow' // 黄色，警告色
+  | 'grey' // 银灰色
+  | 'inverse' // 反色
 
-  textDefault: string // 默认文本
-  textSecondary: string // 次要文本
-  textMuted: string // 禁用文本
+  | 'border' // 边框色
+  | 'background' // 全局背景色
+  | 'cardBackground' // 模块背景色
 
-  textTitle: string // 标题文本
-  textLink: string // 链接文本
-}
+  | 'textDefault' // 默认文本
+  | 'textSecondary' // 次要文本
+  | 'textMuted' // 禁用文本
 
-export const Default: ITheme = {
+  | 'textTitle' // 标题文本
+  | 'textLink' // 链接文本
+
+type TTheme = Record<TThemeKey, string>
+
+export const Default: TTheme = {
   primary: '#0d86ff',
   secondary: '#262626',
   accent: '#4caf50',
@@ -49,7 +58,7 @@ export const Default: ITheme = {
   textLink: '#000'
 }
 
-export const Dark: ITheme = {
+export const Dark: TTheme = {
   primary: 'red',
   secondary: '#262626',
   accent: '#4caf50',
@@ -68,11 +77,11 @@ export const Dark: ITheme = {
   textLink: '#009688'
 }
 
-const colors = observable<ITheme>(Default)
+const colors = observable<TTheme>(Default)
 
 export function updateTheme(darkTheme: boolean) {
   Object.keys(Default).forEach(key => {
-    const themeKty = (key as keyof ITheme)
+    const themeKty = (key as keyof TTheme)
     colors[themeKty] = darkTheme ? Dark[themeKty] : Default[themeKty]
   })
 }

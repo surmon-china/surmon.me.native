@@ -1,4 +1,9 @@
-
+/**
+ * Style sizes.
+ * @file Sizes 尺寸样式
+ * @module app/sizes
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { Dimensions, StyleSheet } from 'react-native'
 import { IS_IOS } from '@app/config'

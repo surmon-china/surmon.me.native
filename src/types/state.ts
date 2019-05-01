@@ -1,7 +1,7 @@
 /**
- * Bussniss constants.
- * @file 业务数据表常量接口
- * @module constants/state
+ * Common bussniss state types.
+ * @file 通用业务数据状态模型
+ * @module types/state
  * @author Surmon <https://github.com/surmon-china>
  */
 

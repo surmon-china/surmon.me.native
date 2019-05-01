@@ -22,8 +22,8 @@ import i18n from '@app/services/i18n'
 import fetch from '@app/services/fetch'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import sizes, { defaultHeaderHeight } from '@app/style/sizes'
-import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
+import colors from '@app/style/colors'
 
 export enum EFilterType {
   Tag = 'Tag',
@@ -139,23 +139,78 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
   }
 
   @computed
-  private get filterList() {
-    return [
+  private get scrollFilterListView(): JSX.Element {
+
+    const { styles } = obStyles
+    const filters = [
       {
-        name: i18n.t(LANGUAGE_KEYS.CATEGORY),
+        name: i18n.t(LANGUAGE_KEYS.CATEGORIES),
         type: EFilterType.Category,
         data: archiveFilterStore.categories
       },
       {
-        name: i18n.t(LANGUAGE_KEYS.TAG),
+        name: i18n.t(LANGUAGE_KEYS.TAGS),
         type: EFilterType.Tag,
         data: archiveFilterStore.tags
       }
     ]
+
+    return (
+      <ScrollView style={styles.container}>
+        {filters.map(filter => (
+          <View key={filter.type}>
+            <Text style={fonts.h4}>{filter.name}</Text>
+            <View style={styles.list}>
+              {filter.data.map(item => {
+                const { filterActive: isFilterActive, filterType, filterValues } = archiveFilterStore
+                const activeValue = filterValues[filterType] as ICategory
+                const isActive = (
+                  isFilterActive &&
+                  filterType === filter.type && 
+                  activeValue &&
+                  activeValue.slug === item.slug
+                )
+                return (
+                  <TouchableView
+                    key={item._id}
+                    style={[
+                      styles.item,
+                      isActive ? styles.itemActive : null
+                    ]}
+                    onPress={() => {
+                      archiveFilterStore.updateActiveFilter(filter.type, item)
+                      archiveFilterStore.updateVisibleState(false)
+                    }}
+                  >
+                    <Text
+                      style={[
+                        { fontSize: fonts.base.fontSize * 0.9, textTransform: 'capitalize' },
+                        isActive ? styles.itemActiveText : null
+                      ]}
+                    >
+                      {optionStore.isEnLang ? item.slug : item.name}
+                    </Text>
+                    {isActive && (
+                      <Ionicon
+                        name="ios-checkmark"
+                        size={fonts.h2.fontSize}
+                        style={[
+                          styles.itemIcon,
+                          isActive ? styles.itemActiveText : null
+                        ]}
+                      />
+                    )}
+                  </TouchableView>
+                )
+              })}
+            </View>
+          </View>
+        ))}
+      </ScrollView>
+    )
   }
 
   render() {
-    const { styles } = obStyles
     return (
       <BetterModal
         top={defaultHeaderHeight}
@@ -173,57 +228,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
           </TouchableView>
         }
       >
-        <ScrollView style={styles.container}>
-          {this.filterList.map(filter => (
-            <View key={filter.type}>
-              <Text style={fonts.h4}>{filter.name}</Text>
-              <View style={styles.list}>
-                {filter.data.map(item => {
-                  const { filterActive: isFilterActive, filterType, filterValues } = archiveFilterStore
-                  const activeValue = filterValues[filterType] as ICategory
-                  const isActive = (
-                    isFilterActive &&
-                    filterType === filter.type && 
-                    activeValue &&
-                    activeValue.slug === item.slug
-                  )
-                  return (
-                    <TouchableView
-                      key={item._id}
-                      style={[
-                        styles.item,
-                        isActive ? styles.itemActive : null
-                      ]}
-                      onPress={() => {
-                        archiveFilterStore.updateActiveFilter(filter.type, item)
-                        archiveFilterStore.updateVisibleState(false)
-                      }}
-                    >
-                      <Text
-                        style={[
-                          fonts.small,
-                          isActive ? styles.itemActiveText : null
-                        ]}
-                      >
-                        {optionStore.isEnLang ? item.slug : item.name}
-                      </Text>
-                      {isActive && (
-                        <Ionicon
-                          name="ios-checkmark"
-                          size={fonts.h4.fontSize}
-                          style={[
-                            styles.itemIcon,
-                            isActive ? styles.itemActiveText : null
-                          ]}
-                        />
-                      )}
-                    </TouchableView>
-                  )
-                })}
-              </View>
-            </View>
-          ))}
-        </ScrollView>
+        {this.scrollFilterListView}
       </BetterModal>
     )
   }
@@ -252,8 +257,8 @@ const obStyles = observable({
       },
       item: {
         ...mixins.rowCenter,
+        height: 32,
         paddingHorizontal: sizes.goldenRatioGap,
-        paddingVertical: sizes.goldenRatioGap / 2,
         backgroundColor: colors.background,
         marginRight: sizes.goldenRatioGap,
         marginBottom: sizes.goldenRatioGap

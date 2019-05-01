@@ -1,32 +1,35 @@
 /**
  * App article list component.
- * @file 文章列表组件 TODO: 文案还都是中文的，图标未调整至 ionicon
+ * @file 文章列表组件
  * @module app/components/archive/list
  * @author Surmon <https://github.com/surmon-china>
  */
 
 import React, { Component, RefObject } from 'react'
-import { FlatList, StyleSheet, View, TouchableHighlight } from 'react-native'
+import { FlatList, StyleSheet, View } from 'react-native'
 import { observable, action, computed, reaction } from 'mobx'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
-import Feather from 'react-native-vector-icons/Feather'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
 import { EHomeRoutes } from '@app/routes'
-import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
-import { Text } from '@app/components/common/text'
-import { INavigationProps } from '@app/types/props'
-import { IArticle, ITag, ICategory } from '@app/types/business'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
-import { ArticleListItem } from './item'
-import { ArticleArchiveHeader } from './header'
+import { IArticle, ITag, ICategory } from '@app/types/business'
+import { INavigationProps } from '@app/types/props'
+import { Text } from '@app/components/common/text'
+import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { archiveFilterStore, EFilterType, TFilterValue } from './filter'
+import { ArticleArchiveHeader } from './header'
+import { ArticleListItem } from './item'
+import i18n from '@app/services/i18n'
 import fetch from '@app/services/fetch'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
+import mixins from '@app/style/mixins'
 
 type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
 
@@ -52,6 +55,12 @@ export class ArticleList extends Component<IArticleListProps> {
 
   private listElement: TArticleListElement = React.createRef()
 
+  @boundMethod
+  scrollToListTop() {
+    const listElement = this.listElement.current
+    listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
+  }
+
   @observable private isLoading: boolean = false
   @observable.ref private params: IRequestParams = {}
   @observable.ref private pagination: IHttpPaginate | null = null
@@ -65,12 +74,6 @@ export class ArticleList extends Component<IArticleListProps> {
   @computed
   private get isNoMoreData(): boolean {
     return !!this.pagination && this.pagination.current_page === this.pagination.total_page
-  }
-
-  @boundMethod
-  scrollToListTop() {
-    const listElement = this.listElement.current
-    listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
   }
 
   @action
@@ -163,23 +166,36 @@ export class ArticleList extends Component<IArticleListProps> {
   @boundMethod
   private renderListEmptyView(): JSX.Element | null {
     const { styles } = obStyles
+    const commonIconOptions = {
+      name: 'ios-arrow-down',
+      size: 22
+    }
+    const commonIconStyles = {
+      color: colors.textSecondary
+    }
+
     if (this.isLoading) {
       return null
     }
+
     return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.h4Title}>暂无数据，下拉刷新重试</Text>
-        <TouchableHighlight
-          underlayColor={colors.textSecondary}
-          style={{ marginTop: sizes.gap }}
-        >
-          <Feather
-            name="chevrons-down"
-            size={22}
-            style={{color: colors.textSecondary}}
-          />
-        </TouchableHighlight>
-      </View>
+      <Observer
+        render={() => (
+          <View style={styles.centerContainer}>
+            <Text style={styles.h4Title}>{i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}</Text>
+            <View style={{ marginTop: sizes.goldenRatioGap }}>
+              <Ionicon
+                {...commonIconOptions}
+                style={commonIconStyles}
+              />
+              <Ionicon
+                {...commonIconOptions}
+                style={[commonIconStyles, { marginTop: -16 }]}
+              />
+            </View>
+          </View>
+        )}
+      />
     )
   }
 
@@ -187,39 +203,56 @@ export class ArticleList extends Component<IArticleListProps> {
   @boundMethod
   private renderListFooterView(): JSX.Element | null {
     const { styles } = obStyles
+
     if (!this.articleListData.length) {
       return null
     }
+
     if (this.isLoading) {
       return (
-        <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-          <AutoActivityIndicator style={{ marginRight: sizes.gap / 4 }} />
-          <Text style={styles.smallTitle}>加载中...</Text>
-        </View>
+        <Observer
+          render={() => (
+            <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+              <AutoActivityIndicator style={{ marginRight: sizes.gap / 4 }} />
+              <Text style={styles.smallTitle}>{i18n.t(LANGUAGE_KEYS.LOADING)}</Text>
+            </View>
+          )}
+        />
       )
     }
+
     if (this.isNoMoreData) {
       return (
-        <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-          <Text style={styles.smallTitle}>没有更多啦</Text>
-        </View>
+        <Observer
+          render={() => (
+            <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+              <Text style={styles.smallTitle}>{i18n.t(LANGUAGE_KEYS.NO_MORE)}</Text>
+            </View>
+          )}
+        />
       )
     }
+
     return (
-      <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-        <Text style={[styles.smallTitle, { marginRight: sizes.gap / 4 }]}>上拉以加载更多</Text>
-        <Feather name="arrow-up-circle" style={{color: colors.textSecondary}} />
-      </View>
+      <Observer
+        render={() => (
+          <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+            <Ionicon name="ios-arrow-dropup" style={{ color: colors.textSecondary }} />
+            <Text style={[styles.smallTitle, { marginLeft: sizes.gap / 4 }]}>
+              {i18n.t(LANGUAGE_KEYS.LOADMORE)}
+            </Text>
+          </View>
+        )}
+      />
     )
   }
 
   render() {
-    const { styles } = obStyles
     return (
-      <View style={styles.listViewContainer}>
+      <View style={obStyles.styles.listViewContainer}>
         <ArticleArchiveHeader />
         <FlatList
-          style={styles.articleListView}
+          style={obStyles.styles.articleListView}
           data={this.articleListData}
           ref={this.listElement}
           // 首屏渲染多少个数据
@@ -279,8 +312,8 @@ const obStyles = observable({
         padding: sizes.gap
       },
       loadmoreViewContainer: {
-        flexDirection: 'row',
-        padding: sizes.gap * 0.66
+        ...mixins.rowCenter,
+        padding: sizes.goldenRatioGap
       },
       h4Title: {
         ...fonts.h4,

@@ -21,11 +21,18 @@ export enum LANGUAGE_KEYS {
   CATEGORIES = 'categories',
   COMMENT = 'comment',
   COMMENTS = 'comments',
+
+  TODAY_VIEWS = 'todayViews',
+
   KEYWORD = 'keyword',
   SEARCH = 'search',
   FILTER_RESULT = 'filterResult',
-  TODAY_VIEWS = 'todayViews',
   FILTER_BY_TAG_CATEGORY = 'filterByTagCategory',
+
+  NO_RESULT_RETRY = 'noResultRetry',
+  LOADING = 'loading',
+  LOADMORE = 'loadmore',
+  NO_MORE = 'noMore',
 
   ORIGIN_HYBRID = 'originHybrid',
   ORIGIN_ORIGINAL = 'originOriginal',

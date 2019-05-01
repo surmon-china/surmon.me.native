@@ -5,7 +5,7 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { observable, action, computed } from 'mobx'
+import { observable, action } from 'mobx'
 import { STORAGE } from '@app/constants/storage'
 import storage from '@app/services/storage'
 
@@ -22,14 +22,13 @@ class LikeStore {
   @action.bound
   updateArticles(articles: number[]) {
     this.articles = articles || []
-    storage.set(STORAGE.ARTICLE_LIKES, this.articles.slice())
+    this.syncArticles()
   }
   
   @action.bound
   likeArticle(articleId: number) {
-    this.updateArticles(
-      [...new Set([...this.articles.slice(), articleId])]
-    )
+    this.articles.push(articleId)
+    this.syncArticles()
   }
   
   @action.bound
@@ -45,18 +44,16 @@ class LikeStore {
     )
   }
 
+  private syncArticles() {
+    storage.set(STORAGE.ARTICLE_LIKES, this.articles.slice())
+  }
+
   private initArticles() {
-    storage.get<number[]>(STORAGE.ARTICLE_LIKES).then(likes => {
-      console.log('initArticles', likes)
-      this.updateArticles(likes)
-    })
+    storage.get<number[]>(STORAGE.ARTICLE_LIKES).then(this.updateArticles)
   }
 
   private initComments() {
-    storage.get<number[]>(STORAGE.COMMENT_LIKES).then(likes => {
-      console.log('initComments', likes)
-      this.updateComments(likes)
-    })
+    storage.get<number[]>(STORAGE.COMMENT_LIKES).then(this.updateComments)
   }
 }
 
