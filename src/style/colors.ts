@@ -1,5 +1,5 @@
 /**
- * Style colors.
+ * Style colors
  * @file Theme 主题/颜色配置
  * @module app/colors
  * @author Surmon <https://github.com/surmon-china>
@@ -59,22 +59,23 @@ export const Default: TTheme = {
 }
 
 export const Dark: TTheme = {
-  primary: 'red',
+  primary: '#0d86ff',
   secondary: '#262626',
   accent: '#4caf50',
   red: '#ff5722',
   yellow: '#ffeb3b',
   grey: '#efefef',
-  inverse: '#000',
-  border: '#c8c7cc',
-  background: '#000',
-  cardBackground: 'blue',
+  inverse: '#FFFFFF',
+  border: '#333333',
+  background: '#000000',
+  cardBackground: '#191919',
 
-  textDefault: '#AAA',
-  textSecondary: '#333',
-  textMuted: '#c8c7cc',
-  textTitle: '#555',
-  textLink: '#009688'
+  textDefault: '#999999',
+  textSecondary: '#777777',
+  textMuted: '#333333',
+
+  textTitle: '#EEEEEE',
+  textLink: '#FFFFFF'
 }
 
 const colors = observable<TTheme>(Default)

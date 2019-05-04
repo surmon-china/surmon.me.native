@@ -1,3 +1,9 @@
+/**
+ * Language key constant
+ * @file 语言字段
+ * @module app/constants/language
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export enum LANGUAGES {
   EN = 'en',
@@ -22,7 +28,16 @@ export enum LANGUAGE_KEYS {
   COMMENT = 'comment',
   COMMENTS = 'comments',
 
+  VIEW = 'view',
+  LIKE = 'like',
+  SHARE = 'share',
+  TOTAL = 'total',
+  EMPTY = 'empty',
   TODAY_VIEWS = 'todayViews',
+  CREATE_AT = 'createAt',
+  LAST_UPDATE_AT = 'lastUpdateAt',
+  RELATED_ARTICLE = 'relatedArticle',
+  GUESTBOOK_SLOGAN = 'guestbookSlogan',
 
   KEYWORD = 'keyword',
   SEARCH = 'search',
@@ -33,6 +48,15 @@ export enum LANGUAGE_KEYS {
   LOADING = 'loading',
   LOADMORE = 'loadmore',
   NO_MORE = 'noMore',
+  RENDERING = 'rendering',
+
+  CLEAR = 'clear',
+  HISTORT = 'history',
+  SAVE = 'save',
+
+  URL_OPEN_TYPE = 'urlOpenType',
+  OPEN_BY_BROWER = 'openByBrower',
+  COPY_URL = 'copyUrl',
 
   ORIGIN_HYBRID = 'originHybrid',
   ORIGIN_ORIGINAL = 'originOriginal',
@@ -54,8 +78,9 @@ export enum LANGUAGE_KEYS {
 
   CLEAR_CACHE = 'clearCache',
   CLEAR_CACHE_TEXT = 'clearCacheText',
-  CLEAR_CACHE_OK_BUTTON = 'clearCacheOkButton',
-  CLEAR_CACHE_CANCEL_BUTTON = 'clearCacheCancelButton',
+
+  OK = 'clearCacheOkButton',
+  CANCEL = 'clearCacheCancelButton',
 
   SUCCESS = 'success',
   NETWORK_ERROR = 'networkError',

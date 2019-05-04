@@ -1,5 +1,5 @@
 /**
- * Storage service.
+ * Storage service
  * @file 本地存储服务 TODO: react-native-community 会造成存储刷新后自动清空的问题
  * @module app/services/storage
  * @author Surmon <https://github.com/surmon-china>
@@ -33,4 +33,3 @@ export default {
   remove,
   clear
 }
-

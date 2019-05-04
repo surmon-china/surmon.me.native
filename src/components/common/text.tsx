@@ -1,3 +1,9 @@
+/**
+ * Text
+ * @file 公共文本控件，解决了默认颜色和样式的问题
+ * @module app/components/common/text
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React from 'react'
 import { Text as RNText } from 'react-native'

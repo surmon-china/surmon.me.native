@@ -1,5 +1,5 @@
 /**
- * Global HTTP types.
+ * Global HTTP types
  * @file HTTP 响应模型
  * @module types/http
  * @author Surmon <https://github.com/surmon-china>

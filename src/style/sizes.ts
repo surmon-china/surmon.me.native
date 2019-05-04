@@ -1,5 +1,5 @@
 /**
- * Style sizes.
+ * Style sizes
  * @file Sizes 尺寸样式
  * @module app/sizes
  * @author Surmon <https://github.com/surmon-china>

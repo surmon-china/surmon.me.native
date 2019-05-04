@@ -1,114 +1,95 @@
+/**
+ * Comment list component
+ * @file 评论列表组件
+ * @module app/components/comment-list
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import React, { Component } from 'react'
-import Feather from 'react-native-vector-icons/Feather'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import { boundMethod } from 'autobind-decorator'
+import React, { Component, RefObject } from 'react'
+import { FlatList, StyleSheet, View, Alert, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { observable, action, computed } from 'mobx'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
-import { observable, action, computed } from 'mobx'
-import { FlatList, StyleSheet, View, TouchableHighlight, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { boundMethod } from 'autobind-decorator'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { likeStore } from '@app/stores/like'
+import { optionStore } from '@app/stores/option'
 import { Text } from '@app/components/common/text'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
-import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
+import { CommentItem } from './item'
+import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
 import { IComment, IAuthor } from '@app/types/business'
-import { STORAGE } from '@app/constants/storage'
-import { optionStore } from '@app/stores/option'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import fetch from '@app/services/fetch'
-import storage from '@app/services/storage'
+import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
 import mixins from '@app/style/mixins'
-import { CommentItem } from './item'
+
+export type TCommentListElement = RefObject<FlatList<IComment>>
 
 type THttpResultPaginateComments = IHttpResultPaginate<IComment[]>
 
-interface IProps {
+interface ICommentProps {
   postId: number
-  getListRef?(ref: any): void
   onScroll?(event: NativeSyntheticEvent<NativeScrollEvent>): void
 }
 
-@observer export class Comment extends Component<IProps> {
+@observer
+export class Comment extends Component<ICommentProps> {
  
-  constructor(props: IProps) {
+  constructor(props: ICommentProps) {
     super(props)
-    this.getLocalCommentLikes().then(() => {
-      this.fetchComments()
-    })
+    this.fetchComments()
   }
 
-  private listRef: any = null
+  private listElement: TCommentListElement = React.createRef()
 
-  @boundMethod private updateListRef(ref: any) {
-    this.listRef = ref
-    this.props.getListRef && this.props.getListRef(ref)
+  @boundMethod
+  scrollToListTop() {
+    const listElement = this.listElement.current
+    if (this.commentListData.length) {
+      listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
+    }
   }
 
   @observable.ref private isLoading: boolean = false
   @observable.ref private isSortByHot: boolean = false
-  @observable.ref private commentLikes: number[] = []
 
   @observable.ref private pagination: IHttpPaginate | null = null
   @observable.shallow private comments: IComment[] = []
 
-  @action private updateLoadingState(loading: boolean) {
-    this.isLoading = loading
+  @computed
+  private get commentListData(): IComment[] {
+    return this.comments.slice() || []
   }
 
-  @action private updatePagination(pagination: IHttpPaginate) {
-    this.pagination = pagination
-  }
-
-  @action private updateCommentLikes(commentLikes: number[]) {
-    this.commentLikes = commentLikes || []
-  }
-
-  @action private updateComments(comments: IComment[], isAdd: boolean) {
-    if (isAdd) {
-      this.comments.push(...comments)
-    } else {
-      this.comments = comments
-    }
-  }
-
-  @action private updateResultData(resultData: THttpResultPaginateComments) {
-    console.log('resultData', resultData)
-    const { data, pagination } = resultData
-    this.updateLoadingState(false)
-    this.updateComments(data, pagination.current_page > 1)
-    this.updatePagination(pagination)
-  }
-
-  @computed get listExtraData(): any {
-    return [this.commentLikes, optionStore.language, optionStore.darkTheme]
-  }
-
-  @computed get commentListData(): IComment[] | null {
-    const { comments: comments } = this
-    return comments && comments.length
-      ? comments.slice()
-      : null
-  }
-
-  @computed get isNoMoreData(): boolean {
+  @computed
+  private get isNoMoreData(): boolean {
     return !!this.pagination && this.pagination.current_page === this.pagination.total_page
   }
 
-  private getLocalCommentLikes(): Promise<any> {
-    return storage.get<number[]>(STORAGE.COMMENT_LIKES)
-      .then(likes => {
-        this.updateCommentLikes(likes)
-        return likes
-      })
-      .catch(error => {
-        console.warn('Get local arrticle likes error:', error)
-        return Promise.reject(error)
-      })
+  @action
+  private updateLoadingState(loading: boolean) {
+    this.isLoading = loading
   }
 
-  @boundMethod private fetchComments(page: number = 1): Promise<any> {
+  @action
+  private updateResultData(resultData: THttpResultPaginateComments) {
+    const { data, pagination } = resultData
+    this.updateLoadingState(false)
+    this.pagination = pagination
+    if (pagination.current_page > 1) {
+      this.comments.push(...data)
+    } else {
+      this.comments = data
+    }
+  }
+
+  @boundMethod
+  private fetchComments(page: number = 1): Promise<any> {
     this.updateLoadingState(true)
     const params = {
       sort: this.isSortByHot ? 2 : -1,
@@ -116,7 +97,6 @@ interface IProps {
       per_page: 66,
       page
     }
-    console.log('发起评论请求', params)
     return fetch.get<THttpResultPaginateComments>('/comment', params)
       .then(comment => {
         this.updateResultData(comment.result)
@@ -133,119 +113,173 @@ interface IProps {
     return `index:${index}:sep:${comment.id}`
   }
 
-  private getCommentLikedState(commentId: number): boolean {
-    return this.commentLikes.indexOf(commentId) > -1
-  }
-
   // 切换排序模式
-  @boundMethod private handleToggleSortType() {
+  @boundMethod
+  private handleToggleSortType() {
     // 归顶
     if (this.pagination && this.pagination.total > 0) {
-      this.listRef.scrollToIndex({ index: 0, viewOffset: 0 })
+      this.scrollToListTop()
     }
     // 修正参数
     action(() => {
       this.isSortByHot = !this.isSortByHot
-    })
+    })()
     // 重新请求数据
-    setTimeout(() => this.fetchComments(), 266)
+    setTimeout(this.fetchComments, 266)
   }
 
-  @boundMethod private handleLoadmoreArticle() {
+  @boundMethod
+  private handleLoadmoreArticle() {
     if (!this.isNoMoreData && !this.isLoading && this.pagination) {
       this.fetchComments(this.pagination.current_page + 1)
     }
   }
 
-  @boundMethod private handleReplyComment(comment: IComment) {
-    console.log('回复某个评论', comment)
-  }
-
-  @boundMethod private handleLikeComment(comment: IComment) {
-    console.log('喜欢某个评论', comment)
-  }
-
-  @boundMethod private handlePressAuthor(author: IAuthor) {
-    console.log('点击了某个评论作者', author)
-  }
-
-  /**
-   * Empty or skeleton view
-   * @function renderSkeletonOrEmptyView
-   * @description 渲染文章列表为空时的两种状态：骨架屏、无数据
-   */
-  @boundMethod private renderSkeletonOrEmptyView(): JSX.Element | null {
-    const { styles } = obStyles
-    if (this.isLoading) {
-      return null
-    }
-    return (
-      <View style={styles.centerContainer}>
-        <Text style={styles.h4Title}>暂无数据，下拉刷新重试</Text>
-        <TouchableHighlight
-          underlayColor={colors.textSecondary}
-          style={{ marginTop: sizes.gap }}
-        >
-          <Feather name="chevrons-down" size={22} style={{color: colors.textSecondary}} />
-        </TouchableHighlight>
-      </View>
+  @boundMethod
+  private handlePressAuthor(author: IAuthor) {
+    Alert.alert(
+      optionStore.isEnLang
+        ? 'More action on PC.'
+        : '更多详细信息要去 Web 端操作'
     )
   }
 
-  /**
-   * 渲染加载更多
-   * @function renderLoadmoreView
-   * @description 渲染文章列表加载更多时的三种状态：加载中、无更多、上拉加载
-   */
-  @boundMethod private renderLoadmoreView(): JSX.Element | null {
+  @boundMethod
+  private handleReplyComment(comment: IComment) {
+    Alert.alert(
+      optionStore.isEnLang
+        ? 'More action on PC.'
+        : '回复评论要去 Web 端操作'
+    )
+  }
+
+  @boundMethod
+  private handleLikeComment(comment: IComment) {
+    const comment_id = comment.id
+    const doLike = () => {
+      const targetCommentIndex = this.comments.findIndex(item => item.id === comment_id)
+      likeStore.likeComment(comment_id)
+      this.comments.splice(targetCommentIndex, 1, {
+        ...comment,
+        likes: comment.likes + 1
+      })
+    }
+    fetch.patch<boolean>('/like/comment', { comment_id })
+      .then(doLike)
+      .catch(error => {
+        doLike()
+        console.warn('Like comment error:', error)
+      })
+  }
+
+  // 渲染评论列表为空时的状态：无数据
+  @boundMethod
+  private renderListEmptyView(): JSX.Element | null {
     const { styles } = obStyles
-    if (!this.commentListData || !this.commentListData.length) {
+    const commonIconOptions = {
+      name: 'ios-arrow-down',
+      size: 19
+    }
+    const commonIconStyles = {
+      color: colors.textSecondary
+    }
+
+    if (this.isLoading) {
       return null
     }
+
+    return (
+      <Observer
+        render={() => (
+          <View style={styles.centerContainer}>
+            <Text style={styles.normalTitle}>
+              {i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}
+            </Text>
+            <View style={{ marginTop: sizes.gap }}>
+              <Ionicon
+                {...commonIconOptions}
+                style={commonIconStyles}
+              />
+              <Ionicon
+                {...commonIconOptions}
+                style={[commonIconStyles, { marginTop: -14 }]}
+              />
+            </View>
+          </View>
+        )}
+      />
+    )
+  }
+
+  // 渲染列表脚部的三种状态：空、加载中、无更多、上拉加载
+  @boundMethod
+  private renderListFooterView(): JSX.Element | null {
+    const { styles } = obStyles
+
+    if (!this.commentListData.length) {
+      return null
+    }
+
     if (this.isLoading) {
       return (
-        <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-          <AutoActivityIndicator style={{ marginRight: sizes.gap / 4 }} />
-          <Text style={styles.smallTitle}>加载中...</Text>
-        </View>
+        <Observer
+          render={() => (
+            <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+              <AutoActivityIndicator style={{ marginRight: sizes.gap / 4 }} />
+              <Text style={styles.smallTitle}>{i18n.t(LANGUAGE_KEYS.LOADING)}</Text>
+            </View>
+          )}
+        />
       )
     }
+
     if (this.isNoMoreData) {
       return (
-        <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-          <Text style={styles.smallTitle}>没有更多啦</Text>
-        </View>
+        <Observer
+          render={() => (
+            <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+              <Text style={styles.smallTitle}>{i18n.t(LANGUAGE_KEYS.NO_MORE)}</Text>
+            </View>
+          )}
+        />
       )
     }
+
     return (
-      <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-        <Text style={[styles.smallTitle, { marginRight: sizes.gap / 4 }]}>上拉以加载更多</Text>
-        <Feather name="arrow-up-circle" style={{color: colors.textSecondary}} />
-      </View>
+      <Observer
+        render={() => (
+          <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
+            <Ionicon name="ios-arrow-dropup" style={{ color: colors.textSecondary }} />
+            <Text style={[styles.smallTitle, { marginLeft: sizes.gap / 4 }]}>
+              {i18n.t(LANGUAGE_KEYS.LOADMORE)}
+            </Text>
+          </View>
+        )}
+      />
     )
   }
 
   private renderToolBoxView(): JSX.Element {
-    const { pagination } = this
+    const { isLoading, pagination } = this
     const { styles } = obStyles
 
     return (
       <View style={styles.toolBox}>
         {pagination && pagination.total ? (
-          <Text>{pagination.total} 条评论</Text>
+          <Text>{pagination.total} {i18n.t(LANGUAGE_KEYS.TOTAL)}</Text>
         ) : (
-          <Text>暂无评论</Text>
+          <Text>{i18n.t(isLoading ? LANGUAGE_KEYS.LOADING : LANGUAGE_KEYS.EMPTY)}</Text>
         )}
         <TouchableView onPress={this.handleToggleSortType}>
           <Ionicon
             name="ios-funnel"
-            size={19}
+            size={17}
             style={styles.toolSort}
           />
           <Ionicon
             name={this.isSortByHot ? 'ios-happy' : 'ios-time'}
             color={this.isSortByHot ? colors.primary : colors.textDefault}
-            size={14}
+            size={13}
             style={styles.toolSortType}
           />
         </TouchableView>
@@ -261,15 +295,13 @@ interface IProps {
         <FlatList
           style={styles.commentListView}
           data={this.commentListData}
-          ref={this.updateListRef}
+          ref={this.listElement}
           // 首屏渲染多少个数据
           initialNumToRender={16}
           // 列表为空时渲染
-          ListEmptyComponent={this.renderSkeletonOrEmptyView}
+          ListEmptyComponent={this.renderListEmptyView}
           // 加载更多时渲染
-          ListFooterComponent={this.renderLoadmoreView}
-          // 额外数据
-          extraData={this.listExtraData}
+          ListFooterComponent={this.renderListFooterView}
           // 当前列表 loading 状态
           refreshing={this.isLoading}
           // 刷新
@@ -289,10 +321,10 @@ interface IProps {
                 render={() => (
                   <CommentItem
                     key={this.getCommentKey(comment, index)}
-                    comment={comment}
                     darkTheme={optionStore.darkTheme}
                     language={optionStore.language}
-                    isLiked={this.getCommentLikedState(comment.id)}
+                    comment={comment}
+                    liked={likeStore.comments.includes(comment.id)}
                     onLike={this.handleLikeComment}
                     onReply={this.handleReplyComment}
                     onPressAuthor={this.handlePressAuthor}
@@ -311,19 +343,18 @@ const obStyles = observable({
   get styles() {
     return StyleSheet.create({
       container: {
-        position: 'relative',
         flex: 1,
+        position: 'relative'
       },
       toolBox: {
         ...mixins.rowCenter,
         justifyContent: 'space-between',
         height: sizes.gap * 2,
-        backgroundColor: colors.cardBackground,
         paddingHorizontal: sizes.gap,
         borderColor: colors.border,
         borderTopWidth: sizes.borderWidth,
         borderBottomWidth: sizes.borderWidth,
-        marginTop: sizes.gap
+        backgroundColor: colors.cardBackground
       },
       toolSort: {
         marginRight: 8,
@@ -332,28 +363,27 @@ const obStyles = observable({
       toolSortType: {
         position: 'absolute',
         right: 0,
-        bottom: 0,
+        bottom: 0
       },
       commentListView: {
-        // marginTop: sizes.goldenRatioGap,
         backgroundColor: colors.cardBackground
       },
       centerContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        padding: sizes.gap,
+        padding: sizes.gap
       },
       loadmoreViewContainer: {
-        padding: sizes.gap * 0.66,
-        flexDirection: 'row'
+        flexDirection: 'row',
+        padding: sizes.goldenRatioGap
       },
-      h4Title: {
-        ...fonts.h4,
-        color: colors.textSecondary,
+      normalTitle: {
+        ...fonts.base,
+        color: colors.textSecondary
       },
       smallTitle: {
         ...fonts.small,
-        color: colors.textSecondary,
+        color: colors.textSecondary
       }
     })
   }

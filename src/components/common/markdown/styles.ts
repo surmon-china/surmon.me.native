@@ -1,3 +1,8 @@
+/**
+ * @file Markdown 解析器样式
+ * @module components/common/markdown/styles
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import { observable } from 'mobx'
 import colors from '@app/style/colors'

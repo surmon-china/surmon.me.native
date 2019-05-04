@@ -1,5 +1,5 @@
 /**
- * App article filter component.
+ * App article filter component
  * @file 文章过滤器组件
  * @module app/components/archive/filter
  * @author Surmon <https://github.com/surmon-china>
@@ -16,7 +16,7 @@ import { BetterModal } from '@app/components/common/modal'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ICategory, ITag } from '@app/types/business'
-import { IHttpResultPaginate } from '@app/types/http'
+import { IHttpResultPaginate, THttpSuccessResponse } from '@app/types/http'
 import { ValueOf } from '@app/utils/transform'
 import i18n from '@app/services/i18n'
 import fetch from '@app/services/fetch'
@@ -111,20 +111,16 @@ class Store {
   
   private fetchTags() {
     return fetch.get<IHttpResultPaginate<ITag[]>>('/tag', { per_page: 666 })
-      .then(
-        action((result: any) => {
-          this.tags = result.result.data
-        })
-      )
+      .then(action((result: THttpSuccessResponse<IHttpResultPaginate<ITag[]>>) => {
+        this.tags = result.result.data
+      }))
   }
 
   private fetchCategories() {
     return fetch.get<IHttpResultPaginate<ICategory[]>>('/category')
-      .then(
-        action((result: any) => {
-          this.categories = result.result.data
-        })
-      )
+      .then(action((result: THttpSuccessResponse<IHttpResultPaginate<ICategory[]>>) => {
+        this.categories = result.result.data
+      }))
   }
 }
 
@@ -224,7 +220,11 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
               archiveFilterStore.updateVisibleState(false)
             }}
           >
-            <Ionicon name="ios-remove" {...getHeaderButtonStyle()} />
+            <Ionicon
+              name="ios-remove"
+              color={colors.textLink}
+              {...getHeaderButtonStyle()}
+            />
           </TouchableView>
         }
       >

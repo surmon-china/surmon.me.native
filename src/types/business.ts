@@ -1,5 +1,5 @@
 /**
- * Bussniss types.
+ * Bussniss types
  * @file 业务数据模型
  * @module types/business
  * @author Surmon <https://github.com/surmon-china>

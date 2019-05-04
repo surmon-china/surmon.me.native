@@ -1,5 +1,5 @@
 /**
- * App article archive header component.
+ * App article archive header component
  * @file 文章列表头部过滤信息组件
  * @module app/components/archive/header
  * @author Surmon <https://github.com/surmon-china>

@@ -1,5 +1,5 @@
 /**
- * App article list component.
+ * App article list component
  * @file 文章列表组件
  * @module app/components/archive/list
  * @author Surmon <https://github.com/surmon-china>
@@ -58,7 +58,9 @@ export class ArticleList extends Component<IArticleListProps> {
   @boundMethod
   scrollToListTop() {
     const listElement = this.listElement.current
-    listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
+    if (this.articleListData.length) {
+      listElement && listElement.scrollToIndex({ index: 0, viewOffset: 0 })
+    }
   }
 
   @observable private isLoading: boolean = false
@@ -168,7 +170,7 @@ export class ArticleList extends Component<IArticleListProps> {
     const { styles } = obStyles
     const commonIconOptions = {
       name: 'ios-arrow-down',
-      size: 22
+      size: 19
     }
     const commonIconStyles = {
       color: colors.textSecondary
@@ -182,7 +184,7 @@ export class ArticleList extends Component<IArticleListProps> {
       <Observer
         render={() => (
           <View style={styles.centerContainer}>
-            <Text style={styles.h4Title}>{i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}</Text>
+            <Text style={styles.normalTitle}>{i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}</Text>
             <View style={{ marginTop: sizes.goldenRatioGap }}>
               <Ionicon
                 {...commonIconOptions}
@@ -190,7 +192,7 @@ export class ArticleList extends Component<IArticleListProps> {
               />
               <Ionicon
                 {...commonIconOptions}
-                style={[commonIconStyles, { marginTop: -16 }]}
+                style={[commonIconStyles, { marginTop: -13 }]}
               />
             </View>
           </View>
@@ -315,8 +317,8 @@ const obStyles = observable({
         ...mixins.rowCenter,
         padding: sizes.goldenRatioGap
       },
-      h4Title: {
-        ...fonts.h4,
+      normalTitle: {
+        ...fonts.base,
         color: colors.textSecondary
       },
       smallTitle: {

@@ -1,3 +1,9 @@
+/**
+ * Comment item component
+ * @file 评论列表子组件
+ * @module app/components/comment/item
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { PureComponent } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
@@ -17,19 +23,18 @@ import mixins from '@app/style/mixins'
 
 export interface ICommentListItemProps {
   comment: IComment
-  isLiked: boolean
-  darkTheme: boolean
-  language: TLanguage
+  liked: boolean
   onLike(comment: IComment): void
   onReply(comment: IComment): void
   onPressAuthor(author: IAuthor): void
+  darkTheme: boolean
+  language: TLanguage
 }
 
 export class CommentItem extends PureComponent<ICommentListItemProps> {
-  
   render() {
     const { props } = this
-    const { comment, isLiked } = props
+    const { comment, liked } = props
     const { styles } = obStyles
 
     return (
@@ -42,8 +47,15 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
         </TouchableView>
         <View style={styles.content}>
           <View style={styles.header}>
-            <TouchableView onPress={() => this.props.onPressAuthor(comment.author)}>
-              <Text style={styles.userName} numberOfLines={1}>{comment.author.name}</Text>
+            <TouchableView
+              onPress={() => this.props.onPressAuthor(comment.author)}
+            >
+              <Text
+                style={styles.userName}
+                numberOfLines={1}
+              >
+                {comment.author.name}
+              </Text>
             </TouchableView>
             <Text style={styles.storey} numberOfLines={1}>#{comment.id}</Text>
           </View>
@@ -57,27 +69,41 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
             <View style={styles.footerInfo}>
               {comment.ip_location && (
                 <>
-                  <Text style={styles.footerInfoItem} numberOfLines={1}>{comment.ip_location.city}</Text>
+                  <Text
+                    style={styles.footerInfoItem}
+                    numberOfLines={1}
+                  >
+                    {comment.ip_location.city}
+                  </Text>
                   <Text style={styles.footerInfoItem}>  ∙  </Text>
                 </>
               )}
-              <Text style={styles.footerInfoItem} numberOfLines={1}>{dateToYMD(comment.create_at)}</Text>
+              <Text
+                style={styles.footerInfoItem}
+                numberOfLines={1}
+              >
+                {dateToYMD(comment.create_at)}
+              </Text>
             </View>
             <View style={styles.footerActions}>
               <TouchableView
                 style={styles.footerActionItem}
                 onPress={() => this.props.onReply(comment)}
               >
-                <Ionicon name="ios-chatbubbles" size={16} color={colors.textDefault} />
+                <Ionicon
+                  name="ios-chatbubbles"
+                  color={colors.textDefault}
+                  size={15}
+                />
               </TouchableView>
               <TouchableView
                 style={styles.footerActionItem}
-                onPress={() => this.props.onLike(comment)}
+                onPress={() => !liked && this.props.onLike(comment)}
               >
                 <Ionicon
                   name="ios-thumbs-up"
-                  size={16}
-                  color={isLiked ? colors.red : colors.textDefault}
+                  size={15}
+                  color={liked ? colors.red : colors.textDefault}
                 />
                 <Text style={{ marginLeft: 5 }}>{comment.likes}</Text>
               </TouchableView>
@@ -94,9 +120,9 @@ const obStyles = observable({
     return StyleSheet.create({
       container: {
         flexDirection: 'row',
+        padding: sizes.goldenRatioGap,
         borderColor: colors.border,
-        borderBottomWidth: sizes.borderWidth,
-        padding: sizes.goldenRatioGap
+        borderBottomWidth: sizes.borderWidth
       },
       gravatar: {
         width: 36,

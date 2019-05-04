@@ -1,5 +1,5 @@
 /**
- * Toast service.
+ * Toast service
  * @file 吐司服务
  * @module app/services/toast
  * @author Surmon <https://github.com/surmon-china>

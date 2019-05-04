@@ -1,5 +1,5 @@
 /**
- * Style mixins.
+ * Style mixins
  * @file Mixins 预置样式
  * @module app/mixins
  * @author Surmon <https://github.com/surmon-china>

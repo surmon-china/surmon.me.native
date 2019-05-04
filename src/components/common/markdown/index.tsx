@@ -4,19 +4,22 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import React, { Component } from 'react'
 import marked from 'marked'
 import Hljs from 'highlight.js'
-import { observer } from 'mobx-react/native'
+import React, { Component } from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
-import { observable, computed, action, reaction } from 'mobx'
+import { observable, computed, action } from 'mobx'
+import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
+import { IS_IOS, webUrl } from '@app/config'
+import { EHomeRoutes } from '@app/routes'
+import { INavigationProps } from '@app/types/props'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ImageViewerModal } from '@app/components/common/image-viewer'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
-import { INavigationProps } from '@app/types/props'
-import { EHomeRoutes } from '@app/routes'
-import { IS_IOS } from '@app/config'
+import i18n from '@app/services/i18n'
 import * as markdownStyles from './styles'
+
 const AutoHeightWebView = require('react-native-autoheight-webview').default
 
 Hljs.registerLanguage('go', require('highlight.js/lib/languages/go'))
@@ -40,7 +43,7 @@ enum WebViewEventAction {
   Url = 'url'
 }
 
-interface IMarkdownProps extends INavigationProps {
+export interface IMarkdownProps extends INavigationProps {
   markdown: string | null // 内容
   padding?: number // 边距
   sanitize?: boolean // 是否清洗 HTML
@@ -48,52 +51,54 @@ interface IMarkdownProps extends INavigationProps {
   style?: ViewStyle // 内容区样式
 }
 
-@observer export class Markdown extends Component<IMarkdownProps> {
-
-  private images: string[] = []
-  private renderer: marked.Renderer = new marked.Renderer()
+@observer
+export class Markdown extends Component<IMarkdownProps> {
 
   constructor(props: IMarkdownProps) {
     super(props)
     this.initMarked()
     this.initRenderer()
-    // reaction(
-    //   () => [this.htmlContent, this.htmlStyle],
-    //   ([htmlContent, htmlStyle]) => console.log('htmlContent', htmlContent, 'htmlStyle', htmlStyle),
-    //   { fireImmediately: true }
-    // )
   }
+
+  private images: string[] = []
+  private renderer: marked.Renderer = new marked.Renderer()
 
   @observable private htmlReadied: boolean = false
   @observable private imageModalVisible: boolean = false
   @observable private imageModalIndex: number = 0
 
-  @action.bound updateHtmlReadied(readied: boolean) {
+  @action
+  private updateHtmlReadied(readied: boolean) {
     this.htmlReadied = readied
   }
 
-  @action.bound updateImageModalIndex(index: number) {
+  @action
+  private updateImageModalIndex(index: number) {
     this.imageModalIndex = index
   }
 
-  @action.bound updateImageModalVisible(visible: boolean) {
+  @action
+  private updateImageModalVisible(visible: boolean) {
     this.imageModalVisible = visible
   }
 
-  @computed get isIndicatorEnabled(): boolean {
+  @computed
+  private get isIndicatorEnabled(): boolean {
     const { indicator } = this.props
     return indicator == null ? true : indicator
   }
 
-  @computed get htmlContent(): string {
+  @computed
+  private get htmlContent(): string {
     const { renderer, props } = this
     const { markdown } = props
     return markdown
-      ? `<div id="content">${marked(markdown, { renderer })}</div>`
+      ? `<div id="content">${marked(markdown, {renderer})}</div>`
       : ''
   }
 
-  @computed get htmlStyle(): string {
+  @computed
+  private get htmlStyle(): string {
     const { padding } = this.props
     return markdownStyles.ocean +
       markdownStyles.content.styles +
@@ -113,7 +118,7 @@ interface IMarkdownProps extends INavigationProps {
       // 打开链接
       if (eventData.action === WebViewEventAction.Url) {
         const url: string = eventData.data
-        const articleUrlPrefix = 'https://surmon.me/article/'
+        const articleUrlPrefix = `${webUrl}/article/`
         const isArticleUrl = url.startsWith(articleUrlPrefix)
         if (isArticleUrl) {
           const articleId = url.replace(articleUrlPrefix, '')
@@ -208,11 +213,18 @@ interface IMarkdownProps extends INavigationProps {
       <View style={{ flex: 1 }}>
         {!this.htmlReadied && this.isIndicatorEnabled && (
           <View style={[{ flex: 1, zIndex: 1 }, StyleSheet.absoluteFill]}>
-            <AutoActivityIndicator style={{ flex: 1 }} text="渲染中..." />
+            <AutoActivityIndicator
+              style={{ flex: 1 }}
+              text={i18n.t(LANGUAGE_KEYS.RENDERING)}
+            />
           </View>
         )}
         <AutoHeightWebView
-          style={{ flex: 1, ...this.props.style, opacity: this.htmlReadied ? 1 : 0 }}
+          style={{
+            flex: 1,
+            ...this.props.style,
+            opacity: this.htmlReadied ? 1 : 0
+          }}
           customScript={this.htmlScript}
           customStyle={this.htmlStyle}
           useWebKit={IS_IOS}

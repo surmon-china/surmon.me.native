@@ -1,5 +1,5 @@
 /**
- * App util filters.
+ * App util filters
  * @file 过滤器扩展
  * @module app/utils/filters
  * @author Surmon <https://github.com/surmon-china>

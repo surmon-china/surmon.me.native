@@ -1,5 +1,5 @@
 /**
- * App article item component.
+ * App article item component
  * @file 文章列表子组件
  * @module app/components/archive/item
  * @author Surmon <https://github.com/surmon-china>
@@ -24,9 +24,9 @@ import fonts from '@app/style/fonts'
 export interface IArtileListItemProps {
   article: IArticle
   liked: boolean
+  onPress(article: IArticle): void
   darkTheme: boolean
   language: TLanguage
-  onPress(article: IArticle): void
 }
 
 export class ArticleListItem extends PureComponent<IArtileListItemProps> {
@@ -42,14 +42,13 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
   }
 
   // 文章来源样式
-  private getOriginStyle(origin: EOriginState): TextStyle {
+  private getOriginBackgroundStyle(origin: EOriginState): TextStyle {
     const bgColors = {
       [EOriginState.Hybrid]: colors.primary, 
       [EOriginState.Original]: colors.accent,
       [EOriginState.Reprint]: colors.red
     }
     return {
-      ...obStyles.styles.origin,
       backgroundColor: bgColors[origin]
     }
   }
@@ -73,7 +72,10 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
           style={styles.thumb}
         />
         <Text
-          style={this.getOriginStyle(article.origin)}
+          style={[
+            styles.origin,
+            this.getOriginBackgroundStyle(article.origin)
+          ]}
           numberOfLines={1}
         >
           {this.originTexts[article.origin]}
@@ -131,8 +133,9 @@ const obStyles = observable({
         height: 28,
         lineHeight: 26,
         paddingHorizontal: 8,
-        opacity: 0.5,
-        textTransform: 'capitalize',
+        opacity: 0.6,
+        color: colors.textTitle,
+        textTransform: 'capitalize'
       },
       title: {
         ...fonts.h4,

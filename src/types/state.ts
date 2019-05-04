@@ -1,5 +1,5 @@
 /**
- * Common bussniss state types.
+ * Common bussniss state types
  * @file 通用业务数据状态模型
  * @module types/state
  * @author Surmon <https://github.com/surmon-china>

@@ -1,15 +1,21 @@
+/**
+ * Modal
+ * @file 弹窗控件
+ * @module app/components/common/modal
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { Component, ReactNode } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Modal, View, Animated, SafeAreaView, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 import { observable, computed, action, reaction } from 'mobx'
 import { observer } from 'mobx-react/native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Text } from './text'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 
-interface IModalProps {
+export interface IModalProps {
   visible: boolean
   onClose(): void
   title?: string
@@ -19,7 +25,8 @@ interface IModalProps {
   children?: any
 }
 
-@observer export class BetterModal extends Component<IModalProps> {
+@observer
+export class BetterModal extends Component<IModalProps> {
 
   constructor(props: IModalProps) {
     super(props)
@@ -31,25 +38,27 @@ interface IModalProps {
     )
   }
 
-  @observable modalVisible: boolean = false
-  @observable.ref maskOpacity = new Animated.Value(0)
+  @observable private modalVisible: boolean = false
+  @observable.ref private maskOpacity = new Animated.Value(0)
 
-  @action updateVisible(visible: boolean) {
+  @action
+  private updateVisible(visible: boolean) {
     this.modalVisible = visible
   }
 
-  @computed get propOpacity(): number {
+  @computed
+  private get propOpacity(): number {
     return this.props.opacity || 0.5
   }
 
-  updateMaskVisible(visible: boolean, callback?: () => void) {
+  private updateMaskVisible(visible: boolean, callback?: () => void) {
     Animated.timing(this.maskOpacity, {
       toValue: visible ? this.propOpacity : 0,
       duration: 88
     }).start(callback)
   }
 
-  handleVisibleChange(visible: boolean) {
+  private handleVisibleChange(visible: boolean) {
     if (visible) {
       this.updateVisible(true)
     } else {
@@ -77,7 +86,11 @@ interface IModalProps {
           <View style={[styles.full, styles.container, { marginTop: topHeaderHeight }]}>
             <View style={styles.header}>
               <TouchableWithoutFeedback onPress={props.onClose}>
-                <Ionicon name="ios-close" {...getHeaderButtonStyle()} />
+                <Ionicon
+                  name="ios-close"
+                  color={colors.textLink}
+                  {...getHeaderButtonStyle()}
+                />
               </TouchableWithoutFeedback>
               <Text style={styles.title}>{props.title}</Text>
               {props.extra && (
@@ -112,10 +125,10 @@ const obStyles = observable({
       header: {
         ...mixins.rowCenter,
         justifyContent: 'space-between',
-        paddingHorizontal: 2,
         height: sizes.gap * 2,
+        paddingHorizontal: 2,
         borderColor: colors.border,
-        borderBottomWidth: sizes.borderWidth,
+        borderBottomWidth: sizes.borderWidth
       },
       title: {},
       extra: {}

@@ -1,3 +1,9 @@
+/**
+ * Storage constant
+ * @file 通用存储键
+ * @module app/constants/storage
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 export const enum STORAGE {
   ARTICLE_LIKES ='aricleLikes',

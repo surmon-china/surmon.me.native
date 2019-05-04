@@ -1,5 +1,5 @@
 /**
- * App main.
+ * App main
  * @file App 骨架
  * @module app/main
  * @author Surmon <https://github.com/surmon-china>
@@ -15,10 +15,8 @@ import {
   NavigationScreenConfig,
   NavigationScreenOptions
 } from 'react-navigation'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import Foundation from 'react-native-vector-icons/Foundation'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import { headerStyles } from '@app/components/layouts/header'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { headerStyles } from '@app/components/layout/header'
 import { Home } from '@app/pages/home'
 import { ArticleSearch } from '@app/pages/home/search'
 import { ArticleDetail } from '@app/pages/home/detail'
@@ -26,7 +24,7 @@ import { About } from '@app/pages/about'
 import { Github } from '@app/pages/about/github'
 import { Setting } from '@app/pages/about/setting'
 import { Guestbook } from '@app/pages/guestbook'
-import { WebviewPage } from '@app/pages/common/webview'
+import { WebViewPage } from '@app/pages/common/webview'
 import { EHomeRoutes, EGuestbookRoutes, EAboutRoutes } from '@app/routes'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n from '@app/services/i18n'
@@ -75,14 +73,14 @@ function getTabIconStyles(options: TabBarIconProps, extendStyle?: ViewStyle) {
     opacity: focused ? 1 : 0.8,
     ...extendStyle
   }
-  return { size: 19, style, color }
+  return { style, color }
 }
 
 export const HomeStack = createStackNavigator({
   [EHomeRoutes.Home]: getNavigationRouteConfig(Home, LANGUAGE_KEYS.HOME, getCommonHeaderStyles),
   [EHomeRoutes.ArticleSearch]: ArticleSearch,
   [EHomeRoutes.ArticleDetail]: ArticleDetail,
-  [EHomeRoutes.ArticleWebview]: WebviewPage
+  [EHomeRoutes.ArticleWebview]: WebViewPage
 }, {
   navigationOptions({ navigation }) {
     return {
@@ -90,8 +88,9 @@ export const HomeStack = createStackNavigator({
       tabBarVisible: navigation.state.index === 0,
       tabBarLabel: i18n.t(LANGUAGE_KEYS.HOME),
       tabBarIcon: options => (
-        <MaterialIcons
-          name="chrome-reader-mode"
+        <Ionicon
+          name="ios-quote"
+          size={23}
           {...getTabIconStyles(options)}
         />
       )
@@ -106,10 +105,10 @@ export const GuestbookStack = createStackNavigator({
   navigationOptions: () => ({
     tabBarLabel: i18n.t(LANGUAGE_KEYS.GUESTBOOK),
     tabBarIcon: options => (
-      <Foundation
-        name="comment-minus"
-        size={21}
-        {...getTabIconStyles(options, { marginBottom: -4 })}
+      <Ionicon
+        name="ios-chatboxes"
+          size={19}
+          {...getTabIconStyles(options, { marginBottom: 0 })}
       />
     )
   })
@@ -124,9 +123,10 @@ export const AboutStack = createStackNavigator({
   navigationOptions: () => ({
     tabBarLabel: i18n.t(LANGUAGE_KEYS.ABOUT),
     tabBarIcon: options => (
-      <FontAwesome
-        name="heartbeat"
-        {...getTabIconStyles(options, { marginBottom: -2 })}
+      <Ionicon
+        name="ios-paw"
+          size={21}
+          {...getTabIconStyles(options, { marginBottom: 0 })}
       />
     )
   })

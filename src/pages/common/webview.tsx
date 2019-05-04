@@ -1,25 +1,35 @@
+/**
+ * WebView
+ * @file 公共 WebView 页
+ * @module pages/common/webview
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { Component } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import { observer } from 'mobx-react/native'
-import { observable, action, computed } from 'mobx'
+import { Clipboard, Linking, StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview'
-import { TouchableOpacity, Clipboard, Linking, StyleSheet, View } from 'react-native'
+import { observable, action, computed } from 'mobx'
+import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { TouchableView } from '@app/components/common/touchable-view'
 import { IPageProps, INavigationProps } from '@app/types/props'
-import { getHeaderButtonStyle } from '@app/style/mixins'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
+import { getHeaderButtonStyle } from '@app/style/mixins'
+
 const ActionSheet = require('react-native-actionsheet').default
 
-class WebviewPageStore {
+class WebviewStore {
 
   @observable url: string = ''
   @observable title: string | null = null
   @observable isLoading: boolean = false
 
-  public webViewRef: React.Ref<WebView> = React.createRef()
-  public actionSheetRef: React.MutableRefObject<any> = React.createRef()
+  public webViewElement: React.Ref<WebView> = React.createRef()
+  public actionSheetElement: React.MutableRefObject<any> = React.createRef()
 
   @action.bound updateUrl(url: string) {
     this.url = url
@@ -34,61 +44,60 @@ class WebviewPageStore {
   }
 }
 
-export const webViewPageStore = new WebviewPageStore()
+export const webViewStore = new WebviewStore()
+export interface IWebViewProps extends IPageProps {}
+@observer
+export class WebViewPage extends Component<IWebViewProps> {
 
-interface IProps extends IPageProps {}
-@observer export class WebviewPage extends Component<IProps> {
+  constructor(props: IWebViewProps) {
+    super(props)
+    this.initUrl()
+  }
 
   static navigationOptions = ({ navigation }: INavigationProps) => {
     const { params } = navigation.state
     const title = (params && params.title) || '...'
     const buttonStyle = getHeaderButtonStyle()
+
     return {
       title,
       headerLeft: (
-        <TouchableOpacity
-          activeOpacity={sizes.touchOpacity}
-          onPress={() => navigation.goBack()}
-        >
+        <TouchableView onPress={() => navigation.goBack()}>
           <Ionicon name="ios-arrow-back" {...buttonStyle} />
-        </TouchableOpacity>
+        </TouchableView>
       ),
       headerRight: (
-        <TouchableOpacity
-          activeOpacity={sizes.touchOpacity}
+        <TouchableView
           onPress={() => {
-            const { actionSheetRef } = webViewPageStore
+            const { actionSheetElement: actionSheetRef } = webViewStore
             const actionSheet = actionSheetRef.current
             actionSheet && actionSheet.show()
           }}
         >
           <Ionicon name="ios-more" {...buttonStyle} />
-        </TouchableOpacity>
+        </TouchableView>
       )
     }
   }
 
-  constructor(props: IProps) {
-    super(props)
-    this.initUrl()
-  }
-
-  @computed private get actionSheetMenus() {
+  @computed
+  private get actionSheetMenus() {
     return [
       {
-        title: '浏览器打开',
+        title: i18n.t(LANGUAGE_KEYS.OPEN_BY_BROWER),
         handle: () => Linking
-          .openURL(webViewPageStore.url)
+          .openURL(webViewStore.url)
           .catch((error: any) => console.warn('Open url failed:', error))
       },
       {
-        title: '复制链接',
-        handle: () => Clipboard.setString(webViewPageStore.url)
+        title: i18n.t(LANGUAGE_KEYS.COPY_URL),
+        handle: () => Clipboard.setString(webViewStore.url)
       }
     ]
   }
 
-  @computed private get actionSheetMenuNames() {
+  @computed
+  private get actionSheetMenuNames() {
     return this.actionSheetMenus.map(menu => menu.title)
   }
 
@@ -98,26 +107,28 @@ interface IProps extends IPageProps {}
   }
 
   private updateTitle(title: string) {
-    webViewPageStore.updateTitle(title)
+    webViewStore.updateTitle(title)
     this.props.navigation.setParams({ title })
   }
 
   private updateUrl(url: string) {
-    webViewPageStore.updateUrl(url)
+    webViewStore.updateUrl(url)
   }
 
-  @boundMethod private handleWebViewStateChange(state: any) {
+  @boundMethod
+  private handleWebViewStateChange(state: any) {
     this.updateUrl(state.url)
     this.updateTitle(state.title)
   }
 
-  @boundMethod private handleActionSheetPress(index: number) {
+  @boundMethod
+  private handleActionSheetPress(index: number) {
     const menu = this.actionSheetMenus[index]
     menu && menu.handle && menu.handle()
   }
 
   render() {
-    const store = webViewPageStore
+    const store = webViewStore
     const { styles } = obStyles
 
     if (!store.url) {
@@ -127,7 +138,7 @@ interface IProps extends IPageProps {}
     return (
       <View style={styles.container}>
         <WebView
-          ref={store.webViewRef}
+          ref={store.webViewElement}
           style={styles.webview} 
           source={{ uri: store.url }}
           onLoad={() => store.updateLoadingState(true)}
@@ -138,9 +149,9 @@ interface IProps extends IPageProps {}
           javaScriptEnabled={true}
         />
         <ActionSheet
-          ref={store.actionSheetRef}
-          title={'打开方式'}
-          options={[...this.actionSheetMenuNames, '取消']}
+          ref={store.actionSheetElement}
+          title={i18n.t(LANGUAGE_KEYS.URL_OPEN_TYPE)}
+          options={[...this.actionSheetMenuNames, i18n.t(LANGUAGE_KEYS.CANCEL)]}
           cancelButtonIndex={this.actionSheetMenuNames.length}
           onPress={this.handleActionSheetPress}
         />

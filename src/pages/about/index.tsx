@@ -1,20 +1,29 @@
+/**
+ * About
+ * @file 关于我页面
+ * @module pages/about
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React, { Component } from 'react'
+import { ImageSourcePropType, ImageBackground, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
+import { observable, computed, action } from 'mobx'
+import { observer } from 'mobx-react/native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { observer } from 'mobx-react/native'
-import { observable, computed, action } from 'mobx'
-import { ImageSourcePropType, ImageBackground, TouchableOpacity, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
+import { webUrl } from '@app/config'
+import { EAboutRoutes } from '@app/routes'
+import { IPageProps } from '@app/types/props'
+import { THttpSuccessResponse } from '@app/types/http'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import { TouchableView } from '@app/components/common/touchable-view'
 import { Remind } from '@app/components/common/remind'
 import { Text } from '@app/components/common/text'
-import { IPageProps } from '@app/types/props'
-import { EAboutRoutes } from '@app/routes'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
 import fonts from '@app/style/fonts'
 import sizes from '@app/style/sizes'
 import fetch from '@app/services/fetch'
-import { LANGUAGE_KEYS } from '@app/constants/language'
 
 enum ESection {
   Follow = 'follow',
@@ -37,44 +46,40 @@ interface ITodayStatistic {
   comments: TStatisticValue
 }
 
-interface IProps extends IPageProps {}
+export interface IAboutProps extends IPageProps {}
 
-@observer export class About extends Component<IProps> {
+@observer
+export class About extends Component<IAboutProps> {
 
-  constructor(props: IProps) {
+  constructor(props: IAboutProps) {
     super(props)
     this.fetchUserInfo()
     this.fetchStatistic()
   }
   
-  @observable.ref private userInfo: IUserInfo = {
+  @observable.ref
+  private userInfo: IUserInfo = {
     gravatar: require('@app/assets/images/gravatar.png'),
     name: '-',
     slogan: '-'
   }
   
-  @observable.ref private statistic: ITodayStatistic = {
+  @observable.ref
+  private statistic: ITodayStatistic = {
     tags: '-',
     views: '-',
     articles: '-',
     comments: '-'
   }
 
-  @action.bound private updateUserInfo(userInfo: IUserInfo) {
-    this.userInfo = userInfo
-  }
-
-  @action.bound private updateStatistic(statistic: ITodayStatistic) {
-    this.statistic = statistic
-  }
-
   private fetchUserInfo() {
     fetch.get<IUserInfo>('/auth/admin')
-      .then(userInfo => {
-        this.updateUserInfo(Object.assign(userInfo.result, {
-          gravatar: { uri: userInfo.result.gravatar }
-        }))
-      })
+      .then(action((userInfo: THttpSuccessResponse<IUserInfo>) => {
+        this.userInfo = {
+          ...userInfo.result,
+          gravatar: { uri: userInfo.result.gravatar as string }
+        }
+      }))
       .catch(error => {
         console.warn('Get user info data failed:', error)
       })
@@ -82,9 +87,9 @@ interface IProps extends IPageProps {}
 
   private fetchStatistic() {
     fetch.get<ITodayStatistic>('/expansion/statistic')
-      .then(statistic => {
-        this.updateStatistic(statistic.result)
-      })
+      .then(action((statistic: THttpSuccessResponse<ITodayStatistic>) => {
+        this.statistic = statistic.result
+      }))
       .catch(error => {
         console.warn('Get statistic data failed:', error)
       })
@@ -99,7 +104,8 @@ interface IProps extends IPageProps {}
       })
   }
 
-  @computed get socials() {
+  @computed
+  private get socials() {
     return [
       {
         name: 'Stack Overflow',
@@ -156,7 +162,8 @@ interface IProps extends IPageProps {}
     ]
   }
 
-  @computed get follows() {
+  @computed
+  private get follows() {
     return [
       {
         name: i18n.t(LANGUAGE_KEYS.GITHUB),
@@ -170,7 +177,7 @@ interface IProps extends IPageProps {}
         name: i18n.t(LANGUAGE_KEYS.VLOG),
         key: 'vlog',
         icon: 'ios-film',
-        onPress: () => this.openUrl('https://surmon.me/vlog')
+        onPress: () => this.openUrl(`${webUrl}/vlog`)
       },
       {
         name: i18n.t(LANGUAGE_KEYS.EMAIL_ME),
@@ -183,7 +190,8 @@ interface IProps extends IPageProps {}
     ]
   }
 
-  @computed get settings() {
+  @computed
+  private get settings() {
     return [
       {
         name: i18n.t(LANGUAGE_KEYS.SETTING),
@@ -196,7 +204,8 @@ interface IProps extends IPageProps {}
     ]
   }
 
-  @computed get sections() {
+  @computed
+  private get sections() {
     return [
       { key: ESection.Follow, data: this.follows },
       { key: ESection.Social, data: this.socials },
@@ -209,8 +218,8 @@ interface IProps extends IPageProps {}
     return (
       <View style={styles.container}>
         <ImageBackground
-          source={this.userInfo.gravatar}
           style={styles.user}
+          source={this.userInfo.gravatar}
           blurRadius={90}
         >
           <Image
@@ -246,13 +255,12 @@ interface IProps extends IPageProps {}
         <View style={styles.section}>
           <SectionList
             sections={this.sections}
-            ListHeaderComponent={() => <View style={styles.listHeaderAndFooter}></View>}
-            ListFooterComponent={() => <View style={styles.listHeaderAndFooter}></View>}
-            SectionSeparatorComponent={() => <View style={styles.sectionSeparator}></View>}
-            ItemSeparatorComponent={() => <View style={styles.lineItemSeparator}></View>}
+            ListHeaderComponent={<View style={styles.listHeaderAndFooter} />}
+            ListFooterComponent={<View style={styles.listHeaderAndFooter} />}
+            SectionSeparatorComponent={() => <View style={styles.sectionSeparator} />}
+            ItemSeparatorComponent={() => <View style={styles.lineItemSeparator} />}
             renderItem={({ item, index, section }) => (
-              <TouchableOpacity
-                activeOpacity={sizes.touchOpacity}
+              <TouchableView
                 style={[
                   styles.line,
                   index === 0 ? styles.firstLineSeparator : null,
@@ -276,8 +284,11 @@ interface IProps extends IPageProps {}
                     <Remind style={[styles.lineTitle, styles.lineRemindIcon]} />
                   )}
                 </View>
-                <Ionicon style={[styles.lineDetailIcon, styles.lineTitle]} name="ios-arrow-forward" />
-              </TouchableOpacity>
+                <Ionicon
+                  name="ios-arrow-forward"
+                  style={[styles.lineDetailIcon, styles.lineTitle]}
+                />
+              </TouchableView>
             )}
           />
         </View>
@@ -294,14 +305,14 @@ const obStyles = observable({
         backgroundColor: colors.background
       },
       user: {
-        paddingVertical: sizes.gap / 2,
-        paddingHorizontal: sizes.gap,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-start',
+        paddingVertical: sizes.gap / 2,
+        paddingHorizontal: sizes.gap,
         backgroundColor: colors.cardBackground,
         borderBottomColor: colors.border,
-        borderBottomWidth: sizes.borderWidth,
+        borderBottomWidth: sizes.borderWidth
       },
       userGravatar: {
         width: 70,
@@ -324,20 +335,20 @@ const obStyles = observable({
         marginBottom: sizes.gap
       },
       statistic: {
-        height: sizes.gap * 3,
         flexDirection: 'row',
         justifyContent: 'space-evenly',
+        height: sizes.gap * 3,
         borderBottomWidth: sizes.borderWidth,
         borderBottomColor: colors.border,
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.cardBackground
       },
       statisticItem: {
         alignItems: 'center',
         justifyContent: 'center',
-        textAlign: 'center',
+        textAlign: 'center'
       },
       statisticCount: {
-        ...fonts.h3,
+        ...fonts.h3
       },
       statisticTitle: {
         ...fonts.small
@@ -351,35 +362,35 @@ const obStyles = observable({
       section: {
         flex: 1,
         flexDirection: 'row',
-        alignItems: 'flex-start',
         justifyContent: 'center',
+        alignItems: 'flex-start'
       },
       listHeaderAndFooter: {
-        height: sizes.gap / 2,
+        height: sizes.gap / 2
       },
       sectionSeparator: {
         height: sizes.gap / 4
       },
       line: {
-        height: sizes.gap * 2,
         flexDirection: 'row',
         justifyContent: 'space-between',
+        height: sizes.gap * 2,
         paddingHorizontal: sizes.gap * 0.8,
-        backgroundColor: colors.cardBackground,
+        backgroundColor: colors.cardBackground
       },
       firstLineSeparator: {
         borderTopWidth: sizes.borderWidth,
-        borderTopColor: colors.border,
+        borderTopColor: colors.border
       },
       lastLineSeparator: {
         borderBottomWidth: sizes.borderWidth,
-        borderBottomColor: colors.border,
+        borderBottomColor: colors.border
       },
       lineContent: {
-        flexDirection: 'row',
+        flexDirection: 'row'
       },
       lineTitle: {
-        lineHeight: sizes.gap * 2,
+        lineHeight: sizes.gap * 2
       },
       lineIcon: {
         ...fonts.h3,
@@ -396,7 +407,7 @@ const obStyles = observable({
       },
       lineItemSeparator: {
         height: sizes.borderWidth,
-        backgroundColor: colors.border,
+        backgroundColor: colors.border
       }
     })
   }

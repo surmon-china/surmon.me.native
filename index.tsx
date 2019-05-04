@@ -11,6 +11,7 @@ import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import { Observer } from 'mobx-react'
 import { optionStore } from '@app/stores/option'
 import { indexStore } from '@app/pages/home/index'
+import { guestbookStore } from '@app/pages/guestbook/index'
 import { EHomeRoutes, EGuestbookRoutes } from '@app/routes'
 import { navigatorStacks, navigatorBaseOptions } from '@app/index'
 import { navigationPersistenceKey } from '@app/config'
@@ -26,9 +27,10 @@ class AppTabBar extends Component<any> {
       <BottomTabBar
         {...this.props}
         activeTintColor={colors.primary}
-        activeBackgroundColor={colors.cardBackground}
         inactiveTintColor={colors.textTitle}
+        activeBackgroundColor={colors.cardBackground}
         inactiveBackgroundColor={colors.cardBackground}
+        style={{ backgroundColor: colors.cardBackground }}
         allowFontScaling={true}
         showIcon={true}
         showLabel={true}
@@ -58,7 +60,7 @@ const AppTabNavigator = createBottomTabNavigator(
           return indexStore.scrollToArticleListTop()
         }
         if (isFocused && routeName === EGuestbookRoutes.Guestbook) {
-          // return guestbookStore.scrollToCommentListTop()
+          return guestbookStore.scrollToCommentListTop()
         }
         // 否则执行默认处理
         options.defaultHandler()

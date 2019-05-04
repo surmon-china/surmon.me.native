@@ -1,5 +1,5 @@
 /**
- * Common Prop types.
+ * Common Prop types
  * @file 公共 Prop 模型
  * @module types/props
  * @author Surmon <https://github.com/surmon-china>

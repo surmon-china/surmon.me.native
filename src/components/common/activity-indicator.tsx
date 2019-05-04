@@ -1,14 +1,20 @@
+/**
+ * AutoActivityIndicator
+ * @file 加载指示器控件
+ * @module app/components/common/activity-indicator
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
 import React from 'react'
-import { observer } from 'mobx-react/native'
 import { ActivityIndicator, View, ViewStyle, TextStyle } from 'react-native'
+import { observer } from 'mobx-react/native'
 import { Text } from './text'
 import { IS_IOS } from '@app/config'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
 import mixins from '@app/style/mixins'
 
-interface IAutoActivityIndicatorProps {
+export interface IAutoActivityIndicatorProps {
   size?: number | 'small' | 'large'
   style?: ViewStyle
   text?: string
@@ -30,10 +36,14 @@ export const AutoActivityIndicator = observer((props: IAutoActivityIndicatorProp
     return (
       <View style={[{ ...mixins.colCenter }, props.style]}>
         {getIndicator(null)}
-        <Text style={[
-          { marginTop: 5, ...fonts.small, color: colors.textSecondary },
-          props.textStyle
-        ]}>{props.text}</Text>
+        <Text
+          style={[
+            { marginTop: 5, ...fonts.small, color: colors.textSecondary },
+            props.textStyle
+          ]}
+        >
+          {props.text}
+        </Text>
       </View>
     )
   }

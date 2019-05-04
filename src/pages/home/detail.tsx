@@ -1,25 +1,34 @@
+/**
+ * Article detail
+ * @file 文章详情
+ * @module pages/article-detail
+ * @author Surmon <https://github.com/surmon-china>
+ */
 
-import React, { Component } from 'react'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import { observer } from 'mobx-react/native'
+import React, { Component, RefObject } from 'react'
+import { Animated, ImageBackground, ScrollView, Share, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { observable, action, computed, reaction } from 'mobx'
+import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
-import { Animated, ImageBackground, Alert, ScrollView, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import Ionicon from 'react-native-vector-icons/Ionicons'
+import { webUrl } from '@app/config'
+import { EHomeRoutes } from '@app/routes'
+import { IPageProps } from '@app/types/props'
+import { IArticle } from '@app/types/business'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { likeStore } from '@app/stores/like'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Markdown } from '@app/components/common/markdown'
-import { Text } from '@app/components/common/text'
+import { BetterModal } from '@app/components/common/modal'
 import { DoubleClick } from '@app/components/common/double-click'
+import { Text } from '@app/components/common/text'
+import { Comment } from '@app/components/comment'
 import { dateToYMD } from '@app/utils/filters'
-import { IArticle } from '@app/types/business'
-import { IPageProps } from '@app/types/props'
-import { LANGUAGE_KEYS } from '@app/constants/language'
-import { EHomeRoutes } from '@app/routes'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
+import sizes, { safeAreaViewBottom } from '@app/style/sizes'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
-import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
 import fetch from '@app/services/fetch'
 
@@ -27,18 +36,19 @@ const headerHeight = sizes.gap * 3
 const headerHeightCollapsed = sizes.gap * 2.5
 const headerDescriptionHeight = 20
 const thumbHeight = sizes.screen.width / sizes.thumbHeightRatio
+const footerHeight = headerHeightCollapsed
 
-interface IProps extends IPageProps {}
+export interface IArticleDetailProps extends IPageProps {}
 
-@observer export class ArticleDetail extends Component<IProps> {
+@observer
+export class ArticleDetail extends Component<IArticleDetailProps> {
 
-  constructor(props: IProps) {
+  constructor(props: IArticleDetailProps) {
     super(props)
     this.fetchArticleDatail()
-    likeStore.likeArticle(this.getArticleId())
     reaction(
       () => this.isHeaderCollapsed,
-      collapse => this.startHeaderAnimate(collapse),
+      collapse => this.runHeaderAnimate(collapse),
       { fireImmediately: true }
     )
   }
@@ -49,20 +59,43 @@ interface IProps extends IPageProps {}
     header: null
   })
 
-  private articleDetailRef: any = null
-  
-  @boundMethod updateArticleDetailRef(ref: any) {
-    this.articleDetailRef = ref
-  }
+  private scrollContentElement: RefObject<ScrollView> = React.createRef()
 
   @observable isLoading: boolean = false
   @observable article: IArticle | null = null
-  @observable isHeaderCollapsed: boolean = false
-  @observable headerHeight = new Animated.Value(headerHeight)
-  @observable headerDescriptionOpacity = new Animated.Value(1)
-  @observable headerDescriptionHeight = new Animated.Value(headerDescriptionHeight)
 
-  private startHeaderAnimate(collapse: boolean) {
+  @observable isHeaderCollapsed: boolean = false
+  @observable commentModalVisible: boolean = false
+
+  @observable headerHeight: Animated.Value = new Animated.Value(headerHeight)
+  @observable headerDescriptionOpacity: Animated.Value = new Animated.Value(1)
+  @observable headerDescriptionHeight: Animated.Value = new Animated.Value(headerDescriptionHeight)
+
+  @boundMethod
+  private getParamArticle(): IArticle {
+    const { params } = this.props.navigation.state
+    return params && params.article
+  }
+
+  @boundMethod
+  private getArticleId(): number {
+    const { params } = this.props.navigation.state
+    const articleId = params && params.articleId
+    const article = this.getParamArticle()
+    return article ? article.id : articleId
+  }
+
+  @computed
+  private get articleContent(): string | null {
+    return this.article && this.article.content
+  }
+
+  @computed
+  private get isLikedArticle(): boolean {
+    return likeStore.articles.includes(this.getArticleId())
+  }
+
+  private runHeaderAnimate(collapse: boolean) {
     Animated.parallel([
       Animated.timing(this.headerHeight, {
         toValue: collapse ? headerHeightCollapsed : headerHeight,
@@ -79,24 +112,23 @@ interface IProps extends IPageProps {}
     ]).start()
   }
 
-  @computed get articleContent(): string | null {
-    return this.article && this.article.content
-  }
-
-  @computed get isLikedArticle(): boolean {
-    // return optionStore.articleLikes.includes(this.article.id)
-    return true
-  }
-
-  @action private updateHeaderCollapsedState(collapse: boolean) {
+  @action
+  private updateHeaderCollapsedState(collapse: boolean) {
     this.isHeaderCollapsed = collapse
   }
 
-  @action private updateLoadingState(loading: boolean) {
+  @action
+  private updateLoadingState(loading: boolean) {
     this.isLoading = loading
   }
 
-  @action private updateArticle(article: IArticle | null) {
+  @action
+  private updateCommentModalVisible(visible: boolean) {
+    this.commentModalVisible = visible
+  }
+
+  @action
+  private updateAndCorrectArticle(article: IArticle | null) {
     if (article && article.content) {
       const { content } = article
       const thumbContent = `![](${article.thumb})`
@@ -116,9 +148,10 @@ interface IProps extends IPageProps {}
     this.article = article
   }
 
-  @action private updateResultData(article: IArticle) {
+  @action
+  private updateResultData(article: IArticle) {
     this.updateLoadingState(false)
-    this.updateArticle(article)
+    this.updateAndCorrectArticle(article)
   }
 
   private fetchArticleDatail(): Promise<any> {
@@ -135,27 +168,18 @@ interface IProps extends IPageProps {}
       })
   }
 
-  @boundMethod private getParamArticle(): IArticle {
-    const { params } = this.props.navigation.state
-    return params && params.article
-  }
-
-  @boundMethod private getArticleId(): number {
-    const { params } = this.props.navigation.state
-    const articleId = params && params.articleId
-    const article = this.getParamArticle()
-    return article ? article.id : articleId
-  }
-
-  @boundMethod private handleGoBack() {
+  @boundMethod
+  private handleGoBack() {
     this.props.navigation.goBack(null)
   }
 
-  @boundMethod private handleScrollToTop() {
-    this.articleDetailRef.scrollTo({ y: 0 })
+  @boundMethod
+  private handleScrollToTop() {
+    const element = this.scrollContentElement.current
+    element && element.scrollTo({ y: 0 })
   }
 
-  @boundMethod private handleToNewArticle(article: IArticle) {
+  private handleToNewArticle(article: IArticle) {
     this.props.navigation.navigate({
       key: String(article.id),
       routeName: EHomeRoutes.ArticleDetail,
@@ -163,36 +187,58 @@ interface IProps extends IPageProps {}
     })
   }
 
-  @boundMethod private handleLikeArticle() {
-    if (this.isLikedArticle) {
-      return true
-    }
-    fetch.patch<any>('/like/article', { post_id: 130 })
-      .then(_ => {
-        // Object.assign({}, this.article, )
-        // optionStore.updateArticleLikes(130)
-        // this.updateArticle()
+  @boundMethod
+  private handleLikeArticle() {
+    if (!this.isLikedArticle) {
+      const articleId = this.getArticleId()
+      const doLike = action(() => {
+        likeStore.likeArticle(articleId)
+        this.article && this.article.meta.likes++
       })
-      .catch(error => console.warn('Fetch like article error:', error))
+      fetch.patch<boolean>('/like/article', { article_id: articleId })
+        .then(doLike)
+        .catch(error => {
+          doLike()
+          console.warn('Fetch like article error:', error)
+        })
+    }
   }
 
-  @boundMethod private handlePageScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  @boundMethod
+  private handlePageScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const pageOffsetY = event.nativeEvent.contentOffset.y
     this.updateHeaderCollapsedState(pageOffsetY > headerHeight)
   }
 
-  // 去留言板
-  toComment() {
-    Alert.alert('功能还没做')
+  @boundMethod
+  private handleOpenComment() {
+    this.updateCommentModalVisible(true)
+  }
+
+  @boundMethod
+  private async handleShare() {
+    try {
+      const result = await Share.share({
+        title: this.article && this.article.title || '',
+        url: `${webUrl}/article/${this.getArticleId()}`
+      })
+    } catch (error) {
+      console.warn('Share article failed:', error.message);
+    }
   }
 
   render() {
     const { styles } = obStyles
     const { article, isLoading } = this
     const automaticArticle = this.article || this.getParamArticle()
+
+    const TextSeparator = (
+      <Text style={styles.metaTextSeparator}>∙</Text>
+    )
+
     return (
       <SafeAreaView style={[styles.container, styles.cardBackground]}>
-        <View style={styles.container}>
+        <View style={[styles.container, styles.article]}>
           <Animated.View
             style={[
               styles.header,
@@ -202,7 +248,11 @@ interface IProps extends IPageProps {}
             ]}
           >
             <TouchableView onPress={this.handleGoBack}>
-              <Ionicon name="ios-arrow-back" {...getHeaderButtonStyle()} />
+              <Ionicon
+                name="ios-arrow-back"
+                color={colors.textTitle}
+                {...getHeaderButtonStyle()}
+              />
             </TouchableView>
             <View style={styles.name}>
               <DoubleClick onDoubleClick={this.handleScrollToTop}>
@@ -223,10 +273,13 @@ interface IProps extends IPageProps {}
             </View>
           </Animated.View>
           <Animated.View
-            style={[styles.container, { transform: [{ translateY: this.headerHeight }] }]}
+            style={[
+              styles.container,
+              { transform: [{ translateY: this.headerHeight }] }
+            ]}
           >
             <ScrollView
-              ref={this.updateArticleDetailRef}
+              ref={this.scrollContentElement}
               style={styles.container}
               scrollEventThrottle={16}
               onScroll={this.handlePageScroll}
@@ -237,15 +290,25 @@ interface IProps extends IPageProps {}
               />
               {automaticArticle && (
                 <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
-                  <Text style={styles.metaText}>阅读 {automaticArticle.meta.views}  ∙  </Text>
-                  <Text style={styles.metaText}>喜欢 {automaticArticle.meta.likes}  ∙  </Text>
-                  <Text style={styles.metaText}>评论 {automaticArticle.meta.comments}  ∙  </Text>
-                  <Text style={styles.metaText}>最后编辑于 {dateToYMD(automaticArticle.update_at)}</Text>
+                  <Text style={styles.metaText}>
+                    {i18n.t(LANGUAGE_KEYS.VIEW)} {automaticArticle.meta.views}
+                  </Text>
+                  {TextSeparator}
+                  <Text style={styles.metaText}>
+                    {i18n.t(LANGUAGE_KEYS.LIKE)} {automaticArticle.meta.likes}
+                  </Text>
+                  {TextSeparator}
+                  <Text style={styles.metaText}>
+                    {i18n.t(LANGUAGE_KEYS.LAST_UPDATE_AT)} {dateToYMD(automaticArticle.update_at)}
+                  </Text>
                 </View>
               )}
               <View style={[styles.content, styles.cardBackground]}>
                 { isLoading
-                  ? <AutoActivityIndicator style={styles.indicator} text="加载中..." />
+                  ? <AutoActivityIndicator
+                      style={styles.indicator}
+                      text={i18n.t(LANGUAGE_KEYS.LOADING)}
+                    />
                   : <Markdown
                       navigation={this.props.navigation}
                       sanitize={false}
@@ -256,18 +319,20 @@ interface IProps extends IPageProps {}
                 }
                 {article && (
                   <View style={[styles.cardBackground, styles.footerMeta]}>
-                    <Text style={styles.metaText}>发布于 {dateToYMD(automaticArticle.create_at)}</Text>
+                    <Text style={styles.metaText}>
+                      {i18n.t(LANGUAGE_KEYS.CREATE_AT)} {dateToYMD(automaticArticle.create_at)}
+                    </Text>
                     <View style={styles.footerMetaItems}>
                       <Text style={styles.metaText}>
                         { article.category.length
                           ? `${String(article.category.map(c => c.name).join('、'))}  ∙  `
-                          : '无分类'
+                          : i18n.t(LANGUAGE_KEYS.EMPTY)
                         }
                       </Text>
                       <Text style={styles.metaText}>
                         { article.tag.length
                           ? `${String(article.tag.map(t => t.name).join('、'))}`
-                          : '无标签'
+                          : i18n.t(LANGUAGE_KEYS.EMPTY)
                         }
                       </Text>
                     </View>
@@ -276,19 +341,37 @@ interface IProps extends IPageProps {}
               </View>
               {article && article.related.length && (
                 <View style={[styles.related, styles.cardBackground]}>
-                  <Text style={styles.relatedTitle}>相关文章</Text>
+                  <Text style={styles.relatedTitle}>
+                    {i18n.t(LANGUAGE_KEYS.RELATED_ARTICLE)}
+                  </Text>
                   {article.related.slice(0, 3).map((item, index) => (
                     <TouchableView
                       key={`${item.id}-${index}`}
                       style={styles.relatedItem}
                       onPress={(() => this.handleToNewArticle(item))}
                     >
-                      <Text style={styles.relatedItemTitle}numberOfLines={1}>{item.title}</Text>
+                      <Text
+                        style={styles.relatedItemTitle}
+                        numberOfLines={1}
+                      >
+                        {item.title}
+                      </Text>
                       <View style={[mixins.rowCenter, styles.cardBackground]}>
-                        <Text style={styles.metaText}>阅读 {item.meta.views}  ∙  </Text>
-                        <Text style={styles.metaText}>喜欢 {item.meta.likes}  ∙  </Text>
-                        <Text style={styles.metaText}>评论 {item.meta.comments}  ∙  </Text>
-                        <Text style={styles.metaText}>发布于 {dateToYMD(item.create_at)}</Text>
+                        <Text style={styles.metaText}>
+                          {i18n.t(LANGUAGE_KEYS.VIEW)} {item.meta.views}
+                        </Text>
+                        {TextSeparator}
+                        <Text style={styles.metaText}>
+                          {i18n.t(LANGUAGE_KEYS.LIKE)} {item.meta.likes}
+                        </Text>
+                        {TextSeparator}
+                        <Text style={styles.metaText}>
+                          {i18n.t(LANGUAGE_KEYS.COMMENT)} {item.meta.comments}
+                        </Text>
+                        {TextSeparator}
+                        <Text style={styles.metaText}>
+                          {i18n.t(LANGUAGE_KEYS.CREATE_AT)} {dateToYMD(item.create_at)}
+                        </Text>
                       </View>
                     </TouchableView>
                   ))}
@@ -296,32 +379,67 @@ interface IProps extends IPageProps {}
               )}
             </ScrollView>
           </Animated.View>
-          
-          {/* {this.article && (
-            <View style={styles.footer}>
-              <TouchableView style={styles.footerItem} onPress={this.toComment}>
-                <Icon name="comment" size={17} style={styles.footerItemIcon}/>
-                <Text style={styles.footerItemIconText}>{ `评论 (${this.article.meta.comments})` }</Text>
+          {article && (
+            <View style={[styles.footer, styles.cardBackground]}>
+              <TouchableView
+                style={styles.footerItem}
+                onPress={this.handleOpenComment}
+              >
+                <Ionicon
+                  name="ios-chatbubbles"
+                  size={15}
+                  style={styles.footerItemIcon}
+                />
+                <Text style={styles.footerItemText}>
+                  {i18n.t(LANGUAGE_KEYS.COMMENTS)}
+                  {` (${article.meta.comments})`}
+                </Text>
               </TouchableView>
-              <TouchableView style={styles.footerItem} onPress={this.handleLikeArticle}>
-                <Icon
-                  size={17}
-                  name={this.isLikedArticle ? 'favorite' : 'favorite-border'} 
-                  style={[styles.footerItemIcon, {
-                    color: this.isLikedArticle ? 'red' : colors.textTitle
-                  }]}
+              <TouchableView
+                style={styles.footerItem}
+                onPress={this.handleLikeArticle}
+              >
+                <Ionicon
+                  size={15}
+                  name="ios-heart" 
+                  style={[
+                    styles.footerItemIcon,
+                    { color: this.isLikedArticle ? colors.red : styles.footerItemIcon.color }
+                  ]}
                 />
                 <Text
                   style={[
-                    styles.footerItemIconText, {
-                      color: this.isLikedArticle ? 'red' : colors.textTitle
-                    }
+                    styles.footerItemText,
+                    { color: this.isLikedArticle ? colors.red : styles.footerItemText.color }
                   ]}
-                >{ `${this.isLikedArticle ? '已' : ''}喜欢 (${this.article.meta.likes})` }</Text>
+                >
+                  {i18n.t(LANGUAGE_KEYS.LIKE)}
+                  {` (${article.meta.likes})`}
+                </Text>
+              </TouchableView>
+              <TouchableView
+                style={styles.footerItem}
+                onPress={this.handleShare}
+              >
+                <Ionicon
+                  size={17}
+                  name="ios-share" 
+                  style={styles.footerItemIcon}
+                />
+                <Text style={styles.footerItemText}>
+                  {i18n.t(LANGUAGE_KEYS.SHARE)}
+                </Text>
               </TouchableView>
             </View>
-          )} */}
+          )}
         </View>
+        <BetterModal
+          visible={this.commentModalVisible}
+          onClose={() => this.updateCommentModalVisible(false)}
+          top={this.isHeaderCollapsed ? headerHeightCollapsed : headerHeight}
+        >
+          <Comment postId={this.getArticleId()} />
+        </BetterModal>
       </SafeAreaView>
     )
   }
@@ -338,14 +456,17 @@ const obStyles = observable({
       cardBackground: {
         backgroundColor: colors.cardBackground
       },
+      article: {
+        paddingBottom: safeAreaViewBottom + footerHeight
+      },
       header: {
-        borderColor: colors.border,
-        borderBottomWidth: sizes.borderWidth,
         position: 'absolute',
         top: 0,
         left: 0,
         right: 0,
-        zIndex: 1
+        zIndex: 1,
+        borderColor: colors.border,
+        borderBottomWidth: sizes.borderWidth
       },
       name: {
         justifyContent: 'center',
@@ -374,6 +495,10 @@ const obStyles = observable({
         ...fonts.small,
         color: colors.textSecondary
       },
+      metaTextSeparator: {
+        marginHorizontal: 5,
+        color: colors.textSecondary
+      },
       headerMeta: {
         paddingBottom: 0,
         paddingTop: sizes.goldenRatioGap
@@ -387,7 +512,8 @@ const obStyles = observable({
         marginTop: sizes.goldenRatioGap
       },
       content: {
-        minHeight: sizes.screen.heightSafeArea - thumbHeight - sizes.borderWidth - headerHeight - sizes.gap - sizes.goldenRatioGap
+        minHeight: sizes.screen.heightSafeArea - thumbHeight - headerHeight - footerHeight,
+        marginBottom: sizes.gap
       },
       indicator: {
         flex: 1
@@ -396,7 +522,7 @@ const obStyles = observable({
         marginVertical: sizes.goldenRatioGap,
       },
       related: {
-        marginTop: sizes.gap
+        marginBottom: sizes.gap * 1.9
       },
       relatedTitle: {
         padding: sizes.goldenRatioGap,
@@ -418,26 +544,24 @@ const obStyles = observable({
         left: 0,
         bottom: 0,
         width: sizes.screen.width,
-        height: sizes.gap * 2.2,
+        height: footerHeight,
         flex: 1,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: colors.background
+        ...mixins.rowCenter,
+        justifyContent: 'space-evenly',
+        borderTopColor: colors.border,
+        borderTopWidth: sizes.borderWidth,
+        opacity: 0.9
       },
       footerItem: {
-        width: sizes.screen.width / 2,
-        height: sizes.gap * 2.2,
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
+        ...mixins.rowCenter,
+        justifyContent: 'center'
       },
       footerItemIcon: {
-        marginRight: 10,
-        color: colors.textTitle
+        marginRight: 5,
+        color: colors.textDefault
       },
-      footerItemIconText: {
-        color: colors.textTitle
+      footerItemText: {
+        color: colors.textDefault
       }
     })
   }

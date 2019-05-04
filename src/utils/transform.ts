@@ -1,5 +1,5 @@
 /**
- * Type transformer.
+ * Type transformer
  * @file Type 类型转换器
  * @module app/utils/transform
  * @author Surmon <https://github.com/surmon-china>

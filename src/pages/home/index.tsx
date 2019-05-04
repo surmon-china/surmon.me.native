@@ -1,7 +1,7 @@
 /**
- * Index.
+ * Index
  * @file 主页（文章列表）
- * @module app/home/index
+ * @module pages/home/index
  * @author Surmon <https://github.com/surmon-china>
  */
 
@@ -15,7 +15,7 @@ import { boundMethod } from 'autobind-decorator'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import { Remind } from '@app/components/common/remind'
 import { TouchableView } from '@app/components/common/touchable-view'
-import { CustomHeader } from '@app/components/layouts/header'
+import { CustomHeader } from '@app/components/layout/header'
 import { archiveFilterStore, ArchiveFilter } from '@app/components/archive/filter'
 import { ArticleList } from '@app/components/archive/list'
 import { LANGUAGE_KEYS } from '@app/constants/language'
@@ -31,7 +31,8 @@ class IndexStore {
 
   articleListElement: RefObject<ArticleList> = React.createRef()
 
-  @boundMethod scrollToArticleListTop() {
+  @boundMethod
+  scrollToArticleListTop() {
     const element = this.articleListElement.current
     element && element.scrollToListTop()
   }
@@ -53,6 +54,7 @@ export class Home extends Component<IIndexProps> {
       ...getHeaderButtonStyle(21),
       color: colors.cardBackground
     }
+
     return {
       headerTitle: (
         <CustomHeader
