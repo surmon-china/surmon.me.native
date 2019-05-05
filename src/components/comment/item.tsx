@@ -47,9 +47,7 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
         </TouchableView>
         <View style={styles.content}>
           <View style={styles.header}>
-            <TouchableView
-              onPress={() => this.props.onPressAuthor(comment.author)}
-            >
+            <TouchableView onPress={() => this.props.onPressAuthor(comment.author)}>
               <Text
                 style={styles.userName}
                 numberOfLines={1}
@@ -98,6 +96,7 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
               </TouchableView>
               <TouchableView
                 style={styles.footerActionItem}
+                accessibilityLabel={`给评论点赞：${comment.content}`}
                 onPress={() => !liked && this.props.onLike(comment)}
               >
                 <Ionicon

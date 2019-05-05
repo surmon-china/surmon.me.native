@@ -10,19 +10,19 @@ import { Modal, View, Animated, SafeAreaView, TouchableWithoutFeedback, StyleShe
 import { observable, computed, action, reaction } from 'mobx'
 import { observer } from 'mobx-react/native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
+import { IChildrenProps } from '@app/types/props'
 import { Text } from './text'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 
-export interface IModalProps {
+export interface IModalProps extends IChildrenProps {
   visible: boolean
   onClose(): void
   title?: string
   extra?: string | ReactNode
   top?: number
   opacity?: number
-  children?: any
 }
 
 @observer
@@ -85,7 +85,10 @@ export class BetterModal extends Component<IModalProps> {
         <SafeAreaView style={styles.full}>
           <View style={[styles.full, styles.container, { marginTop: topHeaderHeight }]}>
             <View style={styles.header}>
-              <TouchableWithoutFeedback onPress={props.onClose}>
+              <TouchableWithoutFeedback
+                accessibilityLabel="关闭弹窗"
+                onPress={props.onClose}
+              >
                 <Ionicon
                   name="ios-close"
                   color={colors.textLink}

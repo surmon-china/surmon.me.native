@@ -120,7 +120,10 @@ export class Guestbook extends Component<IGuestbookProps> {
               <Animated.View
                 style={[styles.like, { opacity: guestbookStore.likeButtonOpacity }]}
               >
-                <TouchableView onPress={guestbookStore.handleLikeSite}>
+                <TouchableView
+                  accessibilityLabel="给网站点赞"
+                  onPress={guestbookStore.handleLikeSite}
+                >
                   <Ionicon
                     name="ios-heart"
                     size={21}

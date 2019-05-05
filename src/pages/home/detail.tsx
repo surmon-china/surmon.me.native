@@ -247,7 +247,11 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
               { height: this.headerHeight }
             ]}
           >
-            <TouchableView onPress={this.handleGoBack}>
+            <TouchableView
+              accessibilityLabel="返回"
+              accessibilityHint="返回列表页"
+              onPress={this.handleGoBack}
+            >
               <Ionicon
                 name="ios-arrow-back"
                 color={colors.textTitle}
@@ -303,7 +307,10 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
                   </Text>
                 </View>
               )}
-              <View style={[styles.content, styles.cardBackground]}>
+              <View
+                accessibilityLabel={`文章内容：${this.articleContent}`}
+                style={[styles.content, styles.cardBackground]}
+              >
                 { isLoading
                   ? <AutoActivityIndicator
                       style={styles.indicator}

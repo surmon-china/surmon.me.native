@@ -90,6 +90,9 @@ react-native link
 
 ### Links
 
+无障碍支持：https://reactnative.cn/docs/accessibility.html
+accessibility: https://code.fb.com/ios/making-react-native-apps-accessible/
+
 ##### IOS
 - AppName和启动页修改 http://www.cnblogs.com/allenxieyusheng/p/5802179.html
 - App图标尺寸 

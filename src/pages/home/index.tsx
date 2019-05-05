@@ -63,7 +63,11 @@ export class Home extends Component<IIndexProps> {
         />
       ),
       headerLeft: (
-        <TouchableView onPress={() => archiveFilterStore.updateVisibleState(true)}>
+        <TouchableView
+          accessibilityLabel="文章筛选器"
+          accessibilityHint="切换文章筛选器"
+          onPress={() => archiveFilterStore.updateVisibleState(true)}
+        >
           <Ionicon name="ios-options" {...buttonStyle} />
           <Observer
             render={() => archiveFilterStore.isActiveTagOrCategoryFilter && (
@@ -73,7 +77,11 @@ export class Home extends Component<IIndexProps> {
         </TouchableView>
       ),
       headerRight: (
-        <TouchableView onPress={() => config.navigation.push(EHomeRoutes.ArticleSearch)}>
+        <TouchableView
+          accessibilityLabel="搜索按钮"
+          accessibilityHint="打开搜索页面"
+          onPress={() => config.navigation.push(EHomeRoutes.ArticleSearch)}
+        >
           <Ionicon name="ios-search" {...buttonStyle} />
         </TouchableView>
       )

@@ -6,7 +6,7 @@
  */
 
 import React, { Component } from 'react'
-import { TouchableWithoutFeedback } from 'react-native'
+import { TouchableWithoutFeedback, StyleProp, ViewStyle } from 'react-native'
 import { observable, action } from 'mobx'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
@@ -14,7 +14,7 @@ import { boundMethod } from 'autobind-decorator'
 export interface IDoubleClickProps {
   onDoubleClick(): void
   onPress?(): void
-  style?: any
+  style?: StyleProp<ViewStyle>
   delay?: number
 }
 

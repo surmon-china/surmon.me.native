@@ -216,6 +216,7 @@ export class Setting extends Component<ISettingProps> {
           </Text>
         </TouchableView>
         <View style={styles.lineSeparator}></View>
+        <Text style={styles.version}>Surmon.me ∙ 1.0.0</Text>
       </View>
     )
   }
@@ -275,6 +276,11 @@ const obStyles = observable({
         ...fonts.h4,
         color: colors.textSecondary,
         marginLeft: sizes.gap / 2
+      },
+      version: {
+        color: colors.textSecondary,
+        textAlign: 'center',
+        marginTop: sizes.gap
       }
     })
   }

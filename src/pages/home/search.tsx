@@ -126,6 +126,7 @@ export class ArticleSearch extends Component<ISearchProps> {
           {this.historys.map((keyword, index) => (
             <View key={keyword} style={styles.historyItem}>
               <TouchableView
+                accessibilityLabel={`历史记录关键词：${keyword}`}
                 style={styles.historyKeyword}
                 onPress={() => this.handlePressHistory(keyword)}
               >
@@ -137,7 +138,7 @@ export class ArticleSearch extends Component<ISearchProps> {
                 <Text>{keyword}</Text>
               </TouchableView>
               <TouchableView
-                activeOpacity={sizes.touchOpacity}
+                accessibilityLabel={`删除历史记录关键词：${keyword}`}
                 onPress={() => this.handleRemoveHistoryItem(index)}
               >
                 <Ionicon

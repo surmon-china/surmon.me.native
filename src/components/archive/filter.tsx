@@ -160,6 +160,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
               {filter.data.map(item => {
                 const { filterActive: isFilterActive, filterType, filterValues } = archiveFilterStore
                 const activeValue = filterValues[filterType] as ICategory
+                const activeValueText = optionStore.isEnLang ? item.slug : item.name
                 const isActive = (
                   isFilterActive &&
                   filterType === filter.type && 
@@ -173,6 +174,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
                       styles.item,
                       isActive ? styles.itemActive : null
                     ]}
+                    accessibilityLabel={`选中过滤条件：${activeValueText}`}
                     onPress={() => {
                       archiveFilterStore.updateActiveFilter(filter.type, item)
                       archiveFilterStore.updateVisibleState(false)
@@ -184,7 +186,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
                         isActive ? styles.itemActiveText : null
                       ]}
                     >
-                      {optionStore.isEnLang ? item.slug : item.name}
+                      {activeValueText}
                     </Text>
                     {isActive && (
                       <Ionicon
@@ -215,6 +217,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
         onClose={() => archiveFilterStore.updateVisibleState(false)}
         extra={
           <TouchableView
+            accessibilityLabel="清空所有文章过滤条件"
             onPress={() => {
               archiveFilterStore.clearActiveFilter()
               archiveFilterStore.updateVisibleState(false)

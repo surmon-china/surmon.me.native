@@ -47,7 +47,10 @@ export const ArticleArchiveHeader = observer((props: IArchiveProps): JSX.Element
         <Text>{i18n.t(LANGUAGE_KEYS.FILTER_RESULT)}</Text>
       </View>
       <View style={styles.resetButton}>
-        <TouchableView onPress={archiveFilterStore.clearActiveFilter}>
+        <TouchableView
+          accessibilityLabel="清空所有文章过滤条件"
+          onPress={archiveFilterStore.clearActiveFilter}
+        >
           <Ionicon name="ios-close" {...getHeaderButtonStyle()} />
         </TouchableView>
       </View>

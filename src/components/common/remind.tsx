@@ -6,14 +6,15 @@
  */
 
 import React from 'react'
+import { StyleProp, TextStyle } from 'react-native'
 import { observer } from 'mobx-react/native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import colors from '@app/style/colors'
 
 interface IRemindProps {
   size?: number
-  style?: any
   color?: string
+  style?: StyleProp<TextStyle>
 }
 
 export const Remind = observer((props: IRemindProps): JSX.Element => {

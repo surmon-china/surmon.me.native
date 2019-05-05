@@ -270,7 +270,10 @@ export class Comment extends Component<ICommentProps> {
         ) : (
           <Text>{i18n.t(isLoading ? LANGUAGE_KEYS.LOADING : LANGUAGE_KEYS.EMPTY)}</Text>
         )}
-        <TouchableView onPress={this.handleToggleSortType}>
+        <TouchableView
+          accessibilityLabel="切换排序模式"
+          onPress={this.handleToggleSortType}
+        >
           <Ionicon
             name="ios-funnel"
             size={17}
