@@ -3,7 +3,7 @@ package com.surmon_me;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import cl.json.RNSharePackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
 import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -28,7 +28,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new RNSharePackage(),
+            new SplashScreenReactPackage(),
             new AsyncStoragePackage(),
             new RNCWebViewPackage(),
             new VectorIconsPackage(),

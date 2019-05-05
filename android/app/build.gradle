@@ -138,7 +138,7 @@ android {
 }
 
 dependencies {
-    implementation project(':react-native-share')
+    implementation project(':react-native-splash-screen')
     implementation project(':@react-native-community_async-storage')
     implementation project(':react-native-webview')
     implementation project(':react-native-vector-icons')

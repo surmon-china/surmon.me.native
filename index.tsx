@@ -8,6 +8,7 @@
 import React, { Component } from 'react'
 import { AppRegistry, Vibration } from 'react-native'
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
+import SplashScreen from 'react-native-splash-screen'
 import { Observer } from 'mobx-react'
 import { optionStore } from '@app/stores/option'
 import { indexStore } from '@app/pages/home/index'
@@ -73,6 +74,11 @@ const AppTabNavigator = createBottomTabNavigator(
 const AppContainer = createAppContainer(AppTabNavigator)
 
 class App extends Component {
+
+  componentDidMount() {
+    SplashScreen.hide()
+  }
+
   render() {
     return (
       <Observer

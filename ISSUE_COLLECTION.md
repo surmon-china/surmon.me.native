@@ -90,14 +90,24 @@ react-native link
 
 ### Links
 
-无障碍支持：https://reactnative.cn/docs/accessibility.html
-accessibility: https://code.fb.com/ios/making-react-native-apps-accessible/
+无障碍支持（accessibility）：
+- https://reactnative.cn/docs/accessibility.html
+- https://code.fb.com/ios/making-react-native-apps-accessible/
+
+启动屏：
+- https://juejin.im/entry/59c741adf265da066a1043b0
+- https://github.com/crazycodeboy/react-native-splash-screen
+
+App icon:
+- https://medium.com/@scottianstewart/react-native-add-app-icons-and-launch-screens-onto-ios-and-android-apps-3bfbc20b7d4c
+
+Display name:
+https://stackoverflow.com/a/38582258
+- ios: `/ios/surmon_me/Info.plist:CFBundleDisplayName`
+- android: `android/app/src/main/res/values/strings.xml`
 
 ##### IOS
-- AppName和启动页修改 http://www.cnblogs.com/allenxieyusheng/p/5802179.html
-- App图标尺寸 
-   + http://blog.csdn.net/leiyu231/article/details/52830151
-   + https://medium.com/the-react-native-log/change-default-launch-screen-in-react-native-ios-app-544f94f1e947
+- 官方提供屏幕尺寸：https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
 - 打包和生产模式的切换步骤 
    + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
    + 中文版 http://www.jianshu.com/p/7683efdd31f5
@@ -109,6 +119,7 @@ accessibility: https://code.fb.com/ios/making-react-native-apps-accessible/
    + `org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)`
 
 ##### Android
+- Icon 转换生成工具：http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
 - 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
 - 安卓打包签名问题
    + Build failed with an exception：https://github.com/soliury/noder-react-native/issues/44
@@ -120,7 +131,3 @@ accessibility: https://code.fb.com/ios/making-react-native-apps-accessible/
    + https://github.com/facebook/react-native/issues/2711
 - 版本不兼容问题
    + http://stackoverflow.com/questions/34749299/gradle-version-2-2-is-required-current-version-is-2-10
-- AppName修改路径 android/app/src/main/res/values/strings.xml
-- AppName和启动页修改 
-   + http://www.cnblogs.com/allenxieyusheng/p/5804023.html
-   + http://stackoverflow.com/questions/33390013/how-to-create-some-kind-of-splash-screen-launching-screen-which-disappears-afte
