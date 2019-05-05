@@ -120,6 +120,7 @@ https://stackoverflow.com/a/38582258
 
 ##### Android
 - Icon 转换生成工具：http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
+- ANDROID_HOME 配置：https://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x
 - 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
 - 安卓打包签名问题
    + Build failed with an exception：https://github.com/soliury/noder-react-native/issues/44
