@@ -9,9 +9,9 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 
 #### 相关的其他项目：
 - SRE service: [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
+- Web service: [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
 - Web client for user: [surmon.me](https://github.com/surmon-china/surmon.me) By Nuxt.js(Vue)
 - Web client for admin: [angular-admin](https://github.com/surmon-china/angular-admin) powered by Angular + Bootstrap4
-- Web Service: [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
 
 ## Screenshot
 
@@ -75,4 +75,4 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 
 ## 开始开发
 
-当你决定要开始开发，或开发遇到异常找不到答案时，请打开为你准备的万能锦囊： [ISSUE_COLLECTION.md](https://github.com/surmon-china/surmon.me.native/blob/master/ISSUE_COLLECTION.md)
+**当你决定要开始开发，或开发遇到异常找不到答案时，请打开为你准备的万能锦囊： [ISSUE_COLLECTION.md](https://github.com/surmon-china/surmon.me.native/blob/master/ISSUE_COLLECTION.md)**
