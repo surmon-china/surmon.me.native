@@ -17,56 +17,58 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 
 ### IOS
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-01.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-1.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-02.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-2.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-03.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-3.jpg)
 
 ### Android
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-01.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-1.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-02.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-2.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-03.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-3.jpg)
 
 
 ## 业务结构
-- **assets**
+- **[assets](https://github.com/surmon-china/surmon.me.native/tree/master/src/assets)**
    + 静态资源（字体、图片）
-- **types**
+- **[types](https://github.com/surmon-china/surmon.me.native/tree/master/src/types)**
    + 被公共消费的任何类型扩展
-- **constants**
+- **[constants](https://github.com/surmon-china/surmon.me.native/tree/master/src/constants)**
    + 被公共消费的任何直接量
-- **languages** 
+- **[languages](https://github.com/surmon-china/surmon.me.native/tree/master/src/languages)** 
    + i18n 语言包
-- **style**
+- **[style](https://github.com/surmon-china/surmon.me.native/tree/master/src/style)**
    + 类似 Web 平台的 CSS 集合，包含字体、颜色、尺寸、混入
-- **services**
+- **[services](https://github.com/surmon-china/surmon.me.native/tree/master/src/services)**
    + 所有会产生（数据、UI）IO 的数据交互接口
-- **utils**
+- **[utils](https://github.com/surmon-china/surmon.me.native/tree/master/src/utils)**
    + 不发生 IO 行为的所有工具性质的 pure function
-- **components**
+- **[components](https://github.com/surmon-china/surmon.me.native/tree/master/src/components)**
    + 所有公共组件（全局、局部、布局）
-- **pages**
+- **[pages](https://github.com/surmon-china/surmon.me.native/tree/master/src/pages)**
    + 所有被导航器消费的页面级组件
-- **stores**
+- **[stores](https://github.com/surmon-china/surmon.me.native/tree/master/src/stores)**
    + 全局性质的公共 store
-- **config**
+- **[config](https://github.com/surmon-china/surmon.me.native/blob/master/src/config.ts)**
    + App 全局配置
-- **routes**
+- **[routes](https://github.com/surmon-china/surmon.me.native/blob/master/src/routes.ts)**
    + App 路由表（枚举量）
-- **index**
+- **[index](https://github.com/surmon-china/surmon.me.native/blob/master/src/index.tsx)**
    + 不涉及 UI 风格的导航栈实例及配置
 
 ## 设计细节
 - darkTheme：
-   + 使用 Mobx 的 [observable](https://github.com/surmon-china/surmon.me.native/blob/master/style/colors.ts) 实现配色更新
+   + [使用 Mobx 的 observable 实现配色更新](https://github.com/surmon-china/surmon.me.native/blob/master/src/style/colors.ts#L83)
 - Markdown 的实现：
-   + 使用 [Webview 注入的形式实现 Markdown 渲染](https://github.com/surmon-china/surmon.me.native/blob/master/components/markdown/index.tsx)，及 [响应式主题切换](https://github.com/surmon-china/surmon.me.native/blob/master/components/markdown/style.ts)
+   + [使用 Webview 注入的形式实现 Markdown 渲染](https://github.com/surmon-china/surmon.me.native/blob/master/src/components/common/markdown/index.tsx#L47)，及 [响应式主题切换](https://github.com/surmon-china/surmon.me.native/blob/master/src/components/common/markdown/styles.ts#L13)
 - i18n：
-   + 同样使用 Mobx 的 [observable 实现语言更新](https://github.com/surmon-china/surmon.me.native/blob/master/services/i18n.ts)
+   + [同样使用 Mobx 的 observable 实现语言实时响应](https://github.com/surmon-china/surmon.me.native/blob/master/src/services/i18n.ts#L51)
+- 本地存储：
+  + 使用 [AsyncStorage](https://github.com/surmon-china/surmon.me.native/blob/master/src/services/storage.ts) 及本机数据 [初始化用户数据](https://github.com/surmon-china/surmon.me.native/blob/master/src/stores/option.ts#L24)
 - 了解更多的实现细节：
    + 阅读源码
    + [读博客](https://surmon.me/article/)
