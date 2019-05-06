@@ -7,65 +7,70 @@
 
 A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://github.com/facebook/react-native).
 
-相关的其他项目：
-- [Web（Nuxt）](https://github.com/surmon-china/surmon.me)
-- [服务端（Nodejs）](https://github.com/surmon-china/nodepress)
-- [Web后台（Angular）](https://github.com/surmon-china/angular-admin)
+#### 相关的其他项目：
+- SRE service: [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
+- Web client for user: [surmon.me](https://github.com/surmon-china/surmon.me) By Nuxt.js(Vue)
+- Web client for admin: [angular-admin](https://github.com/surmon-china/angular-admin) powered by Angular + Bootstrap4
+- Web Service: [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
 
 ## Screenshot
 
 ### IOS
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/ios/full-01.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-01.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/ios/full-02.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-02.jpg)
+
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/ios/p-03.jpg)
 
 ### Android
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/android/full-01.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-01.jpg)
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshot/android/full-02.jpg)
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-02.jpg)
 
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-03.jpg)
 
-## 设计细节
-- 职能单元的划分：...
-- Markdown 的实现：...
-- 动画效果缺陷：...
-- Typescript 的应用：...
-- 两端异同方案：
-  - Android 只能通过自定义方式来定义启动屏，所以安卓上多了一层
 
 ## 业务结构
-- **Welcome**
-   + 安卓下首屏启动页（1.666秒后跳渲染布局组件）
-- **Layout**
-   + 总布局组件
-- **Articles**
-   + 文章列表组件
-   + 可下拉刷新
-   + 上拉点击加载更多
-- **Detail** 
-   + 文章详情页（markdown解析器）
-- **Projects**
-   + Webview组件
-- **About**
-   + 一些图标组件
-- **component/navbar**
-   + 顶部栏组件（StatusBar）
-- **component/menu**
-   + 菜单栏组件（DrawerLayoutAndroid/TabBarIOS）的封装
-- **component/AutoActivityIndicator**
-   + 加载指示器组件（ActivityIndicator）的封装
-- **component/articel**
-   + 文章列表所需的组件
-- 组件:components（公用组件抽象）
-- 页面:pages（主程序的主要构成部分）
-- 布局:layouts（既将两端公用的布局进行封装、又可以用于不同页面下的不同布局，类似nuxt.js中的layout）
-- 服务:service（公共服务抽象，如：网络、缓存...）
-- 样式:styles（类似Web端对样式变量的内聚管理，如果项目较大，路由也可类似管理）
-- 扩展:utils（将任何不涉及依赖的复用纯函数进行封装）
+- **assets**
+   + 静态资源（字体、图片）
+- **types**
+   + 被公共消费的任何类型扩展
+- **constants**
+   + 被公共消费的任何直接量
+- **languages** 
+   + i18n 语言包
+- **style**
+   + 类似 Web 平台的 CSS 集合，包含字体、颜色、尺寸、混入
+- **services**
+   + 所有会产生（数据、UI）IO 的数据交互接口
+- **utils**
+   + 不发生 IO 行为的所有工具性质的 pure function
+- **components**
+   + 所有公共组件（全局、局部、布局）
+- **pages**
+   + 所有被导航器消费的页面级组件
+- **stores**
+   + 全局性质的公共 store
+- **config**
+   + App 全局配置
+- **routes**
+   + App 路由表（枚举量）
+- **index**
+   + 不涉及 UI 风格的导航栈实例及配置
+
+## 设计细节
+- darkTheme：
+   + 使用 Mobx 的 [observable](https://github.com/surmon-china/surmon.me.native/blob/master/style/colors.ts) 实现配色更新
+- Markdown 的实现：
+   + 使用 [Webview 注入的形式实现 Markdown 渲染](https://github.com/surmon-china/surmon.me.native/blob/master/components/markdown/index.tsx)，及 [响应式主题切换](https://github.com/surmon-china/surmon.me.native/blob/master/components/markdown/style.ts)
+- i18n：
+   + 同样使用 Mobx 的 [observable 实现语言更新](https://github.com/surmon-china/surmon.me.native/blob/master/services/i18n.ts)
+- 了解更多的实现细节：
+   + 阅读源码
+   + [读博客](https://surmon.me/article/)
 
 ## 开始开发
 
 当你决定要开始开发，或开发遇到异常找不到答案时，请打开为你准备的万能锦囊： [ISSUE_COLLECTION.md](https://github.com/surmon-china/surmon.me.native/blob/master/ISSUE_COLLECTION.md)
-
