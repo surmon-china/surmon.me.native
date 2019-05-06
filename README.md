@@ -10,7 +10,7 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 #### 相关的其他项目：
 - SRE service: [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
 - Web service: [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
-- Web client for user: [surmon.me](https://github.com/surmon-china/surmon.me) By Nuxt.js(Vue)
+- Web client for user: [surmon.me](https://github.com/surmon-china/surmon.me) powered by Nuxt.js(Vue)
 - Web client for admin: [angular-admin](https://github.com/surmon-china/angular-admin) powered by Angular + Bootstrap4
 
 ## Screenshot
