@@ -1,34 +1,83 @@
 {
   "name": "surmon.me.native",
-  "version": "0.0.1",
+  "description": "App for Surmon.me blog",
+  "version": "1.0.0",
   "private": false,
+  "author": {
+    "name": "Surmon",
+    "email": "surmon@foxmail.com",
+    "url": "https://surmon.me"
+  },
+  "bugs": {
+    "url": "https://github.com/surmon-china/surmon.me.native/issues"
+  },
+  "homepage": "https://github.com/surmon-china/surmon.me.native#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/surmon-china/surmon.me.native.git"
+  },
+  "rnpm": {
+    "assets": [
+      "./src/assets/fonts/"
+    ]
+  },
+  "resolutions": {
+    "terser": "3.17.0"
+  },
   "scripts": {
     "dev": "npm start --reset-cache",
-    "dev:all": "npm run dev:ios && npm run dev:android",
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
+    "dev:all": "npm run dev:ios && npm run dev:android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build:ios": "react-native bundle --entry-file index.ios.js --platform ios --bundle-output ./ios/react.bundle",
+    "build:ios": "react-native bundle --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js --entry-file index.tsx --dev false --platform ios --bundle-output ./ios/react.bundle",
     "build:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
+    "tsc": "tsc",
     "release:android": "cd android && ./gradlew installRelease",
     "postinstall": "rndebugger-open"
   },
   "dependencies": {
-    "react": "^16.0.0",
-    "react-native": "^0.50.0",
-    "react-native-gifted-listview": "git+https://github.com/FaridSafi/react-native-gifted-listview.git",
-    "react-native-root-toast": "^2.0.0",
-    "react-native-simple-markdown": "^1.0.60-rc.3",
-    "react-native-vector-icons": "^4.4.0"
+    "@react-native-community/async-storage": "^1.3.3",
+    "autobind-decorator": "^2.4.0",
+    "gravatar": "^1.8.0",
+    "highlight.js": "^9.15.6",
+    "marked": "^0.6.2",
+    "mobx": "^5.9.4",
+    "mobx-react": "^5.4.3",
+    "query-string": "^6.5.0",
+    "react": "^16.8.6",
+    "react-native": "^0.59.5",
+    "react-native-actionsheet": "^2.4.2",
+    "react-native-autoheight-webview": "^1.1.2",
+    "react-native-gesture-handler": "^1.2.0",
+    "react-native-image-zoom-viewer": "^2.2.25",
+    "react-native-root-toast": "^3.0.2",
+    "react-native-splash-screen": "^3.2.0",
+    "react-native-vector-icons": "^6.4.2",
+    "react-native-webview": "^5.8.1",
+    "react-navigation": "^3.9.1"
   },
   "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-jest": "19.0.0",
-    "babel-preset-react-native": "1.9.1",
-    "jest": "19.0.2",
-    "react-native-debugger-open": "^0.3.3",
-    "react-test-renderer": "~15.4.1"
+    "@babel/core": "^7.4.4",
+    "@babel/plugin-proposal-decorators": "^7.4.4",
+    "@babel/runtime": "^7.4.4",
+    "@types/gravatar": "^1.8.0",
+    "@types/highlight.js": "^9.12.3",
+    "@types/jest": "^24.0.12",
+    "@types/marked": "^0.6.5",
+    "@types/react": "^16.8.15",
+    "@types/react-native": "^0.57.51",
+    "@types/react-native-vector-icons": "^6.4.0",
+    "@types/react-navigation": "^3.0.6",
+    "@types/react-test-renderer": "^16.8.1",
+    "babel-jest": "^24.7.1",
+    "jest": "^24.7.1",
+    "metro-react-native-babel-preset": "^0.53.1",
+    "react-native-debugger-open": "^0.3.19",
+    "react-native-typescript-transformer": "^1.2.12",
+    "react-test-renderer": "16.8.6",
+    "typescript": "^3.4.5"
   },
   "jest": {
     "preset": "react-native"
