@@ -7,7 +7,7 @@
 
  import React, { Component, RefObject } from 'react'
 import { StyleSheet, View, ImageBackground, Animated, TouchableWithoutFeedback, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
+// import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, computed } from 'mobx'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
@@ -90,6 +90,7 @@ export class Guestbook extends Component<IGuestbookProps> {
     super(props)
   }
 
+  /*
   static navigationOptions = (config: NavigationScreenConfigProps) => {
     return {
       headerTitle: (
@@ -100,6 +101,7 @@ export class Guestbook extends Component<IGuestbookProps> {
       )
     }
   }
+  */
 
   render() {
     const { styles } = obStyles

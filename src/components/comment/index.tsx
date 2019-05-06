@@ -12,15 +12,16 @@ import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
 import Ionicon from 'react-native-vector-icons/Ionicons'
+import { LANGUAGE_KEYS } from '@app/constants/language'
+import { IComment, IAuthor } from '@app/types/business'
+import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
+import { IS_IOS } from '@app/config'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
 import { Text } from '@app/components/common/text'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { CommentItem } from './item'
-import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
-import { IComment, IAuthor } from '@app/types/business'
-import { LANGUAGE_KEYS } from '@app/constants/language'
 import fetch from '@app/services/fetch'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
@@ -310,7 +311,7 @@ export class Comment extends Component<ICommentProps> {
           // 刷新
           onRefresh={this.fetchComments}
           // 加载更多安全距离（相对于屏幕高度的比例）
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={IS_IOS ? 0.02 : 0.2}
           // 加载更多
           onEndReached={this.handleLoadmoreArticle}
           // 手势滚动

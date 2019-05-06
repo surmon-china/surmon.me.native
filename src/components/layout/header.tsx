@@ -39,6 +39,7 @@ export const headerStyles = observable({
     return StyleSheet.create({
       title: {
         ...fonts.h3,
+        fontWeight: 'bold',
         color: colors.cardBackground
       }
     })

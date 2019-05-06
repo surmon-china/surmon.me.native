@@ -15,6 +15,7 @@ import Ionicon from 'react-native-vector-icons/Ionicons'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
 import { EHomeRoutes } from '@app/routes'
+import { IS_IOS } from '@app/config'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { IArticle, ITag, ICategory } from '@app/types/business'
@@ -270,7 +271,7 @@ export class ArticleList extends Component<IArticleListProps> {
           // 刷新
           onRefresh={this.fetchArticles}
           // 加载更多安全距离（相对于屏幕高度的比例）
-          onEndReachedThreshold={0}
+          onEndReachedThreshold={IS_IOS ? 0.05 : 0.2}
           // 加载更多
           onEndReached={this.handleLoadmoreArticle}
           // 唯一 ID

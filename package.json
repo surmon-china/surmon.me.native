@@ -26,11 +26,10 @@
   },
   "scripts": {
     "dev": "npm start --reset-cache",
-    "dev:all": "npm run dev:ios && npm run dev:android",
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
+    "dev:all": "npm run dev:ios && npm run dev:android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "start:new": "react-native start --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js",
     "build:ios": "react-native bundle --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js --entry-file index.tsx --dev false --platform ios --bundle-output ./ios/react.bundle",
     "build:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",

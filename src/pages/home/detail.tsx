@@ -481,6 +481,7 @@ const obStyles = observable({
       },
       title: {
         ...fonts.h3,
+        fontWeight: 'bold',
         color: colors.textTitle
       },
       description: {

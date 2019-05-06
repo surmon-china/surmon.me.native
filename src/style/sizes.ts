@@ -11,7 +11,7 @@ import { IS_IOS } from '@app/config'
 export const goldenRatio = 0.618
 export const safeAreaViewTop = 44
 export const safeAreaViewBottom = 34
-export const defaultHeaderHeight = 44
+export const defaultHeaderHeight = IS_IOS ? 44 : 56
 
 const { width, height } = Dimensions.get('window')
 const screenHeight = width < height ? height : width

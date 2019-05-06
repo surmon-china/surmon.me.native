@@ -76,7 +76,7 @@ export const content = observable({
       a {
         color: ${$primaryColor};
         text-decoration: none;
-        border-bottom: ${$borderWidth}px solid ${$textColor};
+        // border-bottom: ${$borderWidth}px solid ${$textColor};
         font-weight: bold;
         margin: 0 .1rem;
       }
