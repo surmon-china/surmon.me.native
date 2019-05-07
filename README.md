@@ -7,7 +7,9 @@
 
 A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://github.com/facebook/react-native).
 
-**[Download Android apk](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/surmon.me.apk)**
+![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/download-url.png)
+
+**🔝🔝🔝 Scan QRcode or [click here 👉 download Android apk](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/surmon.me.apk)**
 
 #### 相关的其他项目：
 - SRE service: [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
