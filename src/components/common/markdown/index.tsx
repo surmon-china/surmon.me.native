@@ -11,7 +11,7 @@ import { StyleSheet, View, ViewStyle } from 'react-native'
 import { observable, computed, action } from 'mobx'
 import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
-import { IS_IOS, webUrl } from '@app/config'
+import { webUrl } from '@app/config'
 import { EHomeRoutes } from '@app/routes'
 import { INavigationProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
@@ -92,17 +92,10 @@ export class Markdown extends Component<IMarkdownProps> {
   private get htmlContent(): string {
     const { renderer, props } = this
     const { markdown } = props
-    return markdown
-      ? `
-        <!html>
-          <head>
-            <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-          </head>
-        <body>
-          <div id="content">${marked(markdown, {renderer})}</div>
-        </body>
-      `
-      : ''
+    if (!markdown) {
+      return ''
+    }
+    return `<div id="content">${marked(markdown, {renderer})}</div>`
   }
 
   @computed
@@ -170,11 +163,7 @@ export class Markdown extends Component<IMarkdownProps> {
   }
 
   private htmlScript: string = `
-    // var meta = document.createElement('meta');
-    // meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0');
-    // meta.setAttribute('name', 'viewport');
-    // document.getElementsByTagName('head')[0].appendChild(meta);
-    window.dispatchMessage = function(action, data) {
+    ;window.dispatchMessage = function(action, data) {
       window.ReactNativeWebView.postMessage(JSON.stringify({ action, data }));
     };
   `
@@ -245,7 +234,7 @@ export class Markdown extends Component<IMarkdownProps> {
           scalesPageToFit={false}
           scrollEnabled={false}
           originWhitelist={['*']}
-          source={{ html: this.htmlContent }}
+          source={{ html: `<style>${this.htmlStyle}</style>` + this.htmlContent }}
           onMessage={this.handleWebViewEvent}
           onSizeUpdated={() => this.updateHtmlReadied(true)}
         />

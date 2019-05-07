@@ -73,7 +73,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+    entryFile: "index.tsx"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -116,10 +116,19 @@ android {
             include "armeabi-v7a", "x86", "arm64-v8a", "x86_64"
         }
     }
+    signingConfigs { 
+        release { 
+            storeFile file(MYAPP_RELEASE_STORE_FILE) 
+            storePassword MYAPP_RELEASE_STORE_PASSWORD 
+            keyAlias MYAPP_RELEASE_KEY_ALIAS 
+            keyPassword MYAPP_RELEASE_KEY_PASSWORD 
+        } 
+    }
     buildTypes {
         release {
             minifyEnabled enableProguardInReleaseBuilds
             proguardFiles getDefaultProguardFile("proguard-android.txt"), "proguard-rules.pro"
+            signingConfig signingConfigs.release
         }
     }
     // applicationVariants are e.g. debug, release
@@ -154,3 +163,18 @@ task copyDownloadableDepsToLibs(type: Copy) {
     from configurations.compile
     into 'libs'
 }
+
+// 解决  task ':app:processReleaseResources' 失败问题
+subprojects {
+  project.configurations.all {
+      afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 26
+                buildToolsVersion '26.0.2'
+            }
+        }
+    }
+  }
+}
+

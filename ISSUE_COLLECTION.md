@@ -89,6 +89,12 @@ react-native link react-native-gesture-handler
 react-native link
 ```
 
+##### Error Execution failed for task ':app:mergeReleaseResources' building APK
+
+```bash
+rm -rf android/app/src/main/res/drawable-*
+```
+
 ### Links
 
 无障碍支持（accessibility）：
@@ -120,9 +126,9 @@ https://stackoverflow.com/a/38582258
 - ANDROID_HOME 配置：https://stackoverflow.com/questions/19986214/setting-android-home-enviromental-variable-on-mac-os-x
 - 打包为APK http://reactnative.cn/docs/0.43/signed-apk-android.html
 - 安卓打包签名问题
-   + Build failed with an exception：https://github.com/soliury/noder-react-native/issues/44
-   + http://reactnative.cn/docs/0.42/signed-apk-android.html#content
-- 找不到安卓设备或运行巨慢
-   + https://github.com/facebook/react-native/issues/2711
-- 版本不兼容问题
-   + http://stackoverflow.com/questions/34749299/gradle-version-2-2-is-required-current-version-is-2-10
+   + https://www.jianshu.com/p/32a99c273be1
+- 生成证书：
+   + `keytool -genkey -v -keystore app-release-key.keystore -alias surmon-app -keyalg RSA -keysize 2048 -validity 10000`
+- 真机调试：
+   + 呼出菜单：`adb shell input keyevent 82`
+   + 映射 IP：`adb -s [device-id] reverse tcp:8081 tcp:8081`
