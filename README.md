@@ -19,7 +19,8 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 
 **IOS Runtime**
 
-<a style="flex: 1" href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" target="_blank">
+<div style="background-color: #000">
+<a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" width="260px" />
 </a>
 
@@ -30,6 +31,7 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" width="260px" />
 </a>
+</div>
 
 ## Screenshot
 
