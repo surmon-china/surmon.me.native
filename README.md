@@ -22,11 +22,11 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" width="260px" />
 </a>
-<span>&nbsp;</span>
+<span>&nbsp;&nbsp;&nbsp;</span>
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-2.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-2.gif" width="260px" />
 </a>
-<span>&nbsp;</span>
+<span>&nbsp;&nbsp;&nbsp;</span>
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" width="260px" />
 </a>
