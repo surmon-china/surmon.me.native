@@ -20,6 +20,7 @@ import { staticApi } from '@app/config'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
+import mixins from '@app/style/mixins'
 
 export interface IArtileListItemProps {
   article: IArticle
@@ -138,7 +139,7 @@ const obStyles = observable({
         textTransform: 'capitalize'
       },
       title: {
-        ...fonts.h4,
+        ...fonts.h3,
         fontWeight: '700',
         margin: sizes.goldenRatioGap
       },
@@ -149,18 +150,16 @@ const obStyles = observable({
         color: colors.textSecondary
       },
       meta: {
-        flexDirection: 'row',
+        ...mixins.rowCenter,
         justifyContent: 'space-between',
-        alignItems: 'center',
         borderTopColor: colors.textMuted,
         borderTopWidth: sizes.borderWidth * 2,
         paddingHorizontal: sizes.goldenRatioGap,
         paddingVertical: sizes.gap / 2 
       },
       metaItem: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center'
+        ...mixins.rowCenter,
+        justifyContent: 'center'
       },
       metaIcon: {
         ...fonts.base,

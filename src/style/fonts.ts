@@ -15,8 +15,8 @@ export function getLineHeight(fontSize: number): number {
 export const fontFamily = 'DIN-Regular'
 
 export const base = {
-  fontSize: 14,
-  lineHeight: getLineHeight(14),
+  fontSize: 15,
+  lineHeight: getLineHeight(15),
   ...Platform.select({
     ios: {
       fontFamily
@@ -27,11 +27,36 @@ export const base = {
   })
 };
 
-export const small = { ...base, fontSize: base.fontSize * 0.85, lineHeight: getLineHeight(base.fontSize) }
-export const h1 = { ...base, fontSize: base.fontSize * 1.75, lineHeight: getLineHeight(base.fontSize * 2) }
-export const h2 = { ...base, fontSize: base.fontSize * 1.5, lineHeight: getLineHeight(base.fontSize * 1.75) }
-export const h3 = { ...base, fontSize: base.fontSize * 1.25, lineHeight: getLineHeight(base.fontSize * 1.5) }
-export const h4 = { ...base, fontSize: base.fontSize * 1.1, lineHeight: getLineHeight(base.fontSize * 1.25) }
+export const small = {
+  ...base,
+  fontSize: base.fontSize * 0.93,
+  lineHeight: getLineHeight(base.fontSize)
+}
+
+export const h1 = {
+  ...base,
+  fontSize: base.fontSize * 1.75,
+  lineHeight: getLineHeight(base.fontSize * 2)
+}
+
+export const h2 = {
+  ...base,
+  fontSize: base.fontSize * 1.5,
+  lineHeight: getLineHeight(base.fontSize * 1.75)
+}
+
+export const h3 = {
+  ...base,
+  fontSize: base.fontSize * 1.25,
+  lineHeight: getLineHeight(base.fontSize * 1.5)
+}
+
+export const h4 = {
+  ...base,
+  fontSize: base.fontSize * 1.1,
+  lineHeight: getLineHeight(base.fontSize * 1.25)
+}
+
 export const h5 = base
 
 export default {

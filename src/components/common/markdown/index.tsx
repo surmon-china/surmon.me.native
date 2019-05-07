@@ -93,7 +93,15 @@ export class Markdown extends Component<IMarkdownProps> {
     const { renderer, props } = this
     const { markdown } = props
     return markdown
-      ? `<div id="content">${marked(markdown, {renderer})}</div>`
+      ? `
+        <!html>
+          <head>
+            <meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+          </head>
+        <body>
+          <div id="content">${marked(markdown, {renderer})}</div>
+        </body>
+      `
       : ''
   }
 
@@ -161,9 +169,15 @@ export class Markdown extends Component<IMarkdownProps> {
     this.renderer.paragraph = this.paragraphRender
   }
 
-  private htmlScript: string = `window.dispatchMessage = function(action, data) {
-    window.ReactNativeWebView.postMessage(JSON.stringify({ action, data }))
-  };`
+  private htmlScript: string = `
+    // var meta = document.createElement('meta');
+    // meta.setAttribute('content', 'width=device-width, initial-scale=0.5, maximum-scale=0.5, user-scalable=0');
+    // meta.setAttribute('name', 'viewport');
+    // document.getElementsByTagName('head')[0].appendChild(meta);
+    window.dispatchMessage = function(action, data) {
+      window.ReactNativeWebView.postMessage(JSON.stringify({ action, data }));
+    };
+  `
 
   // 段落
   private paragraphRender(text: string): string {
@@ -227,7 +241,7 @@ export class Markdown extends Component<IMarkdownProps> {
           }}
           customScript={this.htmlScript}
           customStyle={this.htmlStyle}
-          useWebKit={IS_IOS}
+          useWebKit={false}
           scalesPageToFit={false}
           scrollEnabled={false}
           originWhitelist={['*']}

@@ -14,20 +14,21 @@ npm install # Or yarn install
 # 清除缓存并开启服务器（不执行客户端）
 npm run dev
 
-# 编译两端并开启服务器（执行前需开启安卓模拟器）
-npm run dev:all
-
 # 编译 IOS 并开启服务器
 npm run dev:ios
 
 # 编译 Android 并开启服务器（执行前需开启安卓模拟器）
 npm run dev:android
 
-# 编译 IOS 的包并输出到 ./ios/react.bundle
+# 编译两端并开启服务器（执行前需开启安卓模拟器）
+npm run dev:all
+
+# 编译 IOS 的包并输出到 ./ios/bundle -> XCode -> Product -> Archive
 npm run build:ios
 
 # 编译 Android 的包并输出到 android/app/build/outputs/apk/app-release.apk
 npm run build:android
+npm run release:android
 
 # 替换 debug 插件，仅项目初次安装完后执行
 npm run postinstall
@@ -108,15 +109,11 @@ https://stackoverflow.com/a/38582258
 
 ##### IOS
 - 官方提供屏幕尺寸：https://developer.apple.com/design/human-interface-guidelines/ios/icons-and-images/launch-screen/
-- 打包和生产模式的切换步骤 
+- 开发者证书签名的区别：https://www.pgyer.com/doc/view/app_developer_account
+- 打包为 Ipa 包（没有 $99 || $299 的账户是无法 Export 的）
    + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
-   + 中文版 http://www.jianshu.com/p/7683efdd31f5
-- 打包为IPA包
    + http://www.jianshu.com/p/a19d2d0747ee
-- 开发者账户显示测试机id不符合
-   + http://stackoverflow.com/questions/39754341/none-of-your-accounts-are-a-member-code-signing-errors-after-upgrading-to-xcode 
-- 机构id备份
-   + `org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)`
+   + https://blog.whezh.com/react-native-ios-bundle/
 
 ##### Android
 - Icon 转换生成工具：http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
@@ -125,9 +122,6 @@ https://stackoverflow.com/a/38582258
 - 安卓打包签名问题
    + Build failed with an exception：https://github.com/soliury/noder-react-native/issues/44
    + http://reactnative.cn/docs/0.42/signed-apk-android.html#content
-- Genymotion模拟器安装和设置
-   + https://facebook.github.io/react-native/releases/0.23/docs/android-setup.html
-   + Genymotion模拟器SDK未知未手动指定会导致无法installdebug http://stackoverflow.com/questions/35959350/react-native-android-genymotion-adb-server-didnt-ack
 - 找不到安卓设备或运行巨慢
    + https://github.com/facebook/react-native/issues/2711
 - 版本不兼容问题

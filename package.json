@@ -30,11 +30,11 @@
     "dev:android": "react-native run-android",
     "dev:all": "npm run dev:ios && npm run dev:android",
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build:ios": "react-native bundle --config /Users/surmon/Projects/Javascript/surmon_me/rn-cli.config.js --entry-file index.tsx --dev false --platform ios --bundle-output ./ios/react.bundle",
-    "build:android": "cd android && ./gradlew assembleRelease",
+    "build:ios": "react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
+    "build:android": "react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
+    "release:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
     "tsc": "tsc",
-    "release:android": "cd android && ./gradlew installRelease",
     "postinstall": "rndebugger-open"
   },
   "dependencies": {

@@ -520,7 +520,7 @@ const obStyles = observable({
         marginTop: sizes.goldenRatioGap
       },
       content: {
-        minHeight: sizes.screen.heightSafeArea - thumbHeight - headerHeight - footerHeight,
+        minHeight: sizes.screen.heightSafeArea - thumbHeight - headerHeight - sizes.statusBarHeight,
         marginBottom: sizes.gap
       },
       indicator: {

@@ -26,7 +26,7 @@ export const screen = {
   widthQuarter: screenWidth * 0.25,
   widthThreeQuarters: screenWidth * 0.75,
   heightTwoThirds: screenWidth * 0.666,
-  heightSafeArea: screenHeight - safeAreaViewTop - safeAreaViewBottom,
+  heightSafeArea: screenHeight - safeAreaViewTop,
   heightHoldenRatio: screenHeight * goldenRatio
 }
 

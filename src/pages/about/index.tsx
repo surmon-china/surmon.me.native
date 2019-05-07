@@ -7,11 +7,12 @@
 
 import React, { Component } from 'react'
 import { ImageSourcePropType, ImageBackground, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
+import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, computed, action } from 'mobx'
 import { observer } from 'mobx-react/native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { webUrl } from '@app/config'
+import { webUrl, IS_ANDROID } from '@app/config'
 import { EAboutRoutes } from '@app/routes'
 import { IPageProps } from '@app/types/props'
 import { THttpSuccessResponse } from '@app/types/http'
@@ -19,11 +20,13 @@ import { LANGUAGE_KEYS } from '@app/constants/language'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { Remind } from '@app/components/common/remind'
 import { Text } from '@app/components/common/text'
-import colors from '@app/style/colors'
+import { CustomHeader } from '@app/components/layout/header'
 import i18n from '@app/services/i18n'
+import fetch from '@app/services/fetch'
+import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
 import sizes from '@app/style/sizes'
-import fetch from '@app/services/fetch'
+import mixins from '@app/style/mixins'
 
 enum ESection {
   Follow = 'follow',
@@ -55,6 +58,17 @@ export class About extends Component<IAboutProps> {
     super(props)
     this.fetchUserInfo()
     this.fetchStatistic()
+  }
+
+  static navigationOptions = (config: NavigationScreenConfigProps) => {
+    if (IS_ANDROID) {
+      return null
+    }
+    return {
+      headerTitle: (
+        <CustomHeader title={i18n.t(LANGUAGE_KEYS.ABOUT)} />
+      )
+    }
   }
   
   @observable.ref
@@ -372,7 +386,7 @@ const obStyles = observable({
         height: sizes.gap / 4
       },
       line: {
-        flexDirection: 'row',
+        ...mixins.rowCenter,
         justifyContent: 'space-between',
         height: sizes.gap * 2,
         paddingHorizontal: sizes.gap * 0.8,
@@ -387,10 +401,9 @@ const obStyles = observable({
         borderBottomColor: colors.border
       },
       lineContent: {
-        flexDirection: 'row'
+        ...mixins.rowCenter
       },
       lineTitle: {
-        lineHeight: sizes.gap * 2
       },
       lineIcon: {
         ...fonts.h3,

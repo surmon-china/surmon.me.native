@@ -7,20 +7,23 @@
 
 import React, { Component } from 'react'
 import { Animated, StyleSheet, View, Switch, Alert } from 'react-native'
+import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, action, reaction } from 'mobx'
 import { observer } from 'mobx-react/native'
 import Ionicon from 'react-native-vector-icons/Ionicons'
-import { Text } from '@app/components/common/text'
-import { TouchableView } from '@app/components/common/touchable-view'
-import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IPageProps } from '@app/types/props'
+import { LANGUAGE_KEYS } from '@app/constants/language'
 import { optionStore } from '@app/stores/option'
 import { likeStore } from '@app/stores/like'
+import { Text } from '@app/components/common/text'
+import { TouchableView } from '@app/components/common/touchable-view'
+import { CustomHeader } from '@app/components/layout/header'
 import i18n, { TLanguage, languageMaps } from '@app/services/i18n'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
 import sizes from '@app/style/sizes'
+import mixins from '@app/style/mixins'
 
 interface ILanguageDetailIconProps {
   close: boolean
@@ -72,6 +75,12 @@ export class Setting extends Component<ISettingProps> {
   constructor(props: ISettingProps) {
     super(props)
   }
+
+  static navigationOptions = (config: NavigationScreenConfigProps) => ({
+    headerTitle: (
+      <CustomHeader title={i18n.t(LANGUAGE_KEYS.SETTING)} />
+    )
+  })
 
   @observable.ref isLanguageBoxCollapsed: boolean = true
 
@@ -236,8 +245,7 @@ const obStyles = observable({
         backgroundColor: colors.border
       },
       lineItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
+        ...mixins.rowCenter,
         justifyContent: 'space-between',
         height: sizes.gap * 2,
         paddingHorizontal: sizes.gap * 0.8,
@@ -251,14 +259,13 @@ const obStyles = observable({
         justifyContent: 'center'
       },
       lineItemContent: {
-        flexDirection: 'row'
+        ...mixins.rowCenter
       },
       lineItemLanguageContent: {
         flexDirection: 'column',
         justifyContent: 'center'
       },
       lineItemTitle: {
-        lineHeight: sizes.gap * 2
       },
       lineItemLanguageTitle: {
         ...fonts.h4

@@ -120,7 +120,9 @@ export const AboutStack = createStackNavigator({
   [EAboutRoutes.Setting]: getNavigationRouteConfig(Setting, LANGUAGE_KEYS.SETTING)
 }, {
   defaultNavigationOptions: getDefaultNavigationOptions(),
-  navigationOptions: () => ({
+  navigationOptions: ({ navigation }) => ({
+    // 非根 About 屏都要隐藏 Tabbar（Github、Setting）
+    tabBarVisible: navigation.state.index === 0,
     tabBarLabel: i18n.t(LANGUAGE_KEYS.ABOUT),
     tabBarIcon: options => (
       <Ionicon

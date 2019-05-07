@@ -13,6 +13,7 @@ import { Text } from '@app/components/common/text'
 import { DoubleClick } from '@app/components/common/double-click'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
+import { IS_IOS } from '@app/config'
 
 interface IHeaderProps {
   onDoubleClick?(): void
@@ -39,6 +40,7 @@ export const headerStyles = observable({
     return StyleSheet.create({
       title: {
         ...fonts.h3,
+        fontSize: IS_IOS ? 21 : fonts.h3.fontSize,
         fontWeight: 'bold',
         color: colors.cardBackground
       }

@@ -71,7 +71,7 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
   + 使用 [AsyncStorage](https://github.com/surmon-china/surmon.me.native/blob/master/src/services/storage.ts) 及本机数据 [初始化用户数据](https://github.com/surmon-china/surmon.me.native/blob/master/src/stores/option.ts#L24)
 - 了解更多的实现细节：
    + 阅读源码
-   + [读博客](https://surmon.me/article/)
+   + [读博客](https://surmon.me/article/145)
 
 ## 开始开发
 
