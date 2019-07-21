@@ -17,26 +17,17 @@
     "type": "git",
     "url": "https://github.com/surmon-china/surmon.me.native.git"
   },
-  "rnpm": {
-    "assets": [
-      "./src/assets/fonts/"
-    ]
-  },
-  "resolutions": {
-    "terser": "3.17.0"
-  },
   "scripts": {
     "dev": "npm start --reset-cache",
     "dev:ios": "react-native run-ios",
     "dev:android": "react-native run-android",
     "dev:all": "npm run dev:ios && npm run dev:android",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
     "build:ios": "react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
     "build:android": "react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
     "release:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
-    "tsc": "tsc",
-    "postinstall": "rndebugger-open"
+    "tsc": "tsc"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.5.1",
@@ -48,7 +39,7 @@
     "mobx-react": "^5.4.3",
     "query-string": "^6.5.0",
     "react": "^16.8.6",
-    "react-native": "^0.59.5",
+    "react-native": "^0.60.4",
     "react-native-actionsheet": "^2.4.2",
     "react-native-autoheight-webview": "^1.1.2",
     "react-native-gesture-handler": "^1.2.0",
@@ -60,25 +51,26 @@
     "react-navigation": "^3.11.0"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.5.5",
+    "@react-native-community/eslint-config": "^0.0.5",
     "@types/gravatar": "^1.8.0",
     "@types/highlight.js": "^9.12.3",
-    "@types/jest": "^24.0.12",
-    "@types/marked": "^0.6.5",
-    "@types/react": "^16.8.15",
-    "@types/react-native": "^0.57.51",
+    "@types/jest": "^24.0.15",
+    "@types/marked": "0.6.5",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.60.2",
     "@types/react-native-vector-icons": "^6.4.0",
     "@types/react-navigation": "^3.0.6",
-    "@types/react-test-renderer": "^16.8.1",
-    "babel-jest": "^24.7.1",
-    "jest": "^24.7.1",
-    "metro-react-native-babel-preset": "^0.53.1",
-    "react-native-debugger-open": "^0.3.19",
+    "@types/react-test-renderer": "^16.8.2",
+    "babel-jest": "^24.8.0",
+    "eslint": "^6.1.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.55.0",
     "react-native-typescript-transformer": "^1.2.12",
     "react-test-renderer": "16.8.6",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.3"
   },
   "jest": {
     "preset": "react-native"

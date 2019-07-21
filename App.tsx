@@ -6,7 +6,6 @@
  */
 
 import React, { Component } from 'react'
-import { AppRegistry } from 'react-native'
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
 import SplashScreen from 'react-native-splash-screen'
 import { Observer } from 'mobx-react'
@@ -78,7 +77,7 @@ const AppTabNavigator = createBottomTabNavigator(
 // https://reactnavigation.org/docs/zh-Hans/app-containers.html
 const AppContainer = createAppContainer(AppTabNavigator)
 
-class App extends Component {
+export class App extends Component {
 
   componentDidMount() {
     SplashScreen.hide()
@@ -100,5 +99,3 @@ class App extends Component {
     )
   }
 }
-
-AppRegistry.registerComponent(appJson.name, () => App)
