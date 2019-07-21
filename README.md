@@ -1,32 +1,50 @@
-# surmon.me.native 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me/master/static/icon.png" height="90" alt="surmon.me logo" />
+</p>
 
-[![](https://badge.juejin.im/entry/58e53578a0bb9f0069055b23/likes.svg?style=flat-square)](https://juejin.im/entry/58e53578a0bb9f0069055b23/detail)
-[![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/issues)
-[![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/network)
-[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=flat-square)](https://github.com/surmon-china/surmon.me.native/stargazers)
+# surmon.me.native
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
+[![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)
+[![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/stargazers)
+[![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/issues)
+[![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/network)
+[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native)
 
-A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://github.com/facebook/react-native).
+## Introduction
 
-![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/download-url.png)
+**Applaction for [Surmon.me](https://surmon.me) blog, powered by [react-native](https://github.com/facebook/react-native).**
 
-**🔝🔝🔝 Scan QRcode or [click here 👉 download Android apk](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/surmon.me.apk)**
+**Onlint site:** https://surmon.me/app
 
-#### 相关的其他项目：
-- SRE service: [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
-- Web service: [nodepress](https://github.com/surmon-china/nodepress) powered by nestjs
-- Web client for user: [surmon.me](https://github.com/surmon-china/surmon.me) powered by Nuxt.js(Vue)
-- Web client for admin: [angular-admin](https://github.com/surmon-china/angular-admin) powered by Angular + Bootstrap4
+<p align="center">
+  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/download-url.png" height="300" alt="qrcode" />
+  <br>
+  <strong>
+    <span>Scan QRcode or</span>
+    <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/surmon.me.apk">download Android apk</a>
+  </strong>
+</p>
+
+---
+
+**其他相关项目：**
+- **RESTful API service:** [nodepress](https://github.com/surmon-china/nodepress) powered by [nestjs](https://github.com/nestjs/nest)
+- **web client for user:** [surmon.me](https://github.com/surmon-china/surmon.me) powered by [Nuxt.js](https://github.com/nuxt/nuxt.js)
+- **web client for admin:** [angular-admin](https://github.com/surmon-china/angular-admin) powered by [Angular](https://github.com/angular/angular) & [Bootstrap](https://github.com/twbs/bootstrap)
+- **SRE service:** [sre.surmon.me](https://github.com/surmon-china/sre.surmon.me)
+
+---
 
 **IOS Runtime**
 
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-1.gif" width="260px" />
 </a>
-<span>&nbsp;&nbsp;&nbsp;</span>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-2.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-2.gif" width="260px" />
 </a>
-<span>&nbsp;&nbsp;&nbsp;</span>
+<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
 <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" target="_blank">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/g-3.gif" width="260px" />
 </a>
@@ -57,7 +75,7 @@ A blog applaction for [Surmon.me](https://surmon.me) by [react-native](https://g
    + 被公共消费的任何类型扩展
 - **[constants](https://github.com/surmon-china/surmon.me.native/tree/master/src/constants)**
    + 被公共消费的任何直接量
-- **[languages](https://github.com/surmon-china/surmon.me.native/tree/master/src/languages)** 
+- **[languages](https://github.com/surmon-china/surmon.me.native/tree/master/src/languages)**
    + i18n 语言包
 - **[style](https://github.com/surmon-china/surmon.me.native/tree/master/src/style)**
    + 类似 Web 平台的 CSS 集合，包含字体、颜色、尺寸、混入

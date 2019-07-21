@@ -6,7 +6,7 @@
   "author": {
     "name": "Surmon",
     "email": "surmon@foxmail.com",
-    "url": "https://surmon.me"
+    "url": "https://github.com/surmon-china"
   },
   "license": "MIT",
   "bugs": {
@@ -16,11 +16,6 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/surmon-china/surmon.me.native.git"
-  },
-  "rnpm": {
-    "assets": [
-      "./src/assets/fonts/"
-    ]
   },
   "resolutions": {
     "terser": "3.17.0"
@@ -35,50 +30,49 @@
     "build:android": "react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
     "release:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
-    "tsc": "tsc",
-    "postinstall": "rndebugger-open"
+    "tsc": "tsc"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.3.3",
+    "@react-native-community/async-storage": "^1.5.1",
     "autobind-decorator": "^2.4.0",
     "gravatar": "^1.8.0",
-    "highlight.js": "^9.15.6",
-    "marked": "^0.6.2",
-    "mobx": "^5.9.4",
-    "mobx-react": "^5.4.3",
-    "query-string": "^6.5.0",
+    "highlight.js": "^9.15.8",
+    "marked": "0.7.0",
+    "mobx": "^5.13.0",
+    "mobx-react": "^6.1.1",
+    "query-string": "^6.8.1",
     "react": "^16.8.6",
-    "react-native": "^0.59.5",
+    "react-native": "^0.60.4",
     "react-native-actionsheet": "^2.4.2",
-    "react-native-autoheight-webview": "^1.1.2",
-    "react-native-gesture-handler": "^1.2.0",
-    "react-native-image-zoom-viewer": "^2.2.25",
-    "react-native-root-toast": "^3.0.2",
+    "react-native-autoheight-webview": "^1.1.5",
+    "react-native-gesture-handler": "^1.3.0",
+    "react-native-image-zoom-viewer": "^2.2.26",
+    "react-native-root-toast": "^3.1.2",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-vector-icons": "^6.4.2",
-    "react-native-webview": "^5.8.1",
-    "react-navigation": "^3.9.1"
+    "react-native-vector-icons": "^6.6.0",
+    "react-native-webview": "^5.12.1",
+    "react-navigation": "^3.11.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
+    "@babel/core": "^7.5.5",
     "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
+    "@babel/runtime": "^7.5.5",
     "@types/gravatar": "^1.8.0",
     "@types/highlight.js": "^9.12.3",
-    "@types/jest": "^24.0.12",
+    "@types/jest": "^24.0.15",
     "@types/marked": "^0.6.5",
-    "@types/react": "^16.8.15",
-    "@types/react-native": "^0.57.51",
-    "@types/react-native-vector-icons": "^6.4.0",
-    "@types/react-navigation": "^3.0.6",
-    "@types/react-test-renderer": "^16.8.1",
-    "babel-jest": "^24.7.1",
-    "jest": "^24.7.1",
-    "metro-react-native-babel-preset": "^0.53.1",
+    "@types/react": "^16.8.23",
+    "@types/react-native": "^0.60.2",
+    "@types/react-native-vector-icons": "^6.4.1",
+    "@types/react-navigation": "^3.0.7",
+    "@types/react-test-renderer": "^16.8.2",
+    "babel-jest": "^24.8.0",
+    "jest": "^24.8.0",
+    "metro-react-native-babel-preset": "^0.55.0",
     "react-native-debugger-open": "^0.3.19",
     "react-native-typescript-transformer": "^1.2.12",
     "react-test-renderer": "16.8.6",
-    "typescript": "^3.4.5"
+    "typescript": "^3.5.3"
   },
   "jest": {
     "preset": "react-native"
