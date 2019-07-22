@@ -23,8 +23,8 @@
     "dev:android": "react-native run-android",
     "dev:all": "npm run dev:ios && npm run dev:android",
     "start": "react-native start",
-    "build:ios": "react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
-    "build:android": "react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
+    "build:ios": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
+    "build:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
     "release:android": "cd android && ./gradlew assembleRelease",
     "test": "jest",
     "tsc": "tsc"

@@ -105,7 +105,7 @@ rm -rf android/app/src/main/res/drawable-*
 - https://reactnative.cn/docs/accessibility.html
 - https://code.fb.com/ios/making-react-native-apps-accessible/
 
-启动屏：
+启动屏（Android）：
 - https://juejin.im/entry/59c741adf265da066a1043b0
 - https://github.com/crazycodeboy/react-native-splash-screen
 
@@ -124,6 +124,11 @@ https://stackoverflow.com/a/38582258
    + http://stackoverflow.com/questions/35476349/how-to-build-ipa-for-react-native
    + http://www.jianshu.com/p/a19d2d0747ee
    + https://blog.whezh.com/react-native-ios-bundle/
+- 真机调试：
+   1. `npm run build:ios`
+   2. 拖动 bundle & main.jsbundle 到 <surmon_me>
+   3. 连接手机
+   4. Produce -> Profile（或者选一个环境为 relase 的命令）
 
 ##### Android
 - Icon 转换生成工具：http://romannurik.github.io/AndroidAssetStudio/icons-generic.html
