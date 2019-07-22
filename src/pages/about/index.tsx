@@ -139,18 +139,6 @@ export class About extends Component<IAboutProps> {
         url: 'https://twitter.com/surmon_me'
       },
       {
-        name: i18n.t(LANGUAGE_KEYS.WEIBO),
-        key: 'weibo',
-        remind: true,
-        icon: (
-          <FontAwesome
-            name="weibo"
-            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
-          />
-        ),
-        url: 'https://weibo.com/surmon'
-      },
-      {
         name: i18n.t(LANGUAGE_KEYS.LINKEDIN),
         key: 'linkedin',
         icon: 'logo-linkedin',
@@ -168,6 +156,7 @@ export class About extends Component<IAboutProps> {
         url: 'https://t.me/surmon'
       },
       {
+        remind: true,
         name: 'Instagram',
         key: 'instagram',
         icon: 'logo-instagram',

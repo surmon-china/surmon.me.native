@@ -166,7 +166,7 @@ const obStyles = observable({
       },
       bannerImage: {
         flex: 1,
-        backgroundColor: colors.cardBackground
+        backgroundColor: colors.textSecondary
       },
       like: {
         position: 'absolute',

@@ -1,7 +1,7 @@
 {
   "name": "surmon.me.native",
   "description": "App for Surmon.me blog",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "private": false,
   "author": {
     "name": "Surmon",

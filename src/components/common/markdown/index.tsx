@@ -230,7 +230,6 @@ export class Markdown extends Component<IMarkdownProps> {
           }}
           customScript={this.htmlScript}
           customStyle={this.htmlStyle}
-          useWebKit={false}
           scalesPageToFit={false}
           scrollEnabled={false}
           originWhitelist={['*']}

@@ -7,19 +7,17 @@
 
 import React, { Component } from 'react'
 import { createBottomTabNavigator, createAppContainer } from 'react-navigation'
-import SplashScreen from 'react-native-splash-screen'
+// import SplashScreen from 'react-native-splash-screen'
 import { Observer } from 'mobx-react'
 import { optionStore } from '@app/stores/option'
 import { indexStore } from '@app/pages/home/index'
 import { guestbookStore } from '@app/pages/guestbook/index'
 import { EHomeRoutes, EGuestbookRoutes } from '@app/routes'
 import { navigatorStacks, navigatorBaseOptions } from '@app/index'
-import { navigationPersistenceKey, IS_ANDROID } from '@app/config'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'
 
 const { BottomTabBar } = require('react-navigation-tabs')
-const appJson = require('./app.json')
 
 class AppTabBar extends Component<any> {
   render() {
@@ -80,7 +78,7 @@ const AppContainer = createAppContainer(AppTabNavigator)
 export class App extends Component {
 
   componentDidMount() {
-    SplashScreen.hide()
+    // SplashScreen.hide()
   }
 
   render() {
@@ -88,7 +86,6 @@ export class App extends Component {
       <Observer
         render={() => (
           <AppContainer
-            persistenceKey={navigationPersistenceKey}
             screenProps={{
               language: optionStore.language,
               darkTheme: optionStore.darkTheme

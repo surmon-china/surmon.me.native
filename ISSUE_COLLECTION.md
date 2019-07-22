@@ -39,6 +39,10 @@ npm run test
 
 ### Issues
 
+##### `'glog/logging.h' file not found`
+
+Remove pod lock file and reinstall pod
+
 ##### `Loading dependency graph, done.`
 
 ```bash
