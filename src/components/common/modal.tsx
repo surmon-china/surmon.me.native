@@ -8,8 +8,8 @@
 import React, { Component, ReactNode } from 'react'
 import { Modal, View, Animated, SafeAreaView, TouchableWithoutFeedback, StyleSheet } from 'react-native'
 import { observable, computed, action, reaction } from 'mobx'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observer } from 'mobx-react'
+import { Iconfont } from '@app/components/common/iconfont'
 import { IChildrenProps } from '@app/types/props'
 import { Text } from './text'
 import colors from '@app/style/colors'
@@ -48,7 +48,7 @@ export class BetterModal extends Component<IModalProps> {
 
   @computed
   private get propOpacity(): number {
-    return this.props.opacity || 0.5
+    return this.props.opacity || 0.6
   }
 
   private updateMaskVisible(visible: boolean, callback?: () => void) {
@@ -89,8 +89,8 @@ export class BetterModal extends Component<IModalProps> {
                 accessibilityLabel="关闭弹窗"
                 onPress={props.onClose}
               >
-                <Ionicon
-                  name="ios-close"
+                <Iconfont
+                  name="cancel"
                   color={colors.textLink}
                   {...getHeaderButtonStyle()}
                 />
@@ -123,7 +123,7 @@ const obStyles = observable({
         left: 0,
         width: '100%',
         height: '100%',
-        backgroundColor: colors.inverse
+        backgroundColor: colors.grey
       },
       header: {
         ...mixins.rowCenter,

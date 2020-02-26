@@ -6,9 +6,9 @@
  */
 
 import React, { Component } from 'react'
-import { TouchableWithoutFeedback, StyleProp, ViewStyle } from 'react-native'
+import { TouchableWithoutFeedback, View, StyleProp, ViewStyle } from 'react-native'
 import { observable, action } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
 
 export interface IDoubleClickProps {
@@ -18,12 +18,7 @@ export interface IDoubleClickProps {
   delay?: number
 }
 
-@observer
-export class DoubleClick extends Component<IDoubleClickProps> {
-
-  constructor(props: IDoubleClickProps) {
-    super(props)
-  }
+@observer export class DoubleClick extends Component<IDoubleClickProps> {
 
   @observable.ref private lastPress: number = 0
 
@@ -51,7 +46,7 @@ export class DoubleClick extends Component<IDoubleClickProps> {
         style={this.props.style}
         onPress={this.onPress}
       >
-        {this.props.children}
+        <View>{this.props.children}</View>
       </TouchableWithoutFeedback>
     )
   }

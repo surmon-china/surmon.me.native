@@ -7,17 +7,15 @@
 
 import React, { Component } from 'react'
 import { Animated, StyleSheet, View, Switch, Alert } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, action, reaction } from 'mobx'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observer } from 'mobx-react'
 import { IPageProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { optionStore } from '@app/stores/option'
 import { likeStore } from '@app/stores/like'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { TouchableView } from '@app/components/common/touchable-view'
-import { CustomHeader } from '@app/components/layout/header'
 import i18n, { TLanguage, languageMaps } from '@app/services/i18n'
 import storage from '@app/services/storage'
 import colors from '@app/style/colors'
@@ -29,8 +27,7 @@ interface ILanguageDetailIconProps {
   close: boolean
 }
 
-@observer
-class LanguageDetailIcon extends Component<ILanguageDetailIconProps> {
+@observer class LanguageDetailIcon extends Component<ILanguageDetailIconProps> {
 
   constructor(props: ILanguageDetailIconProps) {
     super(props)
@@ -54,13 +51,11 @@ class LanguageDetailIcon extends Component<ILanguageDetailIconProps> {
     return (
       <>
         <Animated.View style={{ opacity: this.opacity }}>
-          <Text style={styles.lineItemTitle}>
-            {languageMaps[optionStore.language].name}
-          </Text>
+          <Text>{languageMaps[optionStore.language].name}</Text>
         </Animated.View>
-        <Ionicon
+        <Iconfont
           style={[styles.lineDetailIcon, styles.lineItemTitle]}
-          name={this.props.close ? 'ios-arrow-forward' : 'ios-arrow-down'}
+          name={this.props.close ? 'next' : 'next-bottom'}
         />
       </>
     )
@@ -69,18 +64,7 @@ class LanguageDetailIcon extends Component<ILanguageDetailIconProps> {
 
 export interface ISettingProps extends IPageProps {}
 
-@observer
-export class Setting extends Component<ISettingProps> {
-
-  constructor(props: ISettingProps) {
-    super(props)
-  }
-
-  static navigationOptions = (config: NavigationScreenConfigProps) => ({
-    headerTitle: (
-      <CustomHeader title={i18n.t(LANGUAGE_KEYS.SETTING)} />
-    )
-  })
+@observer export class Setting extends Component<ISettingProps> {
 
   @observable.ref isLanguageBoxCollapsed: boolean = true
 
@@ -146,11 +130,10 @@ export class Setting extends Component<ISettingProps> {
                   <Text style={styles.lineItemLanguageEnglish}>{languageMaps[lang].english}</Text>
                 </View>
                 <View style={styles.lineItemContent}>
-                  <Ionicon
-                    name="ios-checkmark"
+                  <Iconfont
+                    name="success"
                     style={[
                       styles.lineItemTitle,
-                      fonts.h1,
                       {
                         color:
                           lang === optionStore.language
@@ -161,7 +144,7 @@ export class Setting extends Component<ISettingProps> {
                   />
                 </View>
               </TouchableView>
-              <View style={styles.lineSeparator}></View>
+              <View style={styles.lineSeparator} />
             </View>
           )
         })}
@@ -173,11 +156,11 @@ export class Setting extends Component<ISettingProps> {
     const { styles } = obStyles
     return (
       <View style={styles.container}>
-        <View style={styles.lineSeparator}></View>
+        <View style={styles.lineSeparator} />
         <View style={styles.lineItem}>
           <View style={styles.lineItemContent}>
-            <Ionicon
-              name="ios-moon"
+            <Iconfont
+              name="moon"
               style={[styles.lineItemIcon, styles.lineItemTitle]}
             />
             <Text style={styles.lineItemTitle}>
@@ -191,14 +174,14 @@ export class Setting extends Component<ISettingProps> {
             />
           </View>
         </View>
-        <View style={styles.lineSeparator}></View>
+        <View style={styles.lineSeparator} />
         <TouchableView
           style={styles.lineItem}
           onPress={this.handleToggleLanguages}
         >
           <View style={styles.lineItemContent}>
-            <Ionicon
-              name="ios-globe"
+            <Iconfont
+              name="earth"
               style={[styles.lineItemIcon, styles.lineItemTitle]}
             />
             <Text style={styles.lineItemTitle}>
@@ -209,23 +192,23 @@ export class Setting extends Component<ISettingProps> {
             <LanguageDetailIcon close={this.isLanguageBoxCollapsed} />
           </View>
         </TouchableView>
-        <View style={styles.lineSeparator}></View>
+        <View style={styles.lineSeparator} />
         {this.renderLanguagesView()}
         <View style={[styles.lineSeparator, { marginTop: sizes.gap / 2 }]} />
         <TouchableView
           style={[styles.lineItem, styles.lineClearCache]}
           onPress={this.handleClearCache}
         >
-          <Ionicon
-            name="ios-refresh"
+          <Iconfont
+            name="windmill"
             style={[styles.lineItemIcon, styles.lineItemTitle]}
           />
           <Text style={styles.lineItemTitle}>
             {i18n.t(LANGUAGE_KEYS.CLEAR_CACHE)}
           </Text>
         </TouchableView>
-        <View style={styles.lineSeparator}></View>
-        <Text style={styles.version}>Surmon.me ∙ 1.0.0</Text>
+        <View style={styles.lineSeparator} />
+        <Text style={styles.version}>Surmon.me ∙ 1.1.0</Text>
       </View>
     )
   }
@@ -274,13 +257,11 @@ const obStyles = observable({
         ...fonts.small
       },
       lineItemIcon: {
-        ...fonts.h3,
         color: colors.textDefault,
         width: sizes.gap,
         marginRight: sizes.gap / 2
       },
       lineDetailIcon: {
-        ...fonts.h4,
         color: colors.textSecondary,
         marginLeft: sizes.gap / 2
       },

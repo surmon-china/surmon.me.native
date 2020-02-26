@@ -13,7 +13,7 @@ import { appApi } from '@app/config'
 import { showToast } from './toast'
 
 // 构造参数
-export function formatURL(url: TRequestUrlPath, params?: IRequestParams): TRequestUrlPath {
+export const formatURL = (url: TRequestUrlPath, params?: IRequestParams): TRequestUrlPath => {
   let query = ''
   if (params && Object.keys(params).length) {
     query = url.includes('?')
@@ -24,7 +24,7 @@ export function formatURL(url: TRequestUrlPath, params?: IRequestParams): TReque
 }
 
 // 请求服务
-export function httpService<T>(url: TRequestUrlPath, options: RequestInit = {}): Promise<THttpSuccessResponse<T>> {
+export const httpService = <T>(url: TRequestUrlPath, options: RequestInit = {}): Promise<THttpSuccessResponse<T>> => {
   const defaultOptions = {
     includeCredentials: true,
     headers: {
@@ -41,23 +41,23 @@ export function httpService<T>(url: TRequestUrlPath, options: RequestInit = {}):
     })
 }
 
-export function get<T>(url: TRequestUrlPath, getParams?: IRequestParams): Promise<THttpSuccessResponse<T>> {
+export const get = <T>(url: TRequestUrlPath, getParams?: IRequestParams): Promise<THttpSuccessResponse<T>> => {
   return httpService<T>(formatURL(url, getParams), { method: 'GET' })
 }
 
-export function post<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
+export const post = <T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> => {
   return httpService<T>(url, { method: 'POST', body: JSON.stringify(data) })
 }
 
-export function put<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
+export const put = <T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> => {
   return httpService<T>(url, { method: 'PUT', body: JSON.stringify(data) })
 }
 
-export function patch<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
+export const patch = <T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> => {
   return httpService<T>(url, { method: 'PATCH', body: JSON.stringify(data) })
 }
 
-export function remove<T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> {
+export const remove = <T>(url: TRequestUrlPath, data?: TRequestData): Promise<THttpSuccessResponse<T>> => {
   return httpService<T>(url, { method: 'DELETE', body: JSON.stringify(data) })
 }
 

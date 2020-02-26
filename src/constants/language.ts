@@ -70,7 +70,6 @@ export enum LANGUAGE_KEYS {
 
   TWITTER = 'twitter',
   LINKEDIN = 'linkedin',
-  WEIBO = 'weibo',
 
   SETTING = 'setting',
   DARK_THEME = 'darkTheme',

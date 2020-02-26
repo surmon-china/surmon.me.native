@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * ImageViewerModal
  * @file 图片滑动浏览控件
@@ -6,12 +7,13 @@
  */
 
 import React from 'react'
-import { Modal } from 'react-native'
-import ImageViewer from 'react-native-image-zoom-viewer'
-import { observer } from 'mobx-react/native'
-import { AutoActivityIndicator } from './activity-indicator'
-import { LANGUAGE_KEYS } from '@app/constants/language'
-import i18n from '@app/services/i18n'
+import { SafeAreaView, Text, Modal, View } from 'react-native'
+import ImageView from 'react-native-image-viewing'
+import { observer } from 'mobx-react'
+import { Dark } from '@app/style/colors'
+import mixins from '@app/style/mixins'
+import sizes from '@app/style/sizes'
+import { IS_ANDROID } from '@app/config'
 
 export interface IImageViewerModalProps {
   images: string[]
@@ -21,22 +23,38 @@ export interface IImageViewerModalProps {
 }
 
 export const ImageViewerModal = observer((props: IImageViewerModalProps): JSX.Element => {
-  const images = props.images.map(url => ({ url }))
-  return (
-    <Modal visible={props.visible} transparent={true}>
-      <ImageViewer
-        index={props.index}
-        imageUrls={images}
-        menuContext={{
-          saveToLocal: i18n.t(LANGUAGE_KEYS.SAVE),
-          cancel: i18n.t(LANGUAGE_KEYS.CANCEL)
-        }}
-        onCancel={props.onClose}
-        onClick={props.onClose}
-        loadingRender={() => (
-          <AutoActivityIndicator size="large" />
-        )}
-      />
-    </Modal>
+  const images = props.images.map(uri => ({ uri }))
+  const viewElement = (
+    <ImageView
+      imageIndex={props.index || 0}
+      images={images}
+      visible={props.visible}
+      onRequestClose={props.onClose}
+      FooterComponent={props => (
+        <SafeAreaView>
+          <Text style={{
+            ...mixins.center,
+            marginBottom: sizes.gap,
+            color: Dark.textDefault,
+            textAlign: 'center'
+          }}>
+            {props.imageIndex + 1} / {images.length}
+          </Text>
+        </SafeAreaView>
+      )}
+    />
   )
+
+  // WORDAROUND
+  if (IS_ANDROID) {
+    return (
+      <Modal visible={props.visible}>
+        <View style={{ flex: 1, backgroundColor: Dark.background }}>
+          {viewElement}
+        </View>
+      </Modal>
+    )
+  }
+
+  return viewElement
 })

@@ -19,15 +19,22 @@ const mixins = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center'
   },
+  // 绝对居中
+  center: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   // 头部按钮
   headerButton: {
     paddingHorizontal: sizes.gap
   }
 })
 
-export function getHeaderButtonStyle(size?: number | void | null): { size: number, style: ViewStyle } {
-  size = size != null ? size : 26
-  return { size, style: mixins.headerButton }
+export const getHeaderButtonStyle = (size?: number | void | null): { size: number, style: ViewStyle } => {
+  return {
+    size: size != null ? size : 16,
+    style: mixins.headerButton
+  }
 }
 
 export default mixins

@@ -13,7 +13,7 @@ export default {
 
   [LANGUAGE_KEYS.HOME]: '明殿',
   [LANGUAGE_KEYS.ARTICLE_DETAIL]: '真知灼见',
-  [LANGUAGE_KEYS.GUESTBOOK]: '百鸣苑',
+  [LANGUAGE_KEYS.GUESTBOOK]: '四方馆',
   [LANGUAGE_KEYS.ABOUT]: '狂浪生',
 
   [LANGUAGE_KEYS.ARTICLE]: '文章',
@@ -67,7 +67,6 @@ export default {
 
   [LANGUAGE_KEYS.TWITTER]: '推特',
   [LANGUAGE_KEYS.LINKEDIN]: '领英',
-  [LANGUAGE_KEYS.WEIBO]: '微博',
 
   [LANGUAGE_KEYS.SETTING]: '设置',
   [LANGUAGE_KEYS.CLEAR_CACHE]: '清理缓存',

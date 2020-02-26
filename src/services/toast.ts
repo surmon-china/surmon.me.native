@@ -10,7 +10,7 @@ import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n from '@app/services/i18n'
 import fonts from '@app/style/fonts'
 
-export function showToast(message: string, options?: ToastOptions): void {
+export const showToast = (message: string, options?: ToastOptions): void => {
   Toast.show(
     message || i18n.t(LANGUAGE_KEYS.UNKNOW_ERROR),
     Object.assign({

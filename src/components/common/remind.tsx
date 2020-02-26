@@ -7,8 +7,8 @@
 
 import React from 'react'
 import { StyleProp, TextStyle } from 'react-native'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observer } from 'mobx-react'
+import { Iconfont } from '@app/components/common/iconfont'
 import colors from '@app/style/colors'
 
 interface IRemindProps {
@@ -19,11 +19,11 @@ interface IRemindProps {
 
 export const Remind = observer((props: IRemindProps): JSX.Element => {
   return (
-    <Ionicon
+    <Iconfont
       style={props.style}
       size={props.size || 10}
       color={props.color || colors.red}
-      name="ios-egg"
+      name="star"
     />
   )
 })

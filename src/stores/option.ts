@@ -11,7 +11,7 @@ import { LANGUAGES } from '@app/constants/language'
 import { STORAGE } from '@app/constants/storage'
 import { getDeviceLanguage, updateLanguage, TLanguage } from '@app/services/i18n'
 import storage from '@app/services/storage'
-import { updateTheme } from '@app/style/colors'
+import { updateTheme, isDarkSystemTheme } from '@app/style/colors'
 
 export interface IOptionStore {
   language: TLanguage
@@ -25,18 +25,22 @@ class OptionStore {
   }
   
   @observable.ref language: TLanguage = LANGUAGES.ZH
-  @observable.ref darkTheme: boolean = false
+  @observable.ref darkTheme: boolean = isDarkSystemTheme
 
-  @computed
-  get isEnLang() {
+  @computed get isEnLang() {
     return this.language === LANGUAGES.EN
   }
 
   @action.bound
-  updateLanguage(language: TLanguage) {
+  updateLanguageWithOutStorage(language: TLanguage) {
     this.language = language
-    storage.set(STORAGE.LOCAL_LANGUAGE, language)
     updateLanguage(language)
+  }
+
+  @action.bound
+  updateLanguage(language: TLanguage) {
+    this.updateLanguageWithOutStorage(language)
+    storage.set(STORAGE.LOCAL_LANGUAGE, language)
   }
 
   @action.bound
@@ -53,24 +57,16 @@ class OptionStore {
   }
 
   private initLanguage() {
-    // 获取本机默认语言
-    function getDeviceDefaultLanguage(): Promise<TLanguage> {
-      return getDeviceLanguage().then(language => {
-        return language.includes(LANGUAGES.EN)
-          ? LANGUAGES.EN
-          : LANGUAGES.ZH
-      })
-    }
-    // 获取本地存储的用户设置语言
+    // 获取本地存储的用户设置语言，若用户未设置语言，则首选本机语言
     storage.get<TLanguage>(STORAGE.LOCAL_LANGUAGE)
       .then(localLanguage => {
         return localLanguage
           ? Promise.resolve(localLanguage)
-          : getDeviceDefaultLanguage()
+          : getDeviceLanguage()
       })
       .then(language => {
         console.log('Init app language:', language)
-        this.updateLanguage(language)
+        this.updateLanguageWithOutStorage(language)
       })
   }
 

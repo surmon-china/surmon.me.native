@@ -7,84 +7,74 @@
 
 import React, { Component, RefObject } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
-import { observable } from 'mobx'
-import { Observer } from 'mobx-react'
-import { observer } from 'mobx-react/native'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observable } from 'mobx'
+import { Observer, observer } from 'mobx-react'
 import { Remind } from '@app/components/common/remind'
+import { Iconfont } from '@app/components/common/iconfont'
 import { TouchableView } from '@app/components/common/touchable-view'
-import { CustomHeader } from '@app/components/layout/header'
+import { CustomHeaderTitle } from '@app/components/layout/title'
 import { archiveFilterStore, ArchiveFilter } from '@app/components/archive/filter'
 import { ArticleList } from '@app/components/archive/list'
+import { IPageProps, NavigationProps } from '@app/types/props'
+import { HomeRoutes } from '@app/constants/routes'
 import { LANGUAGE_KEYS } from '@app/constants/language'
-import { IPageProps } from '@app/types/props'
-import { EHomeRoutes } from '@app/routes'
 import { getHeaderButtonStyle } from '@app/style/mixins'
 import colors from '@app/style/colors'
-import i18n from '@app/services/i18n'
 import sizes from '@app/style/sizes'
 
-// 首页 Store
 class IndexStore {
-
   articleListElement: RefObject<ArticleList> = React.createRef()
 
-  @boundMethod
-  scrollToArticleListTop() {
+  @boundMethod scrollToArticleListTop() {
     const element = this.articleListElement.current
     element && element.scrollToListTop()
   }
 }
-
 export const indexStore = new IndexStore()
 export interface IIndexProps extends IPageProps {}
 
-@observer
-export class Home extends Component<IIndexProps> {
+@observer export class Home extends Component<IIndexProps> {
 
-  constructor(props: IIndexProps) {
-    super(props)
-  }
-
-  static navigationOptions = (config: NavigationScreenConfigProps) => {
+  static getPageScreenOptions = ({ navigation }: NavigationProps) => {
     const { styles } = obStyles
-    const buttonStyle = {
-      ...getHeaderButtonStyle(21),
-      color: colors.cardBackground
-    }
 
     return {
-      headerTitle: (
-        <CustomHeader
-          title={i18n.t(LANGUAGE_KEYS.HOME)}
+      headerTitle: () => (
+        <CustomHeaderTitle
+          i18nKey={LANGUAGE_KEYS.HOME}
           onDoubleClick={indexStore.scrollToArticleListTop}
         />
       ),
-      headerLeft: (
+      headerLeft: () => <Observer render={() => (
         <TouchableView
           accessibilityLabel="文章筛选器"
           accessibilityHint="切换文章筛选器"
           onPress={() => archiveFilterStore.updateVisibleState(true)}
         >
-          <Ionicon name="ios-options" {...buttonStyle} />
-          <Observer
-            render={() => archiveFilterStore.isActiveTagOrCategoryFilter && (
-              <Remind style={styles.headerCheckedIcon} />
-            )}
+          <Iconfont
+            name="list"
+            color={colors.cardBackground}
+            {...getHeaderButtonStyle()}
           />
+          {archiveFilterStore.isActiveTagOrCategoryFilter && (
+            <Remind style={styles.headerCheckedIcon} />
+          )}
         </TouchableView>
-      ),
-      headerRight: (
+      )}/>,
+      headerRight: () => <Observer render={() => (
         <TouchableView
           accessibilityLabel="搜索按钮"
           accessibilityHint="打开搜索页面"
-          onPress={() => config.navigation.push(EHomeRoutes.ArticleSearch)}
+          onPress={() => navigation.push(HomeRoutes.ArticleSearch)}
         >
-          <Ionicon name="ios-search" {...buttonStyle} />
+          <Iconfont
+            name="search"
+            color={colors.cardBackground}
+            {...getHeaderButtonStyle(18)}
+          />
         </TouchableView>
-      )
+      )}/>
     }
   }
 
@@ -94,6 +84,7 @@ export class Home extends Component<IIndexProps> {
       <View style={styles.container}>
         <ArchiveFilter />
         <ArticleList
+          route={this.props.route}
           navigation={this.props.navigation}
           ref={indexStore.articleListElement}
         />

@@ -5,10 +5,9 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { NativeModules } from 'react-native'
+import * as RNLocalize from 'react-native-localize'
 import { observable, action } from 'mobx'
 import { LANGUAGE_KEYS, LANGUAGES } from '@app/constants/language'
-import { IS_IOS } from '@app/config'
 import en from '@app/languages/en'
 import zh from '@app/languages/zh'
 
@@ -39,7 +38,7 @@ export const languageMaps: TLanguageList = {
 const languages: TLanguages = { en, zh }
 
 class I18nStore {
-  
+
   @observable
   private language: TLanguage = LANGUAGES.ZH
 
@@ -60,13 +59,11 @@ class I18nStore {
 export const i18n = new I18nStore()
 export default i18n
 export const updateLanguage = i18n.updateLanguage.bind(i18n)
-export function getDeviceLanguage(): Promise<TLanguage> {
-  const language = IS_IOS
-    ? NativeModules.SettingsManager.settings.AppleLocale
-    : NativeModules.I18nManager.localeIdentifier
-  return language
-    ? Promise.resolve(language)
-    : NativeModules.RNi18n.getLanguages().then(
-      ([language]: TLanguage[]) => language
-    )
+export const getDeviceLanguage = (): TLanguage => {
+  const localTags = RNLocalize
+    .getLocales()
+    .map(local => local.languageCode)
+  return localTags.some(tag => tag.toLocaleLowerCase().includes(LANGUAGES.ZH))
+    ? LANGUAGES.ZH
+    : LANGUAGES.EN
 }

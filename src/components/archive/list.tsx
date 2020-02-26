@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * App article list component
  * @file 文章列表组件
@@ -8,18 +9,18 @@
 import React, { Component, RefObject } from 'react'
 import { FlatList, StyleSheet, View } from 'react-native'
 import { observable, action, computed, reaction } from 'mobx'
-import { Observer } from 'mobx-react'
-import { observer } from 'mobx-react/native'
+import { Observer, observer } from 'mobx-react'
+import { CommonActions } from '@react-navigation/native'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { IS_IOS } from '@app/config'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
-import { EHomeRoutes } from '@app/routes'
-import { IS_IOS } from '@app/config'
+import { HomeRoutes } from '@app/constants/routes'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IHttpPaginate, IRequestParams, IHttpResultPaginate } from '@app/types/http'
 import { IArticle, ITag, ICategory } from '@app/types/business'
-import { INavigationProps } from '@app/types/props'
+import { NavigationProps } from '@app/types/props'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { archiveFilterStore, EFilterType, TFilterValue } from './filter'
@@ -35,10 +36,9 @@ import mixins from '@app/style/mixins'
 type THttpResultPaginateArticles = IHttpResultPaginate<IArticle[]>
 
 export type TArticleListElement = RefObject<FlatList<IArticle>>
-export interface IArticleListProps extends INavigationProps {}
+export interface IArticleListProps extends NavigationProps {}
 
-@observer
-export class ArticleList extends Component<IArticleListProps> {
+@observer export class ArticleList extends Component<IArticleListProps> {
  
   constructor(props: IArticleListProps) {
     super(props)
@@ -76,7 +76,10 @@ export class ArticleList extends Component<IArticleListProps> {
 
   @computed
   private get isNoMoreData(): boolean {
-    return !!this.pagination && this.pagination.current_page === this.pagination.total_page
+    return (
+      !!this.pagination &&
+      this.pagination.current_page === this.pagination.total_page
+    )
   }
 
   @action
@@ -158,11 +161,13 @@ export class ArticleList extends Component<IArticleListProps> {
 
   @boundMethod
   private handleToDetailPage(article: IArticle) {
-    this.props.navigation.navigate({
-      key: String(article.id),
-      routeName: EHomeRoutes.ArticleDetail,
-      params: { article }
-    })
+    this.props.navigation.dispatch(
+      CommonActions.navigate({
+        key: String(article.id),
+        name: HomeRoutes.ArticleDetail,
+        params: { article }
+      })
+    )
   }
 
   // 渲染文章列表为空时的状态：无数据
@@ -170,10 +175,8 @@ export class ArticleList extends Component<IArticleListProps> {
   private renderListEmptyView(): JSX.Element | null {
     const { styles } = obStyles
     const commonIconOptions = {
-      name: 'ios-arrow-down',
-      size: 19
-    }
-    const commonIconStyles = {
+      name: 'tobottom',
+      size: 19,
       color: colors.textSecondary
     }
 
@@ -187,14 +190,8 @@ export class ArticleList extends Component<IArticleListProps> {
           <View style={styles.centerContainer}>
             <Text style={styles.normalTitle}>{i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}</Text>
             <View style={{ marginTop: sizes.goldenRatioGap }}>
-              <Ionicon
-                {...commonIconOptions}
-                style={commonIconStyles}
-              />
-              <Ionicon
-                {...commonIconOptions}
-                style={[commonIconStyles, { marginTop: -13 }]}
-              />
+              <Iconfont {...commonIconOptions} />
+              <Iconfont {...commonIconOptions} style={{ marginTop: -13 }} />
             </View>
           </View>
         )}
@@ -240,7 +237,7 @@ export class ArticleList extends Component<IArticleListProps> {
       <Observer
         render={() => (
           <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-            <Ionicon name="ios-arrow-dropup" style={{ color: colors.textSecondary }} />
+            <Iconfont name="next-bottom" color={colors.textSecondary} />
             <Text style={[styles.smallTitle, { marginLeft: sizes.gap / 4 }]}>
               {i18n.t(LANGUAGE_KEYS.LOADMORE)}
             </Text>

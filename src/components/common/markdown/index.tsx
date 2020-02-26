@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * @file Markdown 解析服务
  * @module components/common/markdown
@@ -9,11 +10,11 @@ import Hljs from 'highlight.js'
 import React, { Component } from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
 import { observable, computed, action } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
 import { webUrl } from '@app/config'
-import { EHomeRoutes } from '@app/routes'
-import { INavigationProps } from '@app/types/props'
+import { HomeRoutes } from '@app/constants/routes'
+import { NavigationProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ImageViewerModal } from '@app/components/common/image-viewer'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
@@ -43,7 +44,7 @@ enum WebViewEventAction {
   Url = 'url'
 }
 
-export interface IMarkdownProps extends INavigationProps {
+export interface IMarkdownProps extends NavigationProps {
   markdown: string | null // 内容
   padding?: number // 边距
   sanitize?: boolean // 是否清洗 HTML
@@ -125,12 +126,12 @@ export class Markdown extends Component<IMarkdownProps> {
           const articleId = url.replace(articleUrlPrefix, '')
           this.props.navigation.navigate({
             key: articleId,
-            routeName: EHomeRoutes.ArticleDetail,
+            routeName: HomeRoutes.ArticleDetail,
             params: { articleId }
           })
         } else {
           this.props.navigation.navigate(
-            EHomeRoutes.ArticleWebview,
+            HomeRoutes.ArticleWebview,
             { url }
           )
         }

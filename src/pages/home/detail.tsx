@@ -8,15 +8,15 @@
 import React, { Component, RefObject } from 'react'
 import { Animated, ImageBackground, ScrollView, Share, StyleSheet, View, SafeAreaView, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { observable, action, computed, reaction } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { CommonActions } from '@react-navigation/native'
 import { webUrl } from '@app/config'
-import { EHomeRoutes } from '@app/routes'
-import { IPageProps } from '@app/types/props'
+import { HomeRoutes } from '@app/constants/routes'
 import { IArticle } from '@app/types/business'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { likeStore } from '@app/stores/like'
+import { Iconfont } from '@app/components/common/iconfont'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
 import { Markdown } from '@app/components/common/markdown'
@@ -25,6 +25,7 @@ import { DoubleClick } from '@app/components/common/double-click'
 import { Text } from '@app/components/common/text'
 import { Comment } from '@app/components/comment'
 import { dateToYMD } from '@app/utils/filters'
+import { IPageProps } from '@app/types/props'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
 import sizes, { safeAreaViewBottom } from '@app/style/sizes'
 import i18n from '@app/services/i18n'
@@ -39,9 +40,7 @@ const thumbHeight = sizes.screen.width / sizes.thumbHeightRatio
 const footerHeight = headerHeightCollapsed
 
 export interface IArticleDetailProps extends IPageProps {}
-
-@observer
-export class ArticleDetail extends Component<IArticleDetailProps> {
+@observer export class ArticleDetail extends Component<IArticleDetailProps> {
 
   constructor(props: IArticleDetailProps) {
     super(props)
@@ -52,12 +51,6 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
       { fireImmediately: true }
     )
   }
-
-  static navigationOptions = () => ({
-    title: i18n.t(LANGUAGE_KEYS.ARTICLE_DETAIL),
-    headerBackTitle: null,
-    header: null
-  })
 
   private scrollContentElement: RefObject<ScrollView> = React.createRef()
 
@@ -73,16 +66,14 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
 
   @boundMethod
   private getParamArticle(): IArticle {
-    const { params } = this.props.navigation.state
+    const { params } = this.props.route
     return params && params.article
   }
 
   @boundMethod
   private getArticleId(): number {
-    const { params } = this.props.navigation.state
-    const articleId = params && params.articleId
     const article = this.getParamArticle()
-    return article ? article.id : articleId
+    return article && article.id
   }
 
   @computed
@@ -155,8 +146,12 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
   }
 
   private fetchArticleDatail(): Promise<any> {
+    const articleId = this.getArticleId()
+    if (!articleId) {
+      return Promise.reject()
+    }
     this.updateLoadingState(true)
-    return fetch.get<IArticle>(`/article/${this.getArticleId()}`)
+    return fetch.get<IArticle>(`/article/${articleId}`)
       .then(article => {
         this.updateResultData(article.result)
         return article
@@ -180,11 +175,13 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
   }
 
   private handleToNewArticle(article: IArticle) {
-    this.props.navigation.navigate({
-      key: String(article.id),
-      routeName: EHomeRoutes.ArticleDetail,
-      params: { article }
-    })
+    this.props.navigation.dispatch(
+      CommonActions.navigate({
+        key: String(article.id),
+        name: HomeRoutes.ArticleDetail,
+        params: { article }
+      })
+    )
   }
 
   @boundMethod
@@ -223,7 +220,7 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
         url: `${webUrl}/article/${this.getArticleId()}`
       })
     } catch (error) {
-      console.warn('Share article failed:', error.message);
+      console.warn('Share article failed:', error.message)
     }
   }
 
@@ -252,10 +249,10 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
               accessibilityHint="返回列表页"
               onPress={this.handleGoBack}
             >
-              <Ionicon
-                name="ios-arrow-back"
+              <Iconfont
+                name="prev"
                 color={colors.textTitle}
-                {...getHeaderButtonStyle()}
+                {...getHeaderButtonStyle(18)}
               />
             </TouchableView>
             <View style={styles.name}>
@@ -318,6 +315,7 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
                     />
                   : <Markdown
                       navigation={this.props.navigation}
+                      route={this.props.route}
                       sanitize={false}
                       style={styles.markdown}
                       padding={sizes.goldenRatioGap}
@@ -392,9 +390,8 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
                 style={styles.footerItem}
                 onPress={this.handleOpenComment}
               >
-                <Ionicon
-                  name="ios-chatbubbles"
-                  size={15}
+                <Iconfont
+                  name="comment-discussion"
                   style={styles.footerItemIcon}
                 />
                 <Text style={styles.footerItemText}>
@@ -406,9 +403,8 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
                 style={styles.footerItem}
                 onPress={this.handleLikeArticle}
               >
-                <Ionicon
-                  size={15}
-                  name="ios-heart" 
+                <Iconfont
+                  name="like"
                   style={[
                     styles.footerItemIcon,
                     { color: this.isLikedArticle ? colors.red : styles.footerItemIcon.color }
@@ -428,9 +424,8 @@ export class ArticleDetail extends Component<IArticleDetailProps> {
                 style={styles.footerItem}
                 onPress={this.handleShare}
               >
-                <Ionicon
-                  size={17}
-                  name="ios-share" 
+                <Iconfont
+                  name="share1"
                   style={styles.footerItemIcon}
                 />
                 <Text style={styles.footerItemText}>

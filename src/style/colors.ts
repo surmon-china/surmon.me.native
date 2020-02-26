@@ -6,13 +6,14 @@
  */
 
 import { observable } from 'mobx'
+import { Appearance } from 'react-native-appearance'
 
-export enum EThemes {
+export enum Themes {
   Default = 'default',
   Dark = 'Dark'
 }
 
-type TThemeKey =
+type ThemeKey =
   | 'primary'// 主题色
   | 'secondary' // 次要主题色
 
@@ -36,20 +37,20 @@ type TThemeKey =
   | 'textTitle' // 标题文本
   | 'textLink' // 链接文本
 
-type TTheme = Record<TThemeKey, string>
+type Theme = Record<ThemeKey, string>
 
-export const Default: TTheme = {
+export const Default: Theme = {
   primary: '#0d86ff',
   secondary: '#262626',
   accent: '#4caf50',
   red: '#ff5722',
   yellow: '#ffeb3b',
-  grey: '#efefef',
+  grey: '#e3e3e3',
   inverse: '#333333',
   border: '#BBBBBB',
   background: '#EEEEEE',
   cardBackground: '#FFFFFF',
-  
+
   textDefault: '#555',
   textSecondary: '#bbb',
   textMuted: '#eee',
@@ -58,17 +59,17 @@ export const Default: TTheme = {
   textLink: '#000'
 }
 
-export const Dark: TTheme = {
+export const Dark: Theme = {
   primary: '#0d86ff',
   secondary: '#262626',
   accent: '#4caf50',
   red: '#ff5722',
   yellow: '#ffeb3b',
-  grey: '#efefef',
+  grey: '#3e3e3e',
   inverse: '#FFFFFF',
   border: '#333333',
   background: '#000000',
-  cardBackground: '#191919',
+  cardBackground: '#1a1a1a',
 
   textDefault: '#999999',
   textSecondary: '#777777',
@@ -78,15 +79,13 @@ export const Dark: TTheme = {
   textLink: '#FFFFFF'
 }
 
-const colors = observable<TTheme>(Default)
+export const isDarkSystemTheme = Appearance.getColorScheme() === 'dark'
+const colors = observable<Theme>(isDarkSystemTheme ? Dark : Default)
 
-export function updateTheme(darkTheme: boolean) {
+export default colors
+export const updateTheme = (darkTheme: boolean) => {
   Object.keys(Default).forEach(key => {
-    const themeKty = (key as keyof TTheme)
+    const themeKty = (key as keyof Theme)
     colors[themeKty] = darkTheme ? Dark[themeKty] : Default[themeKty]
   })
 }
-
-export default colors
-
-

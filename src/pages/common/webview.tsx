@@ -9,16 +9,17 @@ import React, { Component } from 'react'
 import { Clipboard, Linking, StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { observable, action, computed } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Iconfont } from '@app/components/common/iconfont'
 import { TouchableView } from '@app/components/common/touchable-view'
-import { IPageProps, INavigationProps } from '@app/types/props'
+import { IPageProps, NavigationProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import { getHeaderButtonStyle } from '@app/style/mixins'
+import { stringLimit } from '@app/utils/filters'
 
 const ActionSheet = require('react-native-actionsheet').default
 
@@ -46,27 +47,29 @@ class WebviewStore {
 
 export const webViewStore = new WebviewStore()
 export interface IWebViewProps extends IPageProps {}
-@observer
-export class WebViewPage extends Component<IWebViewProps> {
+
+@observer export class WebViewPage extends Component<IWebViewProps> {
 
   constructor(props: IWebViewProps) {
     super(props)
     this.initUrl()
   }
 
-  static navigationOptions = ({ navigation }: INavigationProps) => {
-    const { params } = navigation.state
-    const title = (params && params.title) || '...'
-    const buttonStyle = getHeaderButtonStyle()
+  static getPageScreenOptions = ({ navigation, route }: NavigationProps) => {
+    const title = route?.params?.title || '...'
 
     return {
-      title,
-      headerLeft: (
+      title: stringLimit(title, 20),
+      headerLeft: () => (
         <TouchableView onPress={() => navigation.goBack()}>
-          <Ionicon name="ios-arrow-back" {...buttonStyle} />
+          <Iconfont
+            name="prev"
+            color={colors.cardBackground}
+            {...getHeaderButtonStyle(18)}
+          />
         </TouchableView>
       ),
-      headerRight: (
+      headerRight: () => (
         <TouchableView
           onPress={() => {
             const { actionSheetElement: actionSheetRef } = webViewStore
@@ -74,7 +77,11 @@ export class WebViewPage extends Component<IWebViewProps> {
             actionSheet && actionSheet.show()
           }}
         >
-          <Ionicon name="ios-more" {...buttonStyle} />
+          <Iconfont
+            name="share"
+            color={colors.cardBackground}
+            {...getHeaderButtonStyle(20)}
+          />
         </TouchableView>
       )
     }
@@ -102,8 +109,8 @@ export class WebViewPage extends Component<IWebViewProps> {
   }
 
   private initUrl() {
-    const { params } = this.props.navigation.state
-    params && params.url && this.updateUrl(params.url)
+    const url = this.props.route?.params?.url
+    url && this.updateUrl(url)
   }
 
   private updateTitle(title: string) {

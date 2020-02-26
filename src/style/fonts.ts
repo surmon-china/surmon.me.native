@@ -7,9 +7,9 @@
 
 import { Platform } from 'react-native'
 
-export function getLineHeight(fontSize: number): number {
-  const multiplier = (fontSize > 20) ? 0.1 : 0.33;
-  return parseInt(String(fontSize + (fontSize * multiplier)), 10);
+export const getLineHeight = (fontSize: number): number => {
+  const multiplier = (fontSize > 20) ? 0.1 : 0.33
+  return parseInt(String(fontSize + (fontSize * multiplier)), 10)
 }
 
 export const fontFamily = 'DIN-Regular'
@@ -25,11 +25,11 @@ export const base = {
       fontFamily
     }
   })
-};
+}
 
 export const small = {
   ...base,
-  fontSize: base.fontSize * 0.93,
+  fontSize: base.fontSize * 0.9,
   lineHeight: getLineHeight(base.fontSize)
 }
 
@@ -60,5 +60,12 @@ export const h4 = {
 export const h5 = base
 
 export default {
-  fontFamily, base, small, h1, h2, h3, h4, h5
+  fontFamily,
+  base,
+  small,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5
 }

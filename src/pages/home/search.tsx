@@ -8,15 +8,15 @@
 import React, { Component } from 'react'
 import { SafeAreaView, TextInput, ScrollView, StyleSheet, View } from 'react-native'
 import { observable, computed, action } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { TouchableView } from '@app/components/common/touchable-view'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { archiveFilterStore, EFilterType } from '@app/components/archive/filter'
-import { IPageProps } from '@app/types/props'
 import { STORAGE } from '@app/constants/storage'
 import { LANGUAGE_KEYS } from '@app/constants/language'
+import { IPageProps } from '@app/types/props'
 import storage from '@app/services/storage'
 import i18n from '@app/services/i18n'
 import mixins from '@app/style/mixins'
@@ -25,9 +25,7 @@ import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
 
 export interface ISearchProps extends IPageProps {}
-
-@observer
-export class ArticleSearch extends Component<ISearchProps> {
+@observer export class ArticleSearch extends Component<ISearchProps> {
 
   constructor(props: ISearchProps) {
     super(props)
@@ -35,10 +33,6 @@ export class ArticleSearch extends Component<ISearchProps> {
     this.initAndResetKeyword()
   }
 
-  static navigationOptions = {
-    header: null
-  }
-  
   @observable.ref private keyword: string = ''
   @observable.ref private historys: string[] = []
 
@@ -130,8 +124,8 @@ export class ArticleSearch extends Component<ISearchProps> {
                 style={styles.historyKeyword}
                 onPress={() => this.handlePressHistory(keyword)}
               >
-                <Ionicon
-                  name="ios-time"
+                <Iconfont
+                  name="clock"
                   size={16}
                   style={styles.historyIcon}
                 />
@@ -141,11 +135,7 @@ export class ArticleSearch extends Component<ISearchProps> {
                 accessibilityLabel={`删除历史记录关键词：${keyword}`}
                 onPress={() => this.handleRemoveHistoryItem(index)}
               >
-                <Ionicon
-                  name="ios-close"
-                  size={21}
-                  style={styles.historyIcon}
-                />
+                <Iconfont name="cancel" style={styles.historyIcon} />
               </TouchableView>
             </View>
           ))}

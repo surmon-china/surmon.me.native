@@ -7,20 +7,17 @@
 
 import React, { Component } from 'react'
 import { ImageSourcePropType, ImageBackground, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, computed, action } from 'mobx'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
-import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import { webUrl, IS_ANDROID } from '@app/config'
-import { EAboutRoutes } from '@app/routes'
+import { observer } from 'mobx-react'
+import { webUrl } from '@app/config'
+import { AboutRoutes } from '@app/constants/routes'
 import { IPageProps } from '@app/types/props'
 import { THttpSuccessResponse } from '@app/types/http'
+import { Iconfont } from '@app/components/common/iconfont'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { Remind } from '@app/components/common/remind'
 import { Text } from '@app/components/common/text'
-import { CustomHeader } from '@app/components/layout/header'
 import i18n from '@app/services/i18n'
 import fetch from '@app/services/fetch'
 import colors from '@app/style/colors'
@@ -28,10 +25,19 @@ import fonts from '@app/style/fonts'
 import sizes from '@app/style/sizes'
 import mixins from '@app/style/mixins'
 
-enum ESection {
+enum Sections {
   Follow = 'follow',
   Social = 'social',
   Setting = 'setting'
+}
+
+interface ISectionItem {
+  name: string
+  key: string
+  iconName: string
+  url?: string
+  remind?: boolean
+  onPress?(): void
 }
 
 interface IUserInfo {
@@ -40,13 +46,13 @@ interface IUserInfo {
   slogan: string
 }
 
-type TStatisticValue = number | '-'
+type StatisticValue = number | '-'
 
 interface ITodayStatistic {
-  tags: TStatisticValue
-  views: TStatisticValue
-  articles: TStatisticValue
-  comments: TStatisticValue
+  tags: StatisticValue
+  views: StatisticValue
+  articles: StatisticValue
+  comments: StatisticValue
 }
 
 export interface IAboutProps extends IPageProps {}
@@ -60,17 +66,6 @@ export class About extends Component<IAboutProps> {
     this.fetchStatistic()
   }
 
-  static navigationOptions = (config: NavigationScreenConfigProps) => {
-    if (IS_ANDROID) {
-      return null
-    }
-    return {
-      headerTitle: (
-        <CustomHeader title={i18n.t(LANGUAGE_KEYS.ABOUT)} />
-      )
-    }
-  }
-  
   @observable.ref
   private userInfo: IUserInfo = {
     gravatar: require('@app/assets/images/gravatar.png'),
@@ -124,53 +119,32 @@ export class About extends Component<IAboutProps> {
       {
         name: 'Stack Overflow',
         key: 'stack-overflow',
-        icon: (
-          <FontAwesome
-            name="stack-overflow"
-            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
-          />
-        ),
+        iconName: 'stackoverflow',
         url: 'https://stackoverflow.com/users/6222535/surmon?tab=profile'
       },
       {
         name: 'Twitter',
         key: 'twitter',
-        icon: 'logo-twitter',
+        iconName: 'twitter',
         url: 'https://twitter.com/surmon_me'
-      },
-      {
-        name: i18n.t(LANGUAGE_KEYS.WEIBO),
-        key: 'weibo',
-        remind: true,
-        icon: (
-          <FontAwesome
-            name="weibo"
-            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
-          />
-        ),
-        url: 'https://weibo.com/surmon'
       },
       {
         name: i18n.t(LANGUAGE_KEYS.LINKEDIN),
         key: 'linkedin',
-        icon: 'logo-linkedin',
+        iconName: 'linkedin',
         url: 'http://www.linkedin.com/in/surmon-ma-713bb6a2/'
       },
       {
         name: 'Telegram',
         key: 'telegram',
-        icon: (
-          <FontAwesome
-            name="telegram"
-            style={[obStyles.styles.lineIcon, fonts.h4, obStyles.styles.lineTitle]}
-          />
-        ),
+        iconName: 'telegram',
         url: 'https://t.me/surmon'
       },
       {
+        remind: true,
         name: 'Instagram',
         key: 'instagram',
-        icon: 'logo-instagram',
+        iconName: 'instagram',
         url: 'https://www.instagram.com/surmon666/'
       }
     ]
@@ -182,21 +156,21 @@ export class About extends Component<IAboutProps> {
       {
         name: i18n.t(LANGUAGE_KEYS.GITHUB),
         key: 'github',
-        icon: 'logo-github',
+        iconName: 'github',
         onPress: () => {
-          this.props.navigation.push(EAboutRoutes.Github)
+          this.props.navigation.push(AboutRoutes.Github)
         }
       },
       {
         name: i18n.t(LANGUAGE_KEYS.VLOG),
         key: 'vlog',
-        icon: 'ios-film',
+        iconName: 'vlog',
         onPress: () => this.openUrl(`${webUrl}/vlog`)
       },
       {
         name: i18n.t(LANGUAGE_KEYS.EMAIL_ME),
         key: 'email',
-        icon: 'ios-mail',
+        iconName: 'mail',
         onPress: () => this
           .openUrl('mailto:surmon@foxmail.com')
           .catch(() => Alert.alert(i18n.t(LANGUAGE_KEYS.CALL_EMAIL_ERROR)))
@@ -210,25 +184,22 @@ export class About extends Component<IAboutProps> {
       {
         name: i18n.t(LANGUAGE_KEYS.SETTING),
         key: 'setting',
-        icon: 'ios-settings',
+        iconName: 'setting',
         onPress: () => {
-          this.props.navigation.push(EAboutRoutes.Setting)
+          this.props.navigation.push(AboutRoutes.Setting)
         }
       }
     ]
   }
 
-  @computed
-  private get sections() {
-    return [
-      { key: ESection.Follow, data: this.follows },
-      { key: ESection.Social, data: this.socials },
-      { key: ESection.Setting, data: this.settings }
-    ]
-  }
-
   render() {
     const { styles } = obStyles
+    const sections = [
+      { key: Sections.Follow, data: this.follows.slice() },
+      { key: Sections.Social, data: this.socials.slice() },
+      { key: Sections.Setting, data: this.settings.slice() }
+    ]
+
     return (
       <View style={styles.container}>
         <ImageBackground
@@ -250,25 +221,25 @@ export class About extends Component<IAboutProps> {
             <Text style={styles.statisticCount}>{this.statistic.articles}</Text>
             <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.ARTICLE)}</Text>
           </View>
-          <View style={styles.statisticSeparator}></View>
+          <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.tags}</Text>
             <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TAG)}</Text>
           </View>
-          <View style={styles.statisticSeparator}></View>
+          <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.comments}</Text>
             <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.COMMENT)}</Text>
           </View>
-          <View style={styles.statisticSeparator}></View>
+          <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.views}</Text>
             <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TODAY_VIEWS)}</Text>
           </View>
         </View>
         <View style={styles.section}>
-          <SectionList
-            sections={this.sections}
+          <SectionList<ISectionItem>
+            sections={sections}
             ListHeaderComponent={<View style={styles.listHeaderAndFooter} />}
             ListFooterComponent={<View style={styles.listHeaderAndFooter} />}
             SectionSeparatorComponent={() => <View style={styles.sectionSeparator} />}
@@ -283,25 +254,19 @@ export class About extends Component<IAboutProps> {
                     : null
                 ]}
                 onPress={() => {
-                  section.key === ESection.Social
-                    ? this.openUrl(item.url)
-                    : item.onPress()
+                  if (section.key === Sections.Social && item.url) {
+                    this.openUrl(item.url)
+                  } else if (item.onPress) {
+                    item.onPress()
+                  }
                 }}
               >
                 <View style={styles.lineContent}>
-                  {typeof item.icon === 'string'
-                    ? <Ionicon style={[styles.lineIcon, styles.lineTitle]} name={item.icon} />
-                    : item.icon
-                  }
-                  <Text style={styles.lineTitle}>{item.name}</Text>
-                  {item.remind && (
-                    <Remind style={[styles.lineTitle, styles.lineRemindIcon]} />
-                  )}
+                  <Iconfont style={styles.lineIcon} name={item.iconName} />
+                  <Text>{item.name}</Text>
+                  {item.remind && (<Remind style={styles.lineRemindIcon} />)}
                 </View>
-                <Ionicon
-                  name="ios-arrow-forward"
-                  style={[styles.lineDetailIcon, styles.lineTitle]}
-                />
+                <Iconfont name="next" style={styles.lineDetailIcon} />
               </TouchableView>
             )}
           />
@@ -365,7 +330,8 @@ const obStyles = observable({
         ...fonts.h3
       },
       statisticTitle: {
-        ...fonts.small
+        ...fonts.small,
+        marginTop: 2
       },
       statisticSeparator: {
         width: sizes.borderWidth,
@@ -406,13 +372,11 @@ const obStyles = observable({
       lineTitle: {
       },
       lineIcon: {
-        ...fonts.h3,
         width: sizes.gap,
         marginRight: sizes.gap / 2,
         color: colors.textDefault
       },
       lineDetailIcon: {
-        ...fonts.h4,
         color: colors.textSecondary
       },
       lineRemindIcon: {

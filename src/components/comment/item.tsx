@@ -8,7 +8,7 @@
 import React, { PureComponent } from 'react'
 import { Image, StyleSheet, View } from 'react-native'
 import { observable } from 'mobx'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { IComment, IAuthor } from '@app/types/business'
@@ -88,10 +88,10 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
                 style={styles.footerActionItem}
                 onPress={() => this.props.onReply(comment)}
               >
-                <Ionicon
-                  name="ios-chatbubbles"
-                  color={colors.textDefault}
-                  size={15}
+                <Iconfont
+                  name="comment-discussion"
+                  color={colors.textSecondary}
+                  // size={15}
                 />
               </TouchableView>
               <TouchableView
@@ -99,12 +99,12 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
                 accessibilityLabel={`给评论点赞：${comment.content}`}
                 onPress={() => !liked && this.props.onLike(comment)}
               >
-                <Ionicon
-                  name="ios-thumbs-up"
+                <Iconfont
+                  name="zan"
                   size={15}
-                  color={liked ? colors.red : colors.textDefault}
+                  color={liked ? colors.red : colors.textSecondary}
                 />
-                <Text style={{ marginLeft: 5 }}>{comment.likes}</Text>
+                <Text> {comment.likes}</Text>
               </TouchableView>
             </View>
           </View>

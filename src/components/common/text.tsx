@@ -7,7 +7,7 @@
 
 import React from 'react'
 import { Text as RNText, TextProps } from 'react-native'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { IChildrenProps } from '@app/types/props'
 import colors from '@app/style/colors'
 import fonts from '@app/style/fonts'

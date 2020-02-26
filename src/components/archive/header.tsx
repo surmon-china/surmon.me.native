@@ -8,9 +8,9 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { observable } from 'mobx'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observer } from 'mobx-react'
 import { optionStore } from '@app/stores/option'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ICategory, ITag } from '@app/types/business'
@@ -51,8 +51,8 @@ export const ArticleArchiveHeader = observer((props: IArchiveProps): JSX.Element
           accessibilityLabel="清空所有文章过滤条件"
           onPress={archiveFilterStore.clearActiveFilter}
         >
-          <Ionicon
-            name="ios-close"
+          <Iconfont
+            name="cancel"
             color={colors.textLink}
             {...getHeaderButtonStyle()}
           />

@@ -9,7 +9,7 @@ import gravatar from 'gravatar'
 import { EMAIL } from '@app/constants/regexp'
 import { gravatarApi } from '@app/config'
 
-export function getUrlByEmail(email: string): string {
+export const getUrlByEmail = (email: string): string => {
   if (!EMAIL.test(email)) {
     return `${gravatarApi}/anonymous.jpg`
   }

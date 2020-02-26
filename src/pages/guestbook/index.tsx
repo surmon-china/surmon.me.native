@@ -5,21 +5,20 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
- import React, { Component, RefObject } from 'react'
+import React, { Component, RefObject } from 'react'
 import { StyleSheet, View, ImageBackground, Animated, TouchableWithoutFeedback, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
 import { observable, computed } from 'mobx'
-import { observer } from 'mobx-react/native'
+import { Observer, observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { likeStore } from '@app/stores/like'
 import { staticApi, IS_ANDROID } from '@app/config'
 import { IPageProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
+import { Iconfont } from '@app/components/common/iconfont'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { Text } from '@app/components/common/text'
 import { Comment } from '@app/components/comment'
-import { CustomHeader } from '@app/components/layout/header'
+import { CustomHeaderTitle } from '@app/components/layout/title'
 import fetch from '@app/services/fetch'
 import colors from '@app/style/colors'
 import i18n from '@app/services/i18n'
@@ -29,11 +28,9 @@ import fonts from '@app/style/fonts'
 const defaultLikeButtonOpacity = 0.6
 
 class GuestbookStore {
-
   commentElement: RefObject<Comment> = React.createRef()
 
-  @boundMethod
-  scrollToCommentListTop() {
+  @boundMethod scrollToCommentListTop() {
     const element = this.commentElement.current
     element && element.scrollToListTop()
   }
@@ -59,14 +56,12 @@ class GuestbookStore {
     ]).start()
   }
 
-  @boundMethod
-  handleCommentListScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
+  @boundMethod handleCommentListScroll(event: NativeSyntheticEvent<NativeScrollEvent>) {
     const listOffsetY = event.nativeEvent.contentOffset.y
     this.startBackgroundAnimate(listOffsetY > 20)
   }
 
-  @boundMethod
-  handleLikeSite() {
+  @boundMethod handleLikeSite() {
     if (!this.isLiked) {
       fetch.patch<boolean>('/like/site')
       .then(() => {
@@ -86,18 +81,11 @@ export interface IGuestbookProps extends IPageProps {}
 @observer
 export class Guestbook extends Component<IGuestbookProps> {
 
-  constructor(props: IGuestbookProps) {
-    super(props)
-  }
-
-  static navigationOptions = (config: NavigationScreenConfigProps) => {
-    if (IS_ANDROID) {
-      return null
-    }
+  static getPageScreenOptions = ({ navigation }: any) => {
     return {
-      headerTitle: (
-        <CustomHeader
-          title={i18n.t(LANGUAGE_KEYS.GUESTBOOK)}
+      headerTitle: () => (
+        <CustomHeaderTitle
+          i18nKey={LANGUAGE_KEYS.GUESTBOOK}
           onDoubleClick={guestbookStore.scrollToCommentListTop}
         />
       )
@@ -127,8 +115,8 @@ export class Guestbook extends Component<IGuestbookProps> {
                   accessibilityLabel="给网站点赞"
                   onPress={guestbookStore.handleLikeSite}
                 >
-                  <Ionicon
-                    name="ios-heart"
+                  <Iconfont
+                    name="like"
                     size={21}
                     color={guestbookStore.isLiked ? colors.red : colors.textMuted}
                   />

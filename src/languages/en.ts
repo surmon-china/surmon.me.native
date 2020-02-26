@@ -67,7 +67,6 @@ export default {
 
   [LANGUAGE_KEYS.TWITTER]: 'Twitter',
   [LANGUAGE_KEYS.LINKEDIN]: 'Linkedin',
-  [LANGUAGE_KEYS.WEIBO]: 'Weibo',
 
   [LANGUAGE_KEYS.SETTING]: 'Setting',
   [LANGUAGE_KEYS.CLEAR_CACHE]: 'Clear cache',

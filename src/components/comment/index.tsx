@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * Comment list component
  * @file 评论列表组件
@@ -9,15 +10,15 @@ import React, { Component, RefObject } from 'react'
 import { FlatList, StyleSheet, View, Alert, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
 import { observable, action, computed } from 'mobx'
 import { Observer } from 'mobx-react'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IComment, IAuthor } from '@app/types/business'
 import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
 import { IS_IOS } from '@app/config'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { AutoActivityIndicator } from '@app/components/common/activity-indicator'
@@ -178,10 +179,8 @@ export class Comment extends Component<ICommentProps> {
   private renderListEmptyView(): JSX.Element | null {
     const { styles } = obStyles
     const commonIconOptions = {
-      name: 'ios-arrow-down',
-      size: 19
-    }
-    const commonIconStyles = {
+      name: 'tobottom',
+      size: 19,
       color: colors.textSecondary
     }
 
@@ -197,14 +196,8 @@ export class Comment extends Component<ICommentProps> {
               {i18n.t(LANGUAGE_KEYS.NO_RESULT_RETRY)}
             </Text>
             <View style={{ marginTop: sizes.gap }}>
-              <Ionicon
-                {...commonIconOptions}
-                style={commonIconStyles}
-              />
-              <Ionicon
-                {...commonIconOptions}
-                style={[commonIconStyles, { marginTop: -14 }]}
-              />
+              <Iconfont {...commonIconOptions} />
+              <Iconfont {...commonIconOptions} style={{ marginTop: -14 }} />
             </View>
           </View>
         )}
@@ -250,7 +243,7 @@ export class Comment extends Component<ICommentProps> {
       <Observer
         render={() => (
           <View style={[styles.centerContainer, styles.loadmoreViewContainer]}>
-            <Ionicon name="ios-arrow-dropup" style={{ color: colors.textSecondary }} />
+            <Iconfont name="next-bottom" color={colors.textSecondary} />
             <Text style={[styles.smallTitle, { marginLeft: sizes.gap / 4 }]}>
               {i18n.t(LANGUAGE_KEYS.LOADMORE)}
             </Text>
@@ -275,16 +268,11 @@ export class Comment extends Component<ICommentProps> {
           accessibilityLabel="切换排序模式"
           onPress={this.handleToggleSortType}
         >
-          <Ionicon
-            name="ios-funnel"
-            size={17}
-            style={styles.toolSort}
-          />
-          <Ionicon
-            name={this.isSortByHot ? 'ios-happy' : 'ios-time'}
+          <Iconfont
+            name={this.isSortByHot ? 'mood' : 'clock-stroke'}
             color={this.isSortByHot ? colors.primary : colors.textDefault}
-            size={13}
-            style={styles.toolSortType}
+            size={16}
+            style={styles.toolSort}
           />
         </TouchableView>
       </View>
@@ -361,13 +349,7 @@ const obStyles = observable({
         backgroundColor: colors.cardBackground
       },
       toolSort: {
-        marginRight: 8,
         color: colors.textDefault
-      },
-      toolSortType: {
-        position: 'absolute',
-        right: 0,
-        bottom: 0
       },
       commentListView: {
         backgroundColor: colors.cardBackground

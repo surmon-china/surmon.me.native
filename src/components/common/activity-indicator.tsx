@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 /**
  * AutoActivityIndicator
  * @file 加载指示器控件
@@ -7,7 +8,7 @@
 
 import React from 'react'
 import { ActivityIndicator, View, ViewStyle, TextStyle } from 'react-native'
-import { observer } from 'mobx-react/native'
+import { observer } from 'mobx-react'
 import { Text } from './text'
 import { IS_IOS } from '@app/config'
 import colors from '@app/style/colors'
@@ -38,7 +39,11 @@ export const AutoActivityIndicator = observer((props: IAutoActivityIndicatorProp
         {getIndicator(null)}
         <Text
           style={[
-            { marginTop: 5, ...fonts.small, color: colors.textSecondary },
+            {
+              ...fonts.small,
+              marginTop: 5,
+              color: colors.textSecondary
+            },
             props.textStyle
           ]}
         >

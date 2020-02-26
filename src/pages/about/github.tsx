@@ -7,25 +7,15 @@
 
 import React, { PureComponent } from 'react'
 import { StyleSheet, View } from 'react-native'
-import { NavigationScreenConfigProps } from 'react-navigation'
 import { WebView } from 'react-native-webview'
 import { observable } from 'mobx'
 import { IPageProps } from '@app/types/props'
-import { LANGUAGE_KEYS } from '@app/constants/language'
-import { CustomHeader } from '@app/components/layout/header'
-import i18n from '@app/services/i18n'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
+import mixins from '@app/style/mixins'
 
 export interface IGtihubProps extends IPageProps {}
 export class Github extends PureComponent<IGtihubProps> {
-
-  static navigationOptions = (config: NavigationScreenConfigProps) => ({
-    headerTitle: (
-      <CustomHeader title={i18n.t(LANGUAGE_KEYS.GITHUB)} />
-    )
-  })
-
   render() {
     const { styles } = obStyles
     return (
@@ -47,8 +37,7 @@ const obStyles = observable({
     return StyleSheet.create({
       container: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+        ...mixins.center
       },
       webview: {
         flex: 1,

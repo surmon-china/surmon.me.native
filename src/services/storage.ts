@@ -8,21 +8,21 @@
 import AsyncStorage from '@react-native-community/async-storage'
 import { STORAGE } from '@app/constants/storage'
 
-export function get<T>(key: STORAGE): Promise<T> {
+export const get = <T>(key: STORAGE): Promise<T> => {
   return AsyncStorage.getItem(key).then(data => {
     return data ? JSON.parse(data) : data
   })
 }
 
-export function set(key: STORAGE, value: any): Promise<void> {
+export const set = (key: STORAGE, value: any): Promise<void> => {
   return AsyncStorage.setItem(key, JSON.stringify(value))
 }
 
-export function remove(key: STORAGE): Promise<void> {
+export const remove = (key: STORAGE): Promise<void> => {
   return AsyncStorage.removeItem(key)
 }
 
-export function clear(): Promise<void> {
+export const clear = (): Promise<void> => {
   return AsyncStorage.clear()
 }
 

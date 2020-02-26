@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-  package="com.surmon_me">
+  package="com.surmon_me_native">
 
     <uses-permission android:name="android.permission.INTERNET" />
 

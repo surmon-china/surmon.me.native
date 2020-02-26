@@ -8,8 +8,8 @@
 import React, { PureComponent } from 'react'
 import { Image, StyleSheet, TextStyle, View, ImageSourcePropType } from 'react-native'
 import { observable, computed } from 'mobx'
-import Ionicon from 'react-native-vector-icons/Ionicons'
 import { TouchableView } from '@app/components/common/touchable-view'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IArticle } from '@app/types/business'
@@ -25,9 +25,9 @@ import mixins from '@app/style/mixins'
 export interface IArtileListItemProps {
   article: IArticle
   liked: boolean
-  onPress(article: IArticle): void
   darkTheme: boolean
   language: TLanguage
+  onPress(article: IArticle): void
 }
 
 export class ArticleListItem extends PureComponent<IArtileListItemProps> {
@@ -85,20 +85,20 @@ export class ArticleListItem extends PureComponent<IArtileListItemProps> {
         <Text style={styles.description} numberOfLines={1}>{article.description}</Text>
         <View style={styles.meta}>
           <View style={styles.metaItem}>
-            <Ionicon name="ios-time" style={styles.metaIcon} />
+            <Iconfont name="clock" size={13} style={styles.metaIcon} />
             <Text style={styles.metaText}>{dateToYMD(article.create_at)}</Text>
           </View>
           <View style={styles.metaItem}>
-            <Ionicon name="ios-eye" style={styles.metaIcon} />
+            <Iconfont name="eye" style={styles.metaIcon} />
             <Text style={styles.metaText}>{article.meta.views}</Text>
           </View>
           <View style={styles.metaItem}>
-            <Ionicon name="ios-chatboxes" style={styles.metaIcon} />
+            <Iconfont name="comment" style={styles.metaIcon} />
             <Text style={styles.metaText}>{article.meta.comments}</Text>
           </View>
           <View style={styles.metaItem}>
-            <Ionicon
-              name="ios-heart"
+            <Iconfont
+              name="like"
               style={[
                 styles.metaIcon,
                 this.props.liked ? { color: colors.red } : null
@@ -146,7 +146,7 @@ const obStyles = observable({
       description: {
         ...fonts.base,
         margin: sizes.goldenRatioGap,
-        marginTop: - sizes.goldenRatioGap / 4,
+        marginTop: -(sizes.goldenRatioGap / 4),
         color: colors.textSecondary
       },
       meta: {
@@ -162,7 +162,6 @@ const obStyles = observable({
         justifyContent: 'center'
       },
       metaIcon: {
-        ...fonts.base,
         marginTop: 1,
         marginRight: sizes.goldenRatioGap / 2,
         color: colors.textSecondary

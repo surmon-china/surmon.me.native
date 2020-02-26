@@ -1,12 +1,12 @@
 {
   "name": "surmon.me.native",
   "description": "App for Surmon.me blog",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": false,
   "author": {
     "name": "Surmon",
     "email": "surmon@foxmail.com",
-    "url": "https://github.com/surmon-china"
+    "url": "https://surmon.me"
   },
   "license": "MIT",
   "bugs": {
@@ -17,70 +17,78 @@
     "type": "git",
     "url": "https://github.com/surmon-china/surmon.me.native.git"
   },
-  "rnpm": {
-    "assets": [
-      "./src/assets/fonts/"
-    ]
-  },
   "resolutions": {
     "terser": "3.17.0"
   },
   "scripts": {
-    "dev": "npm start --reset-cache",
-    "dev:ios": "react-native run-ios",
-    "dev:android": "react-native run-android",
-    "dev:all": "npm run dev:ios && npm run dev:android",
-    "start": "node node_modules/react-native/local-cli/cli.js start",
-    "build:ios": "react-native bundle --platform ios --dev false --entry-file index.tsx --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
-    "build:android": "react-native bundle --platform android --dev false --entry-file index.tsx --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
-    "release:android": "cd android && ./gradlew assembleRelease",
+    "all": "yarn ios && yarn android",
+    "android": "react-native run-android",
+    "ios": "react-native run-ios",
+    "start": "react-native start",
     "test": "jest",
-    "tsc": "tsc",
-    "postinstall": "rndebugger-open"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "build:ios": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle",
+    "build:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
+    "release:android": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
-    "@react-native-community/async-storage": "^1.5.1",
+    "@react-native-community/async-storage": "^1.8.0",
+    "@react-native-community/masked-view": "^0.1.6",
+    "@react-navigation/bottom-tabs": "^5.0.7",
+    "@react-navigation/native": "^5.0.7",
+    "@react-navigation/stack": "^5.0.8",
     "autobind-decorator": "^2.4.0",
     "gravatar": "^1.8.0",
-    "highlight.js": "^9.15.6",
+    "highlight.js": "^9.18.1",
     "marked": "0.6.3",
-    "mobx": "^5.13.0",
-    "mobx-react": "^5.4.3",
-    "query-string": "^6.5.0",
-    "react": "^16.8.6",
-    "react-native": "^0.59.5",
+    "mobx": "^5.15.4",
+    "mobx-react": "^6.1.8",
+    "query-string": "^6.11.0",
+    "react": "16.9.0",
+    "react-native": "0.61.5",
     "react-native-actionsheet": "^2.4.2",
-    "react-native-autoheight-webview": "^1.1.2",
-    "react-native-gesture-handler": "^1.2.0",
-    "react-native-image-zoom-viewer": "^2.2.26",
-    "react-native-root-toast": "^3.1.2",
+    "react-native-appearance": "^0.3.2",
+    "react-native-autoheight-webview": "^1.4.2",
+    "react-native-gesture-handler": "^1.6.0",
+    "react-native-image-viewing": "^0.1.6",
+    "react-native-localize": "^1.3.3",
+    "react-native-reanimated": "^1.7.0",
+    "react-native-root-toast": "^3.2.0",
+    "react-native-safe-area-context": "^0.7.3",
+    "react-native-screens": "^2.0.0",
     "react-native-splash-screen": "^3.2.0",
-    "react-native-vector-icons": "^6.6.0",
-    "react-native-webview": "^5.12.1",
-    "react-navigation": "^3.11.0"
+    "react-native-webview": "^8.1.2"
   },
   "devDependencies": {
-    "@babel/core": "^7.4.4",
-    "@babel/plugin-proposal-decorators": "^7.4.4",
-    "@babel/runtime": "^7.4.4",
+    "@babel/core": "^7.6.2",
+    "@babel/plugin-proposal-decorators": "^7.8.3",
+    "@babel/runtime": "^7.6.2",
+    "@react-native-community/eslint-config": "^0.0.5",
     "@types/gravatar": "^1.8.0",
     "@types/highlight.js": "^9.12.3",
-    "@types/jest": "^24.0.12",
-    "@types/marked": "^0.6.5",
-    "@types/react": "^16.8.15",
-    "@types/react-native": "^0.57.51",
-    "@types/react-native-vector-icons": "^6.4.0",
-    "@types/react-navigation": "^3.0.6",
-    "@types/react-test-renderer": "^16.8.1",
-    "babel-jest": "^24.7.1",
-    "jest": "^24.7.1",
-    "metro-react-native-babel-preset": "^0.53.1",
-    "react-native-debugger-open": "^0.3.19",
-    "react-native-typescript-transformer": "^1.2.12",
-    "react-test-renderer": "16.8.6",
-    "typescript": "^3.4.5"
+    "@types/jest": "^24.0.24",
+    "@types/marked": "0.6.5",
+    "@types/react": "^16.9.22",
+    "@types/react-native": "^0.60.25",
+    "@types/react-test-renderer": "16.9.1",
+    "@typescript-eslint/eslint-plugin": "^2.12.0",
+    "@typescript-eslint/parser": "^2.12.0",
+    "babel-jest": "^24.9.0",
+    "eslint": "^6.5.1",
+    "jest": "^24.9.0",
+    "metro-react-native-babel-preset": "^0.56.0",
+    "react-test-renderer": "16.9.0",
+    "typescript": "^3.7.3"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
   }
 }

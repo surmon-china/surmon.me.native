@@ -8,16 +8,16 @@
 import React, { Component } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { observable, action, computed } from 'mobx'
-import { observer } from 'mobx-react/native'
-import Ionicon from 'react-native-vector-icons/Ionicons'
+import { observer } from 'mobx-react'
 import { optionStore } from '@app/stores/option'
+import { Iconfont } from '@app/components/common/iconfont'
 import { Text } from '@app/components/common/text'
 import { BetterModal } from '@app/components/common/modal'
 import { TouchableView } from '@app/components/common/touchable-view'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { ICategory, ITag } from '@app/types/business'
 import { IHttpResultPaginate, THttpSuccessResponse } from '@app/types/http'
-import { ValueOf } from '@app/utils/transform'
+import { ValueOf } from '@app/utils/transformer'
 import i18n from '@app/services/i18n'
 import fetch from '@app/services/fetch'
 import mixins, { getHeaderButtonStyle } from '@app/style/mixins'
@@ -63,7 +63,7 @@ class Store {
   get isActiveTagOrCategoryFilter(): boolean {
     return (
       this.filterActive &&
-      [EFilterType.Tag, EFilterType.Category].includes(this.filterType)
+      [EFilterType.Tag, EFilterType.Category].includes(this.filterType as unknown as number)
     )
   }
 
@@ -95,7 +95,7 @@ class Store {
   @action.bound
   updateActiveFilter(type: EFilterType, value: TFilterValue) {
     this.filterType = type
-    this.filterValues[type] = value
+    this.filterValues[type] = value as any
     this.filterActive = true
   }
 
@@ -130,8 +130,12 @@ export interface IArchiveFilterProps {}
 @observer
 export class ArchiveFilter extends Component<IArchiveFilterProps> {
 
-  constructor(props: IArchiveFilterProps) {
-    super(props)
+  getIconNameFromExtend(target: any) {
+    if (!target || !target.extends.length) {
+      return null
+    }
+    const targetExtend = target.extends.find((t: any) => t.name === 'icon')
+    return targetExtend?.value?.replace('icon-', '') || null
   }
 
   @computed
@@ -142,12 +146,14 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
       {
         name: i18n.t(LANGUAGE_KEYS.CATEGORIES),
         type: EFilterType.Category,
-        data: archiveFilterStore.categories
+        data: archiveFilterStore.categories,
+        defaultIconName: 'category'
       },
       {
         name: i18n.t(LANGUAGE_KEYS.TAGS),
         type: EFilterType.Tag,
-        data: archiveFilterStore.tags
+        data: archiveFilterStore.tags,
+        defaultIconName: 'tag'
       }
     ]
 
@@ -172,7 +178,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
                     key={item._id}
                     style={[
                       styles.item,
-                      isActive ? styles.itemActive : null
+                      isActive && styles.itemActive
                     ]}
                     accessibilityLabel={`选中过滤条件：${activeValueText}`}
                     onPress={() => {
@@ -180,21 +186,26 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
                       archiveFilterStore.updateVisibleState(false)
                     }}
                   >
+                    <View style={[styles.itemIconView, isActive && styles.itemIconViewActive]}>
+                      <Iconfont
+                        name={this.getIconNameFromExtend(item) || filter.defaultIconName}
+                        style={isActive && styles.itemIconActive}
+                      />
+                    </View>
                     <Text
                       style={[
-                        { fontSize: fonts.base.fontSize * 0.9, textTransform: 'capitalize' },
-                        isActive ? styles.itemActiveText : null
+                        styles.itemText,
+                        isActive && styles.itemTextActive
                       ]}
                     >
                       {activeValueText}
                     </Text>
                     {isActive && (
-                      <Ionicon
-                        name="ios-checkmark"
-                        size={fonts.h2.fontSize}
+                      <Iconfont
+                        name="success"
                         style={[
-                          styles.itemIcon,
-                          isActive ? styles.itemActiveText : null
+                          styles.itemSelectedIcon,
+                          isActive && styles.itemTextActive
                         ]}
                       />
                     )}
@@ -215,7 +226,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
         title={i18n.t(LANGUAGE_KEYS.FILTER_BY_TAG_CATEGORY)}
         visible={archiveFilterStore.modalVisible}
         onClose={() => archiveFilterStore.updateVisibleState(false)}
-        extra={
+        extra={(
           <TouchableView
             accessibilityLabel="清空所有文章过滤条件"
             onPress={() => {
@@ -223,13 +234,13 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
               archiveFilterStore.updateVisibleState(false)
             }}
           >
-            <Ionicon
-              name="ios-remove"
+            <Iconfont
+              name="reply"
               color={colors.textLink}
               {...getHeaderButtonStyle()}
             />
           </TouchableView>
-        }
+        )}
       >
         {this.scrollFilterListView}
       </BetterModal>
@@ -239,6 +250,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
 
 const obStyles = observable({
   get styles() {
+    const itemSize = 30
     return StyleSheet.create({
       modal: {
         justifyContent: 'flex-end',
@@ -256,23 +268,41 @@ const obStyles = observable({
       list: {
         ...mixins.rowCenter,
         flexWrap: 'wrap',
-        marginVertical: sizes.gap
+        marginVertical: sizes.gap,
+        marginBottom: sizes.gap + sizes.goldenRatioGap
       },
       item: {
         ...mixins.rowCenter,
-        height: 32,
-        paddingHorizontal: sizes.goldenRatioGap,
+        height: itemSize,
+        paddingRight: sizes.goldenRatioGap,
         backgroundColor: colors.background,
         marginRight: sizes.goldenRatioGap,
-        marginBottom: sizes.goldenRatioGap
+        marginBottom: sizes.gap
+      },
+      itemText: {
+        fontSize: fonts.small.fontSize,
+        textTransform: 'capitalize'
+      },
+      itemIconView: {
+        width: itemSize,
+        height: itemSize,
+        ...mixins.center,
+        marginRight: 8,
+        backgroundColor: colors.grey
+      },
+      itemIconViewActive: {
+        backgroundColor: colors.background
+      },
+      itemIconActive: {
+        color: colors.primary
       },
       itemActive: {
         backgroundColor: colors.primary
       },
-      itemActiveText: {
+      itemTextActive: {
         color: colors.background
       },
-      itemIcon: {
+      itemSelectedIcon: {
         marginLeft: 8
       }
     })
