@@ -12,9 +12,7 @@
 
 ## Introduction
 
-**[Surmon.me](https://github.com/surmon-china/surmon.me) blog app, powered by [react-native](https://github.com/facebook/react-native).**
-
-**Onlint site:** https://surmon.me/app
+**[Surmon.me](https://surmon.me) blog app, powered by [react-native](https://github.com/facebook/react-native).  > [online site page](https://surmon.me/app).**
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/download-url.png" height="300" alt="qrcode" />
