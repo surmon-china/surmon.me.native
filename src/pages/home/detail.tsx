@@ -11,7 +11,7 @@ import { observable, action, computed, reaction } from 'mobx'
 import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
 import { CommonActions } from '@react-navigation/native'
-import { webUrl } from '@app/config'
+import { webUrl, appName } from '@app/config'
 import { HomeRoutes } from '@app/constants/routes'
 import { IArticle } from '@app/types/business'
 import { LANGUAGE_KEYS } from '@app/constants/language'
@@ -66,14 +66,13 @@ export interface IArticleDetailProps extends IPageProps {}
 
   @boundMethod
   private getParamArticle(): IArticle {
-    const { params } = this.props.route
-    return params && params.article
+    return this.props.route.params?.article
   }
 
   @boundMethod
   private getArticleId(): number {
-    const article = this.getParamArticle()
-    return article && article.id
+    const { params } = this.props.route
+    return params?.articleId || params?.article?.id
   }
 
   @computed
@@ -215,9 +214,14 @@ export interface IArticleDetailProps extends IPageProps {}
   @boundMethod
   private async handleShare() {
     try {
+      const title = this.article?.title || ''
       const result = await Share.share({
-        title: this.article && this.article.title || '',
+        title,
+        message: title,
         url: `${webUrl}/article/${this.getArticleId()}`
+      }, {
+        dialogTitle: `Share article: ${title}`,
+        subject: `A article from ${appName}: ${title}`
       })
     } catch (error) {
       console.warn('Share article failed:', error.message)

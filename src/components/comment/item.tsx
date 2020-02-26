@@ -91,7 +91,6 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
                 <Iconfont
                   name="comment-discussion"
                   color={colors.textSecondary}
-                  // size={15}
                 />
               </TouchableView>
               <TouchableView

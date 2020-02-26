@@ -7,7 +7,7 @@
  */
 
 import React, { Component, RefObject } from 'react'
-import { FlatList, StyleSheet, View, Alert, NativeSyntheticEvent, NativeScrollEvent } from 'react-native'
+import { FlatList, StyleSheet, View, Alert, NativeSyntheticEvent, NativeScrollEvent, Linking } from 'react-native'
 import { observable, action, computed } from 'mobx'
 import { Observer } from 'mobx-react'
 import { observer } from 'mobx-react'
@@ -15,7 +15,7 @@ import { boundMethod } from 'autobind-decorator'
 import { LANGUAGE_KEYS } from '@app/constants/language'
 import { IComment, IAuthor } from '@app/types/business'
 import { IHttpPaginate, IHttpResultPaginate } from '@app/types/http'
-import { IS_IOS } from '@app/config'
+import { webUrl, IS_IOS } from '@app/config'
 import { likeStore } from '@app/stores/like'
 import { optionStore } from '@app/stores/option'
 import { Iconfont } from '@app/components/common/iconfont'
@@ -139,11 +139,12 @@ export class Comment extends Component<ICommentProps> {
 
   @boundMethod
   private handlePressAuthor(author: IAuthor) {
-    Alert.alert(
-      optionStore.isEnLang
-        ? 'More action on PC.'
-        : '更多详细信息要去 Web 端操作'
-    )
+    const url = author?.site
+    if (url && url !== webUrl) {
+      Linking.canOpenURL(url).then(
+        canOpen => canOpen && Linking.openURL(url)
+      )
+    }
   }
 
   @boundMethod

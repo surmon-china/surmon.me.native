@@ -24,7 +24,7 @@ cd ios && pod install && cd ..
 # link assets
 react-native link
 
-yarn ios
+yarn ios # or react-native run-ios --device "Surmon’s iPhone 18 pro"
 yarn android
 ```
 

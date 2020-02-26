@@ -174,6 +174,12 @@ export class About extends Component<IAboutProps> {
         onPress: () => this
           .openUrl('mailto:surmon@foxmail.com')
           .catch(() => Alert.alert(i18n.t(LANGUAGE_KEYS.CALL_EMAIL_ERROR)))
+      },
+      {
+        name: 'RSS',
+        key: 'rss',
+        iconName: 'rss',
+        onPress: () => this.openUrl(`${webUrl}/rss.xml`)
       }
     ]
   }

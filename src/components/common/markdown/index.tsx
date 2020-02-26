@@ -9,6 +9,7 @@ import marked from 'marked'
 import Hljs from 'highlight.js'
 import React, { Component } from 'react'
 import { StyleSheet, View, ViewStyle } from 'react-native'
+import { CommonActions } from '@react-navigation/native'
 import { observable, computed, action } from 'mobx'
 import { observer } from 'mobx-react'
 import { boundMethod } from 'autobind-decorator'
@@ -124,15 +125,19 @@ export class Markdown extends Component<IMarkdownProps> {
         const isArticleUrl = url.startsWith(articleUrlPrefix)
         if (isArticleUrl) {
           const articleId = url.replace(articleUrlPrefix, '')
-          this.props.navigation.navigate({
-            key: articleId,
-            routeName: HomeRoutes.ArticleDetail,
-            params: { articleId }
-          })
+          this.props.navigation.dispatch(
+            CommonActions.navigate({
+              key: articleId,
+              name: HomeRoutes.ArticleDetail,
+              params: { articleId }
+            })
+          )
         } else {
-          this.props.navigation.navigate(
-            HomeRoutes.ArticleWebview,
-            { url }
+          this.props.navigation.dispatch(
+            CommonActions.navigate({
+              name: HomeRoutes.ArticleWebview,
+              params: { url }
+            })
           )
         }
       }
@@ -232,10 +237,11 @@ export class Markdown extends Component<IMarkdownProps> {
           customScript={this.htmlScript}
           customStyle={this.htmlStyle}
           useWebKit={false}
-          scalesPageToFit={false}
+          // scalesPageToFit={false}
           scrollEnabled={false}
           originWhitelist={['*']}
           source={{ html: `<style>${this.htmlStyle}</style>` + this.htmlContent }}
+          viewportContent={'width=device-width, user-scalable=no'}
           onMessage={this.handleWebViewEvent}
           onSizeUpdated={() => this.updateHtmlReadied(true)}
         />
