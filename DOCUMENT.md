@@ -1,10 +1,18 @@
 
-### Init
-
-[Init typeScript template](https://github.com/react-native-community/react-native-template-typescript)
+### Upgrade Cli
 
 ```bash
-react-native init surmon_me_native --template react-native-template-typescript
+npm uninstall -g react-native-cli
+npm i -g @react-native-community/cli
+```
+
+### Init
+
+```bash
+# react-native init surmon_me_native --template react-native-template-typescript
+git clone git@github.com:surmon-china/surmon.me.native.git
+
+yarn
 
 # IOS
 cd ios && pod install && cd ..
@@ -12,7 +20,7 @@ cd ios && pod install && cd ..
 # Android
 # https://reactnavigation.org/docs/getting-started/#installing-dependencies-into-a-bare-react-native-project
 
-# Assets
+# assets
 react-native link
 
 yarn ios
@@ -31,10 +39,10 @@ yarn start
 # 编译 IOS 并开启服务器
 yarn ios
 
-# 编译 Android 并开启服务器（执行前需开启安卓模拟器）
+# 编译 Android 并开启服务器
 yarn android
 
-# 编译两端并开启服务器（执行前需开启安卓模拟器）
+# 编译两端并开启服务器
 yarn all
 
 # 编译 IOS 的包并输出到 ./ios/bundle -> XCode -> Product -> Archive
@@ -61,7 +69,7 @@ yarn release:android
 #### IOS
 
 1. Product -> Schema -> Edit Schema
-2. Build Config: relase && debug executable = false
+2. Build Config: relase & debug executable = false
 3. Select your device & Run
 
 ### Issues

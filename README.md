@@ -17,7 +17,7 @@
 **Onlint site:** https://surmon.me/app
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/download-url.png" height="300" alt="qrcode" />
+  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/download-url.png" height="300" alt="qrcode" />
   <br>
   <strong>
     <span>Scan QRcode or</span>
@@ -35,7 +35,7 @@
 
 **相关文档：**
 - **[CHANGELOG](https://github.com/surmon-china/surmon.me.native/CHANGE_LOG.md)**
-- **[DOCUMENT](https://github.com/surmon-china/surmon.me.native/DOCUMENT.md)**
+- **[DOCUMENT](https://github.com/surmon-china/surmon.me.native/DOCUMENT.md)**(Everything you want to know is here)
 
 ---
 
@@ -71,8 +71,3 @@
 
 ![](https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/p-3.jpg)
 
-
-
-## 开始开发
-
-**当你决定要开始开发，或开发遇到异常找不到答案时，请打开为你准备的万能锦囊： [DOCUMENT.md](https://github.com/surmon-china/surmon.me.native/blob/master/DOCUMENT.md)**
