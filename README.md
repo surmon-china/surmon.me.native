@@ -34,8 +34,8 @@
 
 
 **相关文档：**
-- **[CHANGELOG](https://github.com/surmon-china/surmon.me.native/CHANGE_LOG.md)**
-- **[DOCUMENT](https://github.com/surmon-china/surmon.me.native/DOCUMENT.md)**(Everything you want to know is here)
+- **[CHANGELOG](https://github.com/surmon-china/surmon.me.native/blob/master/CHANGE_LOG.md)**
+- **[DOCUMENT](https://github.com/surmon-china/surmon.me.native/blob/master/DOCUMENT.md)** (Everything you want to know is here)
 
 ---
 
