@@ -180,6 +180,7 @@ export class ArchiveFilter extends Component<IArchiveFilterProps> {
                       styles.item,
                       isActive && styles.itemActive
                     ]}
+                    disabled={isActive}
                     accessibilityLabel={`选中过滤条件：${activeValueText}`}
                     onPress={() => {
                       archiveFilterStore.updateActiveFilter(filter.type, item)

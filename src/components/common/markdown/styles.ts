@@ -5,6 +5,7 @@
  */
 
 import { observable } from 'mobx'
+import { webUrl } from '@app/config'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
 import fonts from '@app/style/fonts'
@@ -40,7 +41,7 @@ export const content = observable({
       
       @font-face {
         font-family: ${$fontDINRegular};
-        src: url('https://surmon.me/fonts/DIN-Regular.ttf');
+        src: url('${webUrl}/fonts/DIN-Regular.ttf');
       }
 
       body {

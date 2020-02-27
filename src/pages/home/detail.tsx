@@ -251,12 +251,13 @@ export interface IArticleDetailProps extends IPageProps {}
             <TouchableView
               accessibilityLabel="返回"
               accessibilityHint="返回列表页"
+              style={{ height: sizes.goldenRatioGap * 2 }}
               onPress={this.handleGoBack}
             >
               <Iconfont
                 name="prev"
                 color={colors.textTitle}
-                {...getHeaderButtonStyle(18)}
+                {...getHeaderButtonStyle(19)}
               />
             </TouchableView>
             <View style={styles.name}>
@@ -296,11 +297,11 @@ export interface IArticleDetailProps extends IPageProps {}
               {automaticArticle && (
                 <View style={[styles.meta, styles.cardBackground, styles.headerMeta]}>
                   <Text style={styles.metaText}>
-                    {i18n.t(LANGUAGE_KEYS.VIEW)} {automaticArticle.meta.views}
+                    {automaticArticle.meta.views} {i18n.t(LANGUAGE_KEYS.VIEWS)}
                   </Text>
                   {TextSeparator}
                   <Text style={styles.metaText}>
-                    {i18n.t(LANGUAGE_KEYS.LIKE)} {automaticArticle.meta.likes}
+                  {automaticArticle.meta.likes} {i18n.t(LANGUAGE_KEYS.LIKES)}
                   </Text>
                   {TextSeparator}
                   <Text style={styles.metaText}>
@@ -353,7 +354,7 @@ export interface IArticleDetailProps extends IPageProps {}
                   <Text style={styles.relatedTitle}>
                     {i18n.t(LANGUAGE_KEYS.RELATED_ARTICLE)}
                   </Text>
-                  {article.related.slice(0, 3).map((item, index) => (
+                  {article.related.filter(a => a.id !== article.id).slice(0, 3).map((item, index) => (
                     <TouchableView
                       key={`${item.id}-${index}`}
                       style={styles.relatedItem}
@@ -367,15 +368,15 @@ export interface IArticleDetailProps extends IPageProps {}
                       </Text>
                       <View style={[mixins.rowCenter, styles.cardBackground]}>
                         <Text style={styles.metaText}>
-                          {i18n.t(LANGUAGE_KEYS.VIEW)} {item.meta.views}
+                          {item.meta.views} {i18n.t(LANGUAGE_KEYS.VIEWS)}
                         </Text>
                         {TextSeparator}
                         <Text style={styles.metaText}>
-                          {i18n.t(LANGUAGE_KEYS.LIKE)} {item.meta.likes}
+                          {item.meta.likes} {i18n.t(LANGUAGE_KEYS.LIKES)}
                         </Text>
                         {TextSeparator}
                         <Text style={styles.metaText}>
-                          {i18n.t(LANGUAGE_KEYS.COMMENT)} {item.meta.comments}
+                          {item.meta.comments} {i18n.t(LANGUAGE_KEYS.COMMENTS)}
                         </Text>
                         {TextSeparator}
                         <Text style={styles.metaText}>
@@ -405,19 +406,28 @@ export interface IArticleDetailProps extends IPageProps {}
               </TouchableView>
               <TouchableView
                 style={styles.footerItem}
+                disabled={this.isLikedArticle}
                 onPress={this.handleLikeArticle}
               >
                 <Iconfont
                   name="like"
                   style={[
                     styles.footerItemIcon,
-                    { color: this.isLikedArticle ? colors.red : styles.footerItemIcon.color }
+                    {
+                      color: this.isLikedArticle
+                        ? colors.red
+                        : styles.footerItemIcon.color
+                    }
                   ]}
                 />
                 <Text
                   style={[
                     styles.footerItemText,
-                    { color: this.isLikedArticle ? colors.red : styles.footerItemText.color }
+                    {
+                      color: this.isLikedArticle
+                        ? colors.red
+                        : styles.footerItemText.color
+                    }
                   ]}
                 >
                   {i18n.t(LANGUAGE_KEYS.LIKE)}

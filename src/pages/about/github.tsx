@@ -9,6 +9,7 @@ import React, { PureComponent } from 'react'
 import { StyleSheet, View } from 'react-native'
 import { WebView } from 'react-native-webview'
 import { observable } from 'mobx'
+import { GitHubUrl } from '@app/config'
 import { IPageProps } from '@app/types/props'
 import colors from '@app/style/colors'
 import sizes from '@app/style/sizes'
@@ -22,7 +23,7 @@ export class Github extends PureComponent<IGtihubProps> {
       <View style={styles.container}>
         <WebView
           style={styles.webview} 
-          source={{ uri: 'https://github.com/surmon-china/surmon.me.native' }}
+          source={{ uri: GitHubUrl }}
           startInLoadingState={true}
           domStorageEnabled={true}
           javaScriptEnabled={true}

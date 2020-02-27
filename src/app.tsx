@@ -25,6 +25,7 @@ import { ArticleDetail } from '@app/pages/home/detail'
 import { About } from '@app/pages/about'
 import { Github } from '@app/pages/about/github'
 import { Setting } from '@app/pages/about/setting'
+import { OpenSource } from '@app/pages/about/open-source'
 import { Guestbook } from '@app/pages/guestbook'
 import { WebViewPage } from '@app/pages/common/webview'
 import { Iconfont } from '@app/components/common/iconfont'
@@ -117,6 +118,13 @@ const AboutStackComponent = observer(() => {
         component={Setting}
         options={{
           headerTitle: () => <CustomHeaderTitle i18nKey={LANGUAGE_KEYS.SETTING} />
+        }}
+      />
+      <AboutStack.Screen
+        name={AboutRoutes.OpenSource}
+        component={OpenSource}
+        options={{
+          headerTitle: () => <CustomHeaderTitle i18nKey={LANGUAGE_KEYS.OPEN_SOURCE} />
         }}
       />
     </AboutStack.Navigator>

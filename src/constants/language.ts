@@ -28,7 +28,8 @@ export enum LANGUAGE_KEYS {
   COMMENT = 'comment',
   COMMENTS = 'comments',
 
-  VIEW = 'view',
+  VIEWS = 'views',
+  LIKES = 'likes',
   LIKE = 'like',
   SHARE = 'share',
   TOTAL = 'total',
@@ -67,6 +68,7 @@ export enum LANGUAGE_KEYS {
   GITHUB = 'github',
   VLOG = 'vlog',
   EMAIL_ME = 'emailMe',
+  SPONSOR = 'sponsor',
 
   TWITTER = 'twitter',
   LINKEDIN = 'linkedin',
@@ -74,6 +76,7 @@ export enum LANGUAGE_KEYS {
   SETTING = 'setting',
   DARK_THEME = 'darkTheme',
   SWITCH_LANGUAGE = 'switchLanguage',
+  OPEN_SOURCE = 'openSource',
 
   CLEAR_CACHE = 'clearCache',
   CLEAR_CACHE_TEXT = 'clearCacheText',

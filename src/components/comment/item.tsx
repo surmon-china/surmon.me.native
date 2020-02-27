@@ -96,7 +96,8 @@ export class CommentItem extends PureComponent<ICommentListItemProps> {
               <TouchableView
                 style={styles.footerActionItem}
                 accessibilityLabel={`给评论点赞：${comment.content}`}
-                onPress={() => !liked && this.props.onLike(comment)}
+                disabled={liked}
+                onPress={() => this.props.onLike(comment)}
               >
                 <Iconfont
                   name="zan"

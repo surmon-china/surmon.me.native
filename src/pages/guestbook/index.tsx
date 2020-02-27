@@ -113,6 +113,7 @@ export class Guestbook extends Component<IGuestbookProps> {
               >
                 <TouchableView
                   accessibilityLabel="给网站点赞"
+                  disabled={guestbookStore.isLiked}
                   onPress={guestbookStore.handleLikeSite}
                 >
                   <Iconfont

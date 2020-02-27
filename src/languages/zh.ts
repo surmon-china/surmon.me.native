@@ -25,11 +25,12 @@ export default {
   [LANGUAGE_KEYS.COMMENT]: '评论',
   [LANGUAGE_KEYS.COMMENTS]: '评论',
 
-  [LANGUAGE_KEYS.VIEW]: '阅读',
   [LANGUAGE_KEYS.LIKE]: '喜欢',
   [LANGUAGE_KEYS.SHARE]: '分享',
   [LANGUAGE_KEYS.TOTAL]: '条数据',
   [LANGUAGE_KEYS.EMPTY]: '无数据',
+  [LANGUAGE_KEYS.VIEWS]: '次阅读',
+  [LANGUAGE_KEYS.LIKES]: '人喜欢',
   [LANGUAGE_KEYS.TODAY_VIEWS]: '今日阅读',
   [LANGUAGE_KEYS.CREATE_AT]: '发布于',
   [LANGUAGE_KEYS.LAST_UPDATE_AT]: '最后编辑于',
@@ -64,6 +65,7 @@ export default {
   [LANGUAGE_KEYS.GITHUB]: '同性交友',
   [LANGUAGE_KEYS.VLOG]: '浪迹天涯',
   [LANGUAGE_KEYS.EMAIL_ME]: '给我邮件',
+  [LANGUAGE_KEYS.SPONSOR]: '一杯咖啡',
 
   [LANGUAGE_KEYS.TWITTER]: '推特',
   [LANGUAGE_KEYS.LINKEDIN]: '领英',
@@ -71,7 +73,8 @@ export default {
   [LANGUAGE_KEYS.SETTING]: '设置',
   [LANGUAGE_KEYS.CLEAR_CACHE]: '清理缓存',
   [LANGUAGE_KEYS.SWITCH_LANGUAGE]: '切换语言',
-  [LANGUAGE_KEYS.DARK_THEME]: '夜间模式',
+  [LANGUAGE_KEYS.DARK_THEME]: '深色模式',
+  [LANGUAGE_KEYS.OPEN_SOURCE]: '开源代码',
 
   [LANGUAGE_KEYS.CLEAR_CACHE_TEXT]: '这将清除所有的本地数据，继续吗？',
 

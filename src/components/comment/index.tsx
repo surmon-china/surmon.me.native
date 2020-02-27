@@ -267,6 +267,7 @@ export class Comment extends Component<ICommentProps> {
         )}
         <TouchableView
           accessibilityLabel="切换排序模式"
+          disabled={isLoading}
           onPress={this.handleToggleSortType}
         >
           <Iconfont

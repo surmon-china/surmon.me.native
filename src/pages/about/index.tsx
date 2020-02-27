@@ -9,7 +9,7 @@ import React, { Component } from 'react'
 import { ImageSourcePropType, ImageBackground, SectionList, Linking, StyleSheet, Image, View, Alert } from 'react-native'
 import { observable, computed, action } from 'mobx'
 import { observer } from 'mobx-react'
-import { webUrl } from '@app/config'
+import { webUrl, email } from '@app/config'
 import { AboutRoutes } from '@app/constants/routes'
 import { IPageProps } from '@app/types/props'
 import { THttpSuccessResponse } from '@app/types/http'
@@ -172,8 +172,14 @@ export class About extends Component<IAboutProps> {
         key: 'email',
         iconName: 'mail',
         onPress: () => this
-          .openUrl('mailto:surmon@foxmail.com')
+          .openUrl(`mailto:${email}`)
           .catch(() => Alert.alert(i18n.t(LANGUAGE_KEYS.CALL_EMAIL_ERROR)))
+      },
+      {
+        name: i18n.t(LANGUAGE_KEYS.SPONSOR),
+        key: 'sponsor',
+        iconName: 'dollar',
+        onPress: () => this.openUrl(`${webUrl}/sponsor`)
       },
       {
         name: 'RSS',
@@ -225,17 +231,17 @@ export class About extends Component<IAboutProps> {
         <View style={styles.statistic}>
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.articles}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.ARTICLE)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.ARTICLES)}</Text>
           </View>
           <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.tags}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TAG)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.TAGS)}</Text>
           </View>
           <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
             <Text style={styles.statisticCount}>{this.statistic.comments}</Text>
-            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.COMMENT)}</Text>
+            <Text style={styles.statisticTitle}>{i18n.t(LANGUAGE_KEYS.COMMENTS)}</Text>
           </View>
           <View style={styles.statisticSeparator} />
           <View style={styles.statisticItem}>
@@ -337,7 +343,8 @@ const obStyles = observable({
       },
       statisticTitle: {
         ...fonts.small,
-        marginTop: 2
+        marginTop: 2,
+        textTransform: 'capitalize'
       },
       statisticSeparator: {
         width: sizes.borderWidth,

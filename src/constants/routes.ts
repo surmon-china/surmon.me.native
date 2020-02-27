@@ -19,5 +19,6 @@ export enum GuestbookRoutes {
 export enum AboutRoutes {
   About = 'About',
   Github = 'Github',
-  Setting = 'Setting'
+  Setting = 'Setting',
+  OpenSource = 'OpenSource'
 }

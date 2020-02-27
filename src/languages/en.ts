@@ -23,17 +23,18 @@ export default {
   [LANGUAGE_KEYS.CATEGORY]: 'Category',
   [LANGUAGE_KEYS.CATEGORIES]: 'Categories',
   [LANGUAGE_KEYS.COMMENT]: 'Comment',
-  [LANGUAGE_KEYS.COMMENTS]: 'Comments',
+  [LANGUAGE_KEYS.COMMENTS]: 'comments',
 
-  [LANGUAGE_KEYS.VIEW]: 'View',
   [LANGUAGE_KEYS.LIKE]: 'Like',
   [LANGUAGE_KEYS.SHARE]: 'Share',
   [LANGUAGE_KEYS.TOTAL]: 'Total',
   [LANGUAGE_KEYS.EMPTY]: 'Empty',
+  [LANGUAGE_KEYS.VIEWS]: 'views',
+  [LANGUAGE_KEYS.LIKES]: 'likes',
   [LANGUAGE_KEYS.TODAY_VIEWS]: 'Today Views',
-  [LANGUAGE_KEYS.CREATE_AT]: 'Create at',
-  [LANGUAGE_KEYS.LAST_UPDATE_AT]: 'Last update at',
-  [LANGUAGE_KEYS.RELATED_ARTICLE]: 'Related',
+  [LANGUAGE_KEYS.CREATE_AT]: 'Created at',
+  [LANGUAGE_KEYS.LAST_UPDATE_AT]: 'Last updated at',
+  [LANGUAGE_KEYS.RELATED_ARTICLE]: 'Related articles',
   [LANGUAGE_KEYS.GUESTBOOK_SLOGAN]: 'You have come a long way',
 
   [LANGUAGE_KEYS.KEYWORD]: 'Keyword',
@@ -61,17 +62,19 @@ export default {
   [LANGUAGE_KEYS.AM]: 'AM',
   [LANGUAGE_KEYS.PM]: 'PM',
 
-  [LANGUAGE_KEYS.GITHUB]: 'Github',
+  [LANGUAGE_KEYS.GITHUB]: 'GitHub',
   [LANGUAGE_KEYS.VLOG]: 'Vlog',
   [LANGUAGE_KEYS.EMAIL_ME]: 'Email Me',
-
+  [LANGUAGE_KEYS.SPONSOR]: 'Sponsor Me',
+  
   [LANGUAGE_KEYS.TWITTER]: 'Twitter',
-  [LANGUAGE_KEYS.LINKEDIN]: 'Linkedin',
+  [LANGUAGE_KEYS.LINKEDIN]: 'LinkedIn',
 
   [LANGUAGE_KEYS.SETTING]: 'Setting',
   [LANGUAGE_KEYS.CLEAR_CACHE]: 'Clear cache',
   [LANGUAGE_KEYS.SWITCH_LANGUAGE]: 'Language',
   [LANGUAGE_KEYS.DARK_THEME]: 'Dark Theme',
+  [LANGUAGE_KEYS.OPEN_SOURCE]: 'Open-source libraries',
 
   [LANGUAGE_KEYS.CLEAR_CACHE_TEXT]: 'The action will clear all local data, go on?',
 

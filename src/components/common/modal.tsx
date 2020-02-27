@@ -48,7 +48,7 @@ export class BetterModal extends Component<IModalProps> {
 
   @computed
   private get propOpacity(): number {
-    return this.props.opacity || 0.6
+    return this.props.opacity || 0.8
   }
 
   private updateMaskVisible(visible: boolean, callback?: () => void) {

@@ -9,8 +9,11 @@ import React, { Component } from 'react'
 import { Animated, StyleSheet, View, Switch, Alert } from 'react-native'
 import { observable, action, reaction } from 'mobx'
 import { observer } from 'mobx-react'
+import { boundMethod } from 'autobind-decorator'
+import { appName, version } from '@app/config'
 import { IPageProps } from '@app/types/props'
 import { LANGUAGE_KEYS } from '@app/constants/language'
+import { AboutRoutes } from '@app/constants/routes'
 import { optionStore } from '@app/stores/option'
 import { likeStore } from '@app/stores/like'
 import { Iconfont } from '@app/components/common/iconfont'
@@ -85,6 +88,11 @@ export interface ISettingProps extends IPageProps {}
     optionStore.updateDarkTheme(value)
   }
 
+  @boundMethod
+  private handleToOpenSourcePage(): void {
+    this.props.navigation.push(AboutRoutes.OpenSource)
+  }
+
   private handleClearCache(): void {
     Alert.alert(
       i18n.t(LANGUAGE_KEYS.CLEAR_CACHE),
@@ -124,6 +132,7 @@ export interface ISettingProps extends IPageProps {}
               <TouchableView
                 style={[styles.lineItem, styles.lineItemLanguage]}
                 onPress={() => this.handleUpdateLanguage(lang)}
+                disabled={lang === optionStore.language}
               >
                 <View style={styles.lineItemLanguageContent}>
                   <Text style={styles.lineItemLanguageTitle}>{languageMaps[lang].name}</Text>
@@ -196,19 +205,26 @@ export interface ISettingProps extends IPageProps {}
         {this.renderLanguagesView()}
         <View style={[styles.lineSeparator, { marginTop: sizes.gap / 2 }]} />
         <TouchableView
+          style={[styles.lineItem, styles.lineItemOpenSource]}
+          onPress={this.handleToOpenSourcePage}
+        >
+          <Iconfont name="code" style={styles.lineItemIcon} />
+          <Text style={styles.lineItemTitle}>
+            {i18n.t(LANGUAGE_KEYS.OPEN_SOURCE)}
+          </Text>
+        </TouchableView>
+        <View style={styles.lineSeparator} />
+        <View style={[styles.lineSeparator, { marginTop: sizes.gap / 2 }]} />
+        <TouchableView
           style={[styles.lineItem, styles.lineClearCache]}
           onPress={this.handleClearCache}
         >
-          <Iconfont
-            name="windmill"
-            style={[styles.lineItemIcon, styles.lineItemTitle]}
-          />
-          <Text style={styles.lineItemTitle}>
+          <Text style={[styles.lineItemTitle, styles.lineClearCacheContent]}>
             {i18n.t(LANGUAGE_KEYS.CLEAR_CACHE)}
           </Text>
         </TouchableView>
         <View style={styles.lineSeparator} />
-        <Text style={styles.version}>Surmon.me ∙ 1.1.0</Text>
+        <Text style={styles.version}>{appName} ∙ {version}</Text>
       </View>
     )
   }
@@ -238,8 +254,14 @@ const obStyles = observable({
         height: sizes.gap * 3,
         backgroundColor: colors.background
       },
+      lineItemOpenSource: {
+        justifyContent: 'flex-start'
+      },
       lineClearCache: {
         justifyContent: 'center'
+      },
+      lineClearCacheContent: {
+        color: colors.red
       },
       lineItemContent: {
         ...mixins.rowCenter
