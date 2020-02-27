@@ -117,12 +117,6 @@ export class About extends Component<IAboutProps> {
   private get socials() {
     return [
       {
-        name: 'Stack Overflow',
-        key: 'stack-overflow',
-        iconName: 'stackoverflow',
-        url: 'https://stackoverflow.com/users/6222535/surmon?tab=profile'
-      },
-      {
         name: 'Twitter',
         key: 'twitter',
         iconName: 'twitter',
