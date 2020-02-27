@@ -117,7 +117,7 @@ export class About extends Component<IAboutProps> {
   private get socials() {
     return [
       {
-        name: 'Twitter',
+        name: i18n.t(LANGUAGE_KEYS.TWITTER),
         key: 'twitter',
         iconName: 'twitter',
         url: 'https://twitter.com/surmon_me'
