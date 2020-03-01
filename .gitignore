@@ -2,6 +2,9 @@
 #
 .DS_Store
 
+# Producet
+product.json
+
 # Xcode
 #
 build/

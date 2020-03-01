@@ -80,6 +80,16 @@ react-native link
 
 ### Links
 
+[Sentry.io for react-native](https://docs.sentry.io/platforms/react-native/?_ga=2.245117389.977930320.1583413657-1615820818.1583413657)
+1. `yarn add @sentry/react-native`
+2. `yarn sentry-wizard -i reactNative -p ios android`
+3. `cd ios && pod install`
+
+Version
+- `yarn postversion`
+- ~~`build.gradle`~~
+- ~~`info.plist`~~
+
 无障碍支持（accessibility）：
 - https://reactnative.cn/docs/accessibility.html
 - https://code.fb.com/ios/making-react-native-apps-accessible/

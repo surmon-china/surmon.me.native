@@ -1,6 +1,10 @@
 
 ### CHANGELOG
 
+#### v1.1.4
+- Add Sentry.io
+- Add auto version
+
 #### v1.1.2
 - Add open-source page
 - Add Sponsor link

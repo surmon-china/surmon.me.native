@@ -5,8 +5,17 @@
  * @author Surmon <https://github.com/surmon-china>
  */
 
-import { AppRegistry } from 'react-native';
-import { name as appName } from './app.json';
-import { App } from './src/app';
+import * as Sentry from '@sentry/react-native'
+import { AppRegistry } from 'react-native'
+import { name } from './app.json'
+import { App } from './src/app'
+import { IS_DEV, appName, version } from './src/config'
 
-AppRegistry.registerComponent(appName, () => App);
+Sentry.init({
+  debug: IS_DEV,
+  environment: IS_DEV ? 'development' : 'production',
+  release: `${appName}@${version}`,
+  dsn: require('./product.json').sentryDSN
+})
+
+AppRegistry.registerComponent(name, () => App)
