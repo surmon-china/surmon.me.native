@@ -37,10 +37,21 @@ export class OpenSource extends PureComponent<IOpenSourceProps> {
             <Text key={dependencie} style={styles.item}>∙ {dependencie}</Text>
           ))}
           <TouchableView
-            style={styles.errorTest}
+            style={{ marginTop: sizes.goldenRatioGap }}
+            onPress={() => {
+              throw new Error('New error from page press test event!')
+            }}
+          >
+            <Text style={{ color: colors.red }}>Throw test error!</Text>
+          </TouchableView>
+          <TouchableView
+            style={{
+              marginTop: sizes.goldenRatioGap,
+              marginBottom: sizes.gap
+            }}
             onPress={Sentry.nativeCrash}
           >
-            <Text style={{ color: colors.red }}>Error test!</Text>
+            <Text style={{ color: colors.red }}>Sentry test nativeCrash!</Text>
           </TouchableView>
         </ScrollView>
       </SafeAreaView>
@@ -70,10 +81,6 @@ const obStyles = observable({
         color: colors.textLink,
         textDecorationLine: 'underline',
         textDecorationStyle: 'solid'
-      },
-      errorTest: {
-        marginTop: sizes.goldenRatioGap,
-        marginBottom: sizes.gap,
       }
     })
   }

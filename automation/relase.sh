@@ -2,12 +2,12 @@
 # update versions
 yarn postversion
 
-# build Android apk
-yarn release:android
-
 # build ios -> XCode
 echo 'Build IOS now! and goon'
-exit
+# exit
+
+# build Android apk
+yarn release:android
 
 # bundle source-map
 yarn bundle:android

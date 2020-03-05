@@ -132,7 +132,7 @@ android {
         applicationId "com.surmon_me_native"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 3
+        versionCode 4
         versionName "1.1.4"
     }
     splits {
