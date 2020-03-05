@@ -7,15 +7,16 @@
 
 import * as Sentry from '@sentry/react-native'
 import { AppRegistry } from 'react-native'
-import { name } from './app.json'
+import { name as appName } from './app.json'
 import { App } from './src/app'
-import { IS_DEV, appName, version } from './src/config'
+import { IS_DEV, projectName, version } from './src/config'
 
 Sentry.init({
   debug: IS_DEV,
   environment: IS_DEV ? 'development' : 'production',
-  release: `${appName}@${version}`,
+  release: `${projectName}@${version}`,
+  deactivateStacktraceMerging: true,
   dsn: require('./product.json').sentryDSN
 })
 
-AppRegistry.registerComponent(name, () => App)
+AppRegistry.registerComponent(appName, () => App)

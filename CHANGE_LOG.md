@@ -1,11 +1,11 @@
 
 ### CHANGELOG
 
-#### v1.1.4
+#### v1.1.4 (2020-03-05)
 - Add Sentry.io
 - Add auto version
 
-#### v1.1.2
+#### v1.1.2 (2020-02-27)
 - Add open-source page
 - Add Sponsor link
 - Improve buttons logic

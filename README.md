@@ -15,11 +15,11 @@
 **[Surmon.me](https://surmon.me) blog app, powered by [react-native](https://github.com/facebook/react-native).  > [online site page](https://surmon.me/app).**
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/download-url.png" height="300" alt="qrcode" />
+  <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/download.png" height="300" alt="qrcode" />
   <br>
   <strong>
     <span>Scan QRcode or</span>
-    <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/surmon.me.apk">download Android apk</a>
+    <a href="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/dist/android/surmon.me.apk">download Android apk</a>
   </strong>
 </p>
 

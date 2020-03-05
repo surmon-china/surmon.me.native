@@ -15,6 +15,9 @@ git clone git@github.com:surmon-china/surmon.me.native.git
 # Install dependencies
 yarn
 
+# Sentry
+yarn sentry-wizard -i reactNative -p ios android
+
 # IOS
 cd ios && pod install && cd ..
 
@@ -43,9 +46,6 @@ yarn android
 # 编译两端并开启服务器
 yarn all
 
-# 编译 IOS 的包并输出到 ./ios/bundle -> XCode -> Product -> Archive
-npm run build:ios
-
 # 编译 Android 的包并输出到 android/app/build/outputs/apk/app-release.apk
 npm run build:android
 npm run release:android
@@ -57,11 +57,22 @@ npm run test
 
 ### Relase
 
+```bash
+. ./automation/relase.sh
+```
+
+---
+
+or:
+
+first: `yarn postversion`
+
 #### Android
 
 ```bash
 # generate app-release-key.keystore
 yarn release:android
+# output: android/app/build/outputs/apk/release
 ```
 
 #### IOS

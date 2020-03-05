@@ -41,7 +41,6 @@
 	<string />
 	<key>UIAppFonts</key>
 	<array>
-		<string>DINRegular.ttf</string>
 		<string>iconfont.ttf</string>
 		<string>DIN-Regular.ttf</string>
 	</array>

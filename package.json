@@ -29,7 +29,9 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postversion": "react-native-version",
     "build:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
-    "release:android": "cd android && ./gradlew assembleRelease"
+    "release:android": "cd android && ./gradlew assembleRelease",
+    "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output dist/android/index.android.bundle --sourcemap-output dist/android/index.android.bundle.map",
+    "bundle:ios": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output dist/ios/index.ios.bundle --sourcemap-output dist/ios/index.ios.bundle.map"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.0",
@@ -72,6 +74,7 @@
     "@types/react": "^16.9.22",
     "@types/react-native": "^0.60.25",
     "@types/react-test-renderer": "16.9.1",
+    "@types/shelljs": "^0.8.6",
     "@typescript-eslint/eslint-plugin": "^2.12.0",
     "@typescript-eslint/parser": "^2.12.0",
     "babel-jest": "^24.9.0",
@@ -80,7 +83,9 @@
     "metro-react-native-babel-preset": "^0.56.0",
     "react-native-version": "^4.0.0",
     "react-test-renderer": "16.9.0",
-    "typescript": "^3.7.3"
+    "shelljs": "^0.8.3",
+    "typescript": "^3.7.3",
+    "xml-js": "^1.6.11"
   },
   "jest": {
     "preset": "react-native",

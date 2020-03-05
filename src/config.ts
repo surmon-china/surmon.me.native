@@ -15,6 +15,7 @@ export const appApi = 'https://api.surmon.me'
 export const staticApi = 'https://cdn.surmon.me'
 export const gravatarApi = 'https://static.surmon.me/avatar'
 export const GitHubUrl = 'https://github.com/surmon-china'
+export const projectName = packageJSON.name
 export const projectUrl = packageJSON.homepage
 export const version = packageJSON.version
 export const license = packageJSON.license
