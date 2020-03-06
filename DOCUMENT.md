@@ -6,6 +6,8 @@ npm uninstall -g react-native-cli
 npm i -g @react-native-community/cli
 ```
 
+---
+
 ### Init
 
 ```bash
@@ -13,6 +15,7 @@ npm i -g @react-native-community/cli
 git clone git@github.com:surmon-china/surmon.me.native.git
 
 # Install dependencies
+rm -rf node_modules/
 yarn
 
 # Sentry
@@ -24,62 +27,103 @@ cd ios && pod install && cd ..
 # Android
 # https://reactnavigation.org/docs/getting-started/#installing-dependencies-into-a-bare-react-native-project
 
-# link assets
+# Link assets
 react-native link
 
-yarn ios # or react-native run-ios --device "Surmon’s iPhone 18 pro"
-yarn android
+# Now you can run the app on development environment
 ```
+
+---
 
 ### Run
 
 ```bash
-# 清除缓存并开启服务器（不执行客户端）
-yarn start
-
 # 编译 IOS 并开启服务器
 yarn ios
 
 # 编译 Android 并开启服务器
 yarn android
 
+# 指定设备
+yarn <platform> --device "Surmon’s iPhone 18 pro"
+
+# 清除缓存并开启服务器（不执行客户端）
+yarn start
+
 # 编译两端并开启服务器
 yarn all
 
-# 编译 Android 的包并输出到 android/app/build/outputs/apk/app-release.apk
-npm run build:android
-npm run release:android
-
 # 测试
-npm run lint
-npm run test
-```
-
-### Relase
-
-```bash
-. ./automation/relase.sh
+yarn lint
+yarn test
 ```
 
 ---
 
-or:
+### Relase
 
-first: `yarn postversion`
+**First step (update versions)**: `yarn postversion`
 
 #### Android
 
 ```bash
 # generate app-release-key.keystore
+
+# Build Android apk -> (Sentry auto upload map)
 yarn release:android
-# output: android/app/build/outputs/apk/release
+
+# output: android/app/build/outputs/apk/release/app-release.apk
+cp -f ./android/app/build/outputs/apk/release/app-release.apk ./dist/android/surmon.me.apk
 ```
 
 #### IOS
 
-1. Product -> Schema -> Edit Schema
-2. Build Config: relase & debug executable = false
-3. Select your device & Run
+Build IOS -> XCode -> (Sentry auto upload map)
+
+1. `XCode` -> `Product` -> `Schema` -> `Edit Schema`
+2. Build Config: `select relase` & `debug executable = false`
+3. Select your `device` & `Press Run`
+
+---
+
+### Bundle
+
+#### bundle normal
+
+Android: 
+
+```bash
+react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/
+```
+
+IOS: 
+
+```bash
+react-native bundle --platform ios --dev false --entry-file index.js --bundle-output ./ios/main.jsbundle --assets-dest ./ios/bundle
+```
+
+#### bundle source-map to dist dir
+
+Android: 
+
+```bash
+react-native bundle --platform android --dev false --entry-file index.js --bundle-output dist/android/index.android.bundle --sourcemap-output dist/android/index.android.bundle.map
+```
+
+IOS: 
+
+```bash
+react-native bundle --platform ios --dev false --entry-file index.js --bundle-output dist/ios/index.ios.bundle --sourcemap-output dist/ios/index.ios.bundle.map
+```
+
+#### manual upload sentry source-map
+
+```bash
+export SENTRY_PROPERTIES=./android/.sentry.properties
+node ./sentry.js
+```
+
+---
 
 ### Issues
 
@@ -89,6 +133,8 @@ yarn release:android
 react-native link
 ```
 
+---
+
 ### Links
 
 [Sentry.io for react-native](https://docs.sentry.io/platforms/react-native/?_ga=2.245117389.977930320.1583413657-1615820818.1583413657)
@@ -96,7 +142,7 @@ react-native link
 2. `yarn sentry-wizard -i reactNative -p ios android`
 3. `cd ios && pod install`
 
-Version
+Update version
 - `yarn postversion`
 - ~~`build.gradle`~~
 - ~~`info.plist`~~
@@ -134,6 +180,7 @@ Version
    + 呼出菜单：`adb shell input keyevent 82`
    + 映射 IP：`adb -s [device-id] reverse tcp:8081 tcp:8081`
 
+---
 
 ### 业务结构
 - **[assets](https://github.com/surmon-china/surmon.me.native/tree/master/src/assets)**
@@ -162,6 +209,8 @@ Version
    + App 路由表（枚举量）
 - **[index](https://github.com/surmon-china/surmon.me.native/blob/master/src/app.tsx)**
    + 不涉及 UI 风格的导航栈实例及配置
+
+---
 
 ### 设计细节
 - darkTheme：

@@ -21,17 +21,14 @@
     "terser": "3.17.0"
   },
   "scripts": {
-    "all": "yarn ios && yarn android",
     "android": "react-native run-android",
     "ios": "react-native run-ios",
+    "all": "yarn ios && yarn android",
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
     "postversion": "react-native-version",
-    "build:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/main.jsbundle --assets-dest android/app/src/main/res/",
-    "release:android": "cd android && ./gradlew assembleRelease",
-    "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output dist/android/index.android.bundle --sourcemap-output dist/android/index.android.bundle.map",
-    "bundle:ios": "react-native bundle --platform ios --dev false --entry-file index.js --bundle-output dist/ios/index.ios.bundle --sourcemap-output dist/ios/index.ios.bundle.map"
+    "release:android": "cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@react-native-community/async-storage": "^1.8.0",

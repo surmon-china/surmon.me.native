@@ -3,14 +3,14 @@ const fs = require('fs')
 const path = require('path')
 const shelljs = require('shelljs')
 const convert = require('xml-js')
-const packageJSON = require('../package.json')
+const packageJSON = require('./package.json')
 const release = `${packageJSON.name}@${packageJSON.version}`
 
 try {
   const runIOS = () => {
     const iosJSON = convert.xml2js(
       fs.readFileSync(
-        path.resolve(__dirname, '..', 'ios', 'surmon_me_native', 'Info.plist')
+        path.resolve(__dirname, 'ios', 'surmon_me_native', 'Info.plist')
       ),
       {
         compact: true,
@@ -18,7 +18,7 @@ try {
         instructionHasAttributes: true
       }
     )
-    shelljs.cd(path.join(__dirname, '..', 'dist', 'ios'))
+    shelljs.cd(path.join(__dirname, 'dist', 'ios'))
     const index = iosJSON.plist.dict.key.findIndex(item => item._text === 'CFBundleVersion')
     const iosVersion = iosJSON.plist.dict.string[index]._text
     shelljs.exec(
@@ -32,9 +32,9 @@ try {
     )
   }
 
-  const androidJSON = require('../android/app/build/outputs/apk/release/output.json')
+  const androidJSON = require('./android/app/build/outputs/apk/release/output.json')
   const androidVersionCode = androidJSON[0].apkData.versionCode
-  shelljs.cd(path.join(__dirname, '..', 'dist', 'android')) 
+  shelljs.cd(path.join(__dirname, 'dist', 'android')) 
   console.log(release, androidVersionCode)
   shelljs.exec(
     `sentry-cli releases files ${release} upload-sourcemaps index.android.bundle.map --url-prefix 'app:///' --rewrite --dist ${androidVersionCode}`,
