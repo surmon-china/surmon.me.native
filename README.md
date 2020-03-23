@@ -3,16 +3,13 @@
 </p>
 
 # surmon.me.native
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/uses-js.svg)](https://forthebadge.com)
+![vue](https://img.shields.io/badge/MADE%20WITH-REACT%20NATIVE-05a5d1?style=for-the-badge)
+[![nodepress](https://img.shields.io/badge/NODE-PRESS-%2383BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/stargazers)
-[![GitHub issues](https://img.shields.io/github/issues/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/issues)
 [![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/network)
-[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native)
+[![GitHub license](https://img.shields.io/github/license/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/blob/master/LICENSE)
 
-## Introduction
-
-**[Surmon.me](https://surmon.me) blog app, powered by [react-native](https://github.com/facebook/react-native).  > [online site page](https://surmon.me/app).**
+**[Surmon.me](https://surmon.me) blog app, powered by [react-native](https://github.com/facebook/react-native).**
 
 <p align="center">
   <img src="https://raw.githubusercontent.com/surmon-china/surmon.me.native/master/screenshots/android/download.png" height="300" alt="qrcode" />
