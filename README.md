@@ -3,7 +3,7 @@
 </p>
 
 # surmon.me.native
-![vue](https://img.shields.io/badge/MADE%20WITH-REACT%20NATIVE-05a5d1?style=for-the-badge)
+![react native](https://img.shields.io/badge/MADE%20WITH-REACT%20NATIVE-05a5d1?style=for-the-badge)
 [![nodepress](https://img.shields.io/badge/NODE-PRESS-%2383BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/stargazers)
 [![GitHub forks](https://img.shields.io/github/forks/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/network)
