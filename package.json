@@ -40,7 +40,7 @@
     "autobind-decorator": "^2.4.0",
     "global": "^4.4.0",
     "gravatar": "^1.8.0",
-    "highlight.js": "^9.18.1",
+    "highlight.js": "^10.4.1",
     "marked": "0.6.3",
     "metro": "^0.58.0",
     "mobx": "^5.15.4",
