@@ -83,7 +83,7 @@
     "metro-react-native-babel-preset": "^0.56.0",
     "react-native-version": "^4.0.0",
     "react-test-renderer": "16.9.0",
-    "shelljs": "^0.8.3",
+    "shelljs": "^0.8.5",
     "typescript": "^3.7.3",
     "xml-js": "^1.6.11"
   },
