@@ -3,7 +3,7 @@
 
 ![react native](https://img.shields.io/badge/MADE%20WITH-REACT%20NATIVE-05a5d1?style=for-the-badge)
 &nbsp;
-[![nodepress](https://img.shields.io/badge/NODE-PRESS-83BA2F?style=for-the-badge&labelColor=90C53F)](https://github.com/surmon-china/nodepress)
+[![nodepress](https://raw.githubusercontent.com/surmon-china/nodepress/main/badge.svg)](https://github.com/surmon-china/nodepress)
 &nbsp;
 [![GitHub stars](https://img.shields.io/github/stars/surmon-china/surmon.me.native.svg?style=for-the-badge)](https://github.com/surmon-china/surmon.me.native/stargazers)
 &nbsp;
